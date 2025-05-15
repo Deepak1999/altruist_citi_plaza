@@ -1,9 +1,60 @@
-import React from 'react'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../Auth/AuthContext';
 
 const Sidebar = () => {
-    return (
-        <div>Sidebar</div>
-    )
-}
+    const location = useLocation();
+    // const menuData = location.state?.menuData || [];
+    const { menuData } = useAuth();
 
-export default Sidebar
+    return (
+        <aside id="sidebar" className="sidebar">
+            <ul className="sidebar-nav" id="sidebar-nav">
+                {/* Static Dashboard */}
+                <li className="nav-item">
+                    <Link to="/dashboard" className="nav-link">
+                        <i className="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </Link>
+                </li>
+
+                {menuData?.map((menu) => {
+                    const menuName = menu.menuMaster.menuName;
+                    const icon = menu.menuMaster.menuIcon || 'bi bi-folder';
+                    const menuId = `menu-${menu.menuMaster.id}`;
+
+                    return (
+                        <li className="nav-item" key={menu.menuMaster.id}>
+                            <a
+                                className="nav-link collapsed"
+                                data-bs-target={`#${menuId}`}
+                                data-bs-toggle="collapse"
+                                href="#"
+                            >
+                                <i className={icon}></i>
+                                <span>{menuName}</span>
+                                <i className="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <ul
+                                id={menuId}
+                                className="nav-content collapse"
+                                data-bs-parent="#sidebar-nav"
+                            >
+                                {menu.menuMaster.subMenuMaster.map((sub) => (
+                                    <li key={sub.id}>
+                                        <Link to={`/${sub.route}`}>
+                                            <i className="bi bi-circle"></i>
+                                            <span>{sub.subMenuName}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </li>
+                    );
+                })}
+            </ul>
+        </aside>
+    );
+};
+
+export default Sidebar;

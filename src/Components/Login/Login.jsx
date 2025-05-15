@@ -3,50 +3,84 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { useAuth } from '../Auth/AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [otp, setOtp] = useState('');
+    const [showOtp, setShowOtp] = useState(false);
+
     const navigate = useNavigate();
+    const { setMenuData } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/abuzz-admin/account/web/v1/login`, {
+            const response = await fetch(`${ApiBaseUrl}/otp/generate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userName: username,
-                    passwd: password,
+                    usernameOrEmail: username,
+                    password: password,
                 }),
             });
 
             const data = await response.json();
-
             const statusCode = data?.statusDescription?.statusCode;
             const statusMessage = data?.statusDescription?.statusMessage;
 
             if (statusCode === 200) {
-                toast.success('Login successful!');
-                localStorage.setItem('userName', data.adminUser.userName);
-                localStorage.setItem('name', data.adminUser.name);
-                localStorage.setItem('id', data.adminUser.id);
-                localStorage.setItem('token', data.adminUser.admUserTokenDetails.jwtToken);
-                localStorage.setItem('source', data.adminUser.loginSource);
-
-                navigate('/dashboard');
+                setShowOtp(true); // Show OTP input
+                toast.success(statusMessage || 'OTP sent to your registered email');
             } else {
                 toast.error(statusMessage || 'Invalid credentials');
             }
-
         } catch (err) {
             toast.error('Something went wrong. Please try again.');
         }
     };
 
+    const handleVerifyOtp = async () => {
+        try {
+            const response = await fetch(`${ApiBaseUrl}/otp/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    usernameOrEmail: username,
+                    otp: otp,
+                }),
+            });
+
+            const data = await response.json();
+            const statusCode = data?.statusDescription?.statusCode;
+            const statusMessage = data?.statusDescription?.statusMessage;
+
+            if (statusCode === 200) {
+                toast.success('OTP verified. Login successful!');
+                localStorage.setItem('userName', data?.userDetail?.fullName);
+                localStorage.setItem('Token', data?.userDetail?.userTokenDetail?.jwtToken);
+                localStorage.setItem('id', data?.userDetail?.userTokenDetail?.id);
+                localStorage.setItem('userId', data?.userDetail?.userId);
+
+                const menuData = data?.userDetail?.role?.roleMenu || [];
+                localStorage.setItem('menuData', JSON.stringify(menuData));
+                setMenuData(menuData);
+
+                navigate('/dashboard');
+
+            } else {
+                toast.error(statusMessage || 'Invalid OTP');
+            }
+        } catch (err) {
+            toast.error('Error verifying OTP. Please try again.');
+        }
+    };
 
     return (
         <div className="container">
@@ -100,12 +134,36 @@ const Login = () => {
                                             <div className="invalid-feedback">Please enter your password!</div>
                                         </div>
 
-                                        <div className="col-12">
-                                            <button className="btn btn-primary w-100" type="submit">
-                                                Login
-                                            </button>
-                                        </div>
+                                        {!showOtp && (
+                                            <div className="col-12">
+                                                <button className="btn btn-primary w-100" type="submit">
+                                                    Login
+                                                </button>
+                                            </div>
+                                        )}
                                     </form>
+
+                                    {/* OTP Input Section */}
+                                    {showOtp && (
+                                        <>
+                                            <div className="col-12 mt-3">
+                                                <label htmlFor="otp" className="form-label">Enter OTP</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="otp"
+                                                    value={otp}
+                                                    onChange={(e) => setOtp(e.target.value)}
+                                                    placeholder="Enter OTP"
+                                                />
+                                            </div>
+                                            <div className="col-12 mt-3">
+                                                <button className="btn btn-success w-100" onClick={handleVerifyOtp}>
+                                                    Verify OTP
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
