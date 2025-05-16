@@ -18,7 +18,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/otp/generate`, {
+            const response = await fetch(`${ApiBaseUrl}/auth/v1/otp/generate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const Login = () => {
 
     const handleVerifyOtp = async () => {
         try {
-            const response = await fetch(`${ApiBaseUrl}/otp/verify`, {
+            const response = await fetch(`${ApiBaseUrl}/auth/v1/otp/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

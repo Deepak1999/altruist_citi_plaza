@@ -11,8 +11,6 @@ const Header = () => {
 
     const logout = async () => {
 
-        const Jwttoken = localStorage.getItem('To');
-        const source = localStorage.getItem('source');
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
@@ -21,15 +19,12 @@ const Header = () => {
         }
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/logout`, {
+            const response = await fetch(`${ApiBaseUrl}/auth/v1/logout`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     userId: userId,
                 },
-                // body: JSON.stringify({
-                //     userId,
-                // }),
             });
 
             const data = await response.json();
