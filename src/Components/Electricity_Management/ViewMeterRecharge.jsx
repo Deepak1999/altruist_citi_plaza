@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTable, usePagination } from 'react-table';
+import React, { useEffect, useMemo, useState } from 'react'
+import { usePagination, useTable } from 'react-table';
 import { toast, ToastContainer } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
-const ViewRent = () => {
+const ViewMeterRecharge = () => {
 
-    const [lesseeTableData, setLesseeTableData] = useState([]);
+    const [electricityTableData, SeEelectricityTableData] = useState([]);
 
     const handleGetMonthlyData = async () => {
 
@@ -17,7 +17,7 @@ const ViewRent = () => {
         }
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/rent/monthly-rent-log/all`, {
+            const response = await fetch(`${ApiBaseUrl}/electricity/bill-logs/all`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const ViewRent = () => {
                 const { statusCode, statusMessage } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    setLesseeTableData(data.monthlyRentLogs || []);
+                    SeEelectricityTableData(data.electricityBillLogs || []);
                 } else {
                     toast.error(statusMessage || 'Logout failed');
                 }
@@ -48,8 +48,7 @@ const ViewRent = () => {
     }, []);
 
     const columns = useMemo(() => [
-        { Header: 'Lessee Name', accessor: 'lesseeName' },
-        { Header: 'Monthly Rent Amount', accessor: 'rentAmount' },
+        { Header: 'Lessee Name', accessor: 'lesseeId' },
         {
             Header: 'Month & Year',
             accessor: 'monthYear',
@@ -58,10 +57,15 @@ const ViewRent = () => {
                 return date.toLocaleString('default', { month: 'long', year: 'numeric' });
             }
         },
-        { Header: 'Payment Mode', accessor: 'paymentMode' },
-        { Header: 'Amount Paid', accessor: 'rentPaidAmount' },
-        { Header: 'Pending Rent Amount', accessor: 'rentPendingAmount' },
+        {
+            Header: 'Bill Type',
+            accessor: 'billType',
+            Cell: ({ value }) => (value === 1 ? 'Postpaid' : value === 2 ? 'Prepaid' : '')
+        },
+        { Header: 'Amount Paid', accessor: 'amountPaid' },
+        { Header: 'Payment Date', accessor: 'paymentDate' },
         { Header: 'Remarks', accessor: 'remarks' },
+
     ], []);
 
     const {
@@ -77,7 +81,7 @@ const ViewRent = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: lesseeTableData, initialState: { pageIndex: 0, pageSize: 7 } },
+        { columns, data: electricityTableData, initialState: { pageIndex: 0, pageSize: 7 } },
         usePagination
     );
 
@@ -88,14 +92,14 @@ const ViewRent = () => {
                     <div className="col-lg-12">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title">View Rent Details</h5>
+                                <h5 className="card-title">View Meter Recharge Details</h5>
                                 <table {...getTableProps()} className="table table-striped">
                                     <thead>
                                         {headerGroups.map(headerGroup => (
                                             <tr {...headerGroup.getHeaderGroupProps()}>
                                                 {headerGroup.headers.map(column => (
                                                     <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                                ))} 
+                                                ))}
                                             </tr>
                                         ))}
                                     </thead>
@@ -147,4 +151,4 @@ const ViewRent = () => {
     );
 };
 
-export default ViewRent;
+export default ViewMeterRecharge

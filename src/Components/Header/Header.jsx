@@ -2,6 +2,7 @@ import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
 
@@ -38,6 +39,7 @@ const Header = () => {
                     localStorage.removeItem('userName');
                     localStorage.removeItem('id');
                     localStorage.removeItem('Token');
+                    localStorage.removeItem('menuData');
 
                     window.location.href = '/';
                 } else {
@@ -91,12 +93,20 @@ const Header = () => {
                                 <hr className="dropdown-divider" />
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <a className="dropdown-item d-flex align-items-center">
                                     <i className="bi bi-person"></i>
                                     <span>My Profile</span>
                                 </a>
+                            </li> */}
+
+                            <li>
+                                <Link to="/my-profile" className="dropdown-item d-flex align-items-center">
+                                    <i className="bi bi-person"></i>
+                                    <span>My Profile</span>
+                                </Link>
                             </li>
+
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>

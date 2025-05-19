@@ -7,6 +7,9 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import AddRent from './Components/Rent_Management/AddRent';
 import ViewRent from './Components/Rent_Management/ViewRent';
 import { AuthProvider } from './Components/Auth/AuthContext';
+import Profile from './Components/Profile/Profile';
+import AddMeterRecharge from './Components/Electricity_Management/AddMeterRecharge';
+import ViewMeterRecharge from './Components/Electricity_Management/ViewMeterRecharge';
 
 const App = () => {
   return (
@@ -25,6 +28,18 @@ const App = () => {
           <Route
             path="/viewRent"
             element={<PrivateRoute element={<MainLayout><ViewRent /></MainLayout>} />}
+          />
+          <Route
+            path="/my-profile"
+            element={<PrivateRoute element={<MainLayout><Profile /></MainLayout>} />}
+          />
+          <Route
+            path="/addMeterRecharge"
+            element={<PrivateRoute element={<MainLayout><AddMeterRecharge /></MainLayout>} />}
+          />
+          <Route
+            path="/viewMeterRecharge"
+            element={<PrivateRoute element={<MainLayout><ViewMeterRecharge /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>

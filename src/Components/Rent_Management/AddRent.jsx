@@ -123,59 +123,6 @@ const AddRent = () => {
         setRemarks(e.target.value);
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     const userId = localStorage.getItem('userId');
-
-    //     if (!selectedLesseeId || !selectedRentAmount || !paymentModeId || !amountToPay) {
-    //         toast.error('Please fill in all required fields');
-    //         return;
-    //     }
-
-    //     if (!userId) {
-    //         toast.error('User ID is missing in localStorage');
-    //         return;
-    //     }
-
-    //     const requestBody = {
-    //         monthlyRentLog: {
-    //             lesseeId: parseInt(selectedLesseeId),
-    //             rentAmount: parseFloat(selectedRentAmount),
-    //             rentPaidAmount: parseFloat(amountToPay),
-    //             paymentModeId: parseInt(paymentModeId),
-    //             remarks: remarks,
-    //             monthYear: document.querySelector('input[type="month"]').value,
-    //         }
-    //     };
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/rent/save/rent-log`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'userId': userId,
-    //             },
-    //             body: JSON.stringify(requestBody),
-    //         });
-
-    //         const data = await response.json();
-
-    //         if (response.ok) {
-    //             if (data?.statusDescription?.statusCode === 200) {
-    //                 toast.success(data.description || 'Rent log submitted successfully');
-    //                 // Optionally reset form here
-    //             } else {
-    //                 toast.error(data?.statusDescription?.description || 'Failed to save rent log');
-    //             }
-    //         } else {
-    //             toast.error('Submission failed: ' + response.status);
-    //         }
-    //     } catch (error) {
-    //         toast.error('Error submitting rent log: ' + error.message);
-    //     }
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -191,7 +138,6 @@ const AddRent = () => {
             return;
         }
 
-        // Get selected lessee and payment mode details
         const selectedLessee = lesseeDetails.find(l => l.id === parseInt(selectedLesseeId));
         const selectedMode = paymentMode.find(m => m.id === parseInt(paymentModeId));
 
@@ -227,6 +173,7 @@ const AddRent = () => {
 
             if (response.ok && data?.statusDescription?.statusCode === 200) {
                 toast.success(data?.description || 'Rent log submitted successfully');
+                handleResetForm();
             } else {
                 toast.error(data?.statusDescription?.description || 'Failed to save rent log');
             }
@@ -235,6 +182,16 @@ const AddRent = () => {
         }
     };
 
+    const handleResetForm = () => {
+        setSelectedLesseeId('');
+        setRentAmounts([]);
+        setSelectedRentAmount('');
+        setPaymentModeId('');
+        setAmountToPay('');
+        setRemarks('');
+        setPaymentMode([]);
+        setLesseeDetails([]);
+    }
 
     return (
         <main id="main" className="main">
@@ -282,24 +239,23 @@ const AddRent = () => {
                                             </select>
                                         </div>
 
-                                        {/* <div className="col-md-3">
-                                            <label className="form-label">Monthly Rent Amount</label>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={
-                                                    rentAmounts.length > 0
-                                                        ? `₹${rentAmounts[0].toLocaleString()}`
-                                                        : 'No rent agreement available'
-                                                }
-                                                readOnly
-                                            />
-                                        </div> */}
                                         <div className="col-md-3">
                                             <label className="form-label">Month & Year</label>
                                             <input type="month" className="form-control" required />
                                         </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label">Paid Amount</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={amountToPay}
+                                                onChange={handleAmountToPayChange}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
+                                    <div className="row mb-3">
                                         <div className="col-md-3">
                                             <label className="form-label">Payment Mode</label>
                                             <select
@@ -315,24 +271,11 @@ const AddRent = () => {
                                                 ))}
                                             </select>
                                         </div>
-                                    </div>
 
-                                    <div className="row mb-3">
-                                        <div className="col-md-3">
-                                            <label className="form-label">Amount To Pay</label>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={amountToPay}
-                                                onChange={handleAmountToPayChange}
-                                                required
-                                            />
-                                        </div>
-
-                                        <div className="col-md-3">
+                                        {/* <div className="col-md-3">
                                             <label className="form-label">Pending Rent</label>
                                             <input type="text" className="form-control" value="0" readOnly />
-                                        </div>
+                                        </div> */}
 
                                         <div className="col-md-6">
                                             <label className="form-label">Remarks</label>
