@@ -12,6 +12,8 @@ import AddMeterRecharge from './Components/Electricity_Management/AddMeterRechar
 import ViewMeterRecharge from './Components/Electricity_Management/ViewMeterRecharge';
 import ViewMonthlyCons from './Components/Electricity_Management/ViewMonthlyCons';
 import AddMonthlyCons from './Components/Electricity_Management/AddMonthlyCons';
+import ViewGopal from './Components/SalesManagements/ViewGopal';
+import ViewAyaanCinema from './Components/SalesManagements/ViewAyaanCinema';
 
 const App = () => {
   return (
@@ -50,6 +52,22 @@ const App = () => {
           <Route
             path="/viewElecCons"
             element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
+          />
+          {/* <Route
+            path="/addGopalSales"
+            element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
+          /> */}
+          <Route
+            path="/viewGopalSales"
+            element={<PrivateRoute element={<MainLayout><ViewGopal /></MainLayout>} />}
+          />
+          {/* <Route
+            path="/addAyaanSales"
+            element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
+          /> */}
+          <Route
+            path="/viewAyaanSales"
+            element={<PrivateRoute element={<MainLayout><ViewAyaanCinema /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>

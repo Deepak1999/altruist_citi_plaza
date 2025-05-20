@@ -249,6 +249,7 @@ const AddRent = () => {
                                             <label className="form-label">Month & Year</label>
                                             <input type="month" className="form-control" required />
                                         </div>
+
                                         <div className="col-md-3">
                                             <label className="form-label">Paid Amount</label>
                                             <input
