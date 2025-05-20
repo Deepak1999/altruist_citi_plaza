@@ -155,10 +155,17 @@ const AddMeterRecharge = () => {
     };
 
     const handleResetForm = () => {
-        setFormData('');
         setLesseeDetails([]);
         setPaymentMode([]);
         setPaymentModeId('');
+        setFormData({
+            lesseeName: '',
+            monthYear: '',
+            paidAmount: '',
+            amountBilled: '',
+            remarks: '',
+            paymentStatus: '',
+        });
     }
 
     useEffect(() => {
@@ -246,7 +253,7 @@ const AddMeterRecharge = () => {
                                                         ))}
                                                     </select>
                                                 </div>
-                                                <div className="col-md-3">
+                                                {/* <div className="col-md-3">
                                                     <label className="form-label">Remarks</label>
                                                     <input
                                                         type="text"
@@ -255,7 +262,7 @@ const AddMeterRecharge = () => {
                                                         value={formData.remarks}
                                                         onChange={handleChange}
                                                     />
-                                                </div>
+                                                </div> */}
 
                                                 {billType === '2' && (
                                                     <>
@@ -280,6 +287,16 @@ const AddMeterRecharge = () => {
                                                                 onChange={handleChange}
                                                             />
                                                         </div> */}
+                                                        <div className="col-md-3">
+                                                            <label className="form-label">Remarks</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                name="remarks"
+                                                                value={formData.remarks}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
                                                     </>
                                                 )}
 
@@ -332,6 +349,16 @@ const AddMeterRecharge = () => {
                                                                 <label className="form-check-label">Unpaid</label>
                                                             </div>
                                                         </div>
+                                                        <div className="col-md-3">
+                                                            <label className="form-label">Remarks</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                name="remarks"
+                                                                value={formData.remarks}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
                                                     </>
                                                 )}
                                             </div>
@@ -340,7 +367,7 @@ const AddMeterRecharge = () => {
 
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-primary me-3">Submit</button>
-                                        <button type="reset" className="btn btn-secondary">Reset</button>
+                                        <button type="reset" className="btn btn-secondary" onClick={handleResetForm} >Reset</button>
                                     </div>
                                 </form>
                             </div>
