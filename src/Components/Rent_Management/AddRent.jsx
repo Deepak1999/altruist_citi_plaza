@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { useNavigate } from 'react-router-dom';
 
 const AddRent = () => {
     const [paymentMode, setPaymentMode] = useState([]);
@@ -11,6 +12,8 @@ const AddRent = () => {
     const [paymentModeId, setPaymentModeId] = useState('');
     const [amountToPay, setAmountToPay] = useState('');
     const [remarks, setRemarks] = useState('');
+
+    const navigate = useNavigate();
 
     const handleGetPaymentMode = async () => {
         const userId = localStorage.getItem('userId');
@@ -174,6 +177,9 @@ const AddRent = () => {
             if (response.ok && data?.statusDescription?.statusCode === 200) {
                 toast.success(data?.description || 'Rent log submitted successfully');
                 handleResetForm();
+                setTimeout(() => {
+                    navigate('/viewRent');
+                }, 3000);
             } else {
                 toast.error(data?.statusDescription?.description || 'Failed to save rent log');
             }

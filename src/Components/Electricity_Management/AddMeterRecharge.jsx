@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const AddMeterRecharge = () => {
 
@@ -16,6 +17,8 @@ const AddMeterRecharge = () => {
     const [lesseeDetails, setLesseeDetails] = useState([]);
     const [paymentMode, setPaymentMode] = useState([]);
     const [paymentModeId, setPaymentModeId] = useState('');
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -137,8 +140,12 @@ const AddMeterRecharge = () => {
 
             const result = await response.json();
 
-            if (response.ok) {
+            if (response.ok && result?.statusDescription?.statusCode === 200) {
                 toast.success(result?.statusDescription.description || 'Meter recharge details submitted successfully!');
+                handleResetForm();
+                setTimeout(() => {
+                    navigate('/viewMeterRecharge');
+                }, 3000);
             } else {
                 toast.error(result.statusDescription?.description || 'Submission failed');
             }
@@ -147,6 +154,12 @@ const AddMeterRecharge = () => {
         }
     };
 
+    const handleResetForm = () => {
+        setFormData('');
+        setLesseeDetails([]);
+        setPaymentMode([]);
+        setPaymentModeId('');
+    }
 
     useEffect(() => {
         handleGetLesseeDetails();
