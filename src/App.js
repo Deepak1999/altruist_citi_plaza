@@ -14,6 +14,7 @@ import ViewMonthlyCons from './Components/Electricity_Management/ViewMonthlyCons
 import AddMonthlyCons from './Components/Electricity_Management/AddMonthlyCons';
 import ViewGopal from './Components/SalesManagements/ViewGopal';
 import ViewAyaanCinema from './Components/SalesManagements/ViewAyaanCinema';
+import AddGopal from './Components/SalesManagements/AddGopal';
 
 const App = () => {
   return (
@@ -53,10 +54,10 @@ const App = () => {
             path="/viewElecCons"
             element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
           />
-          {/* <Route
+          <Route
             path="/addGopalSales"
-            element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
-          /> */}
+            element={<PrivateRoute element={<MainLayout><AddGopal /></MainLayout>} />}
+          />
           <Route
             path="/viewGopalSales"
             element={<PrivateRoute element={<MainLayout><ViewGopal /></MainLayout>} />}
