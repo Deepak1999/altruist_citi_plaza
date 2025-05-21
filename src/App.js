@@ -15,6 +15,7 @@ import AddMonthlyCons from './Components/Electricity_Management/AddMonthlyCons';
 import ViewGopal from './Components/SalesManagements/ViewGopal';
 import ViewAyaanCinema from './Components/SalesManagements/ViewAyaanCinema';
 import AddGopal from './Components/SalesManagements/AddGopal';
+import AddAyaanCinema from './Components/SalesManagements/AddAyaanCinema';
 
 const App = () => {
   return (
@@ -62,10 +63,10 @@ const App = () => {
             path="/viewGopalSales"
             element={<PrivateRoute element={<MainLayout><ViewGopal /></MainLayout>} />}
           />
-          {/* <Route
+          <Route
             path="/addAyaanSales"
-            element={<PrivateRoute element={<MainLayout><ViewMonthlyCons /></MainLayout>} />}
-          /> */}
+            element={<PrivateRoute element={<MainLayout><AddAyaanCinema /></MainLayout>} />}
+          />
           <Route
             path="/viewAyaanSales"
             element={<PrivateRoute element={<MainLayout><ViewAyaanCinema /></MainLayout>} />}
