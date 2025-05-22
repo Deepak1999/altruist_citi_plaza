@@ -19,7 +19,7 @@ const AddRent = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary information for headers');
             return;
         }
 
@@ -278,11 +278,6 @@ const AddRent = () => {
                                                 ))}
                                             </select>
                                         </div>
-
-                                        {/* <div className="col-md-3">
-                                            <label className="form-label">Pending Rent</label>
-                                            <input type="text" className="form-control" value="0" readOnly />
-                                        </div> */}
 
                                         <div className="col-md-6">
                                             <label className="form-label">Remarks</label>

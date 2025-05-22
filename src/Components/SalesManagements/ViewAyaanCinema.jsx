@@ -51,19 +51,19 @@ const ViewAyaanCinema = () => {
         {
             Header: 'Date',
             accessor: 'reportDate',
-            Cell: ({ value }) => {
-                const date = new Date(value);
-                return date.toLocaleString('default', { month: 'long', year: 'numeric' });
-            }
+            // Cell: ({ value }) => {
+            //     const date = new Date(value);
+            //     return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+            // }
         },
-        { Header: 'Box Office Admits incl Comps', accessor: 'boxOfficeAdmits' },
+        { Header: 'Box Office Admits', accessor: 'boxOfficeAdmits' },
         { Header: 'Net Box Office Sales ', accessor: 'netBoxOfficeSales' },
         { Header: 'Gross Box Office Sales', accessor: 'grossBoxOfficeSales' },
-        { Header: 'Net Concessions Sales', accessor: 'netConcessionsSales' },
-        { Header: 'Gross Concessions Sales', accessor: 'grossConcessionsSales' },
-        { Header: 'DSR Share on net Box Off. Sales (A)', accessor: 'dsrShareNetBoxOffice' },
-        { Header: 'DSR Share on net Concession (B)', accessor: 'dsrShareNetConcessions' },
-        { Header: 'Grand Total (A+B)', accessor: 'totalDsrShare' },
+        { Header: 'Net Concs. Sales', accessor: 'netConcessionsSales' },
+        { Header: 'Gross Concs. Sales', accessor: 'grossConcessionsSales' },
+        { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
+        { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
+        { Header: 'Total (A+B)', accessor: 'totalDsrShare' },
 
     ], []);
 

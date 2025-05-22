@@ -51,10 +51,10 @@ const ViewGopal = () => {
         {
             Header: 'Date',
             accessor: 'saleDate',
-            Cell: ({ value }) => {
-                const date = new Date(value);
-                return date.toLocaleString('default', { month: 'long', year: 'numeric' });
-            }
+            // Cell: ({ value }) => {
+            //     const date = new Date(value);
+            //     return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+            // }
         },
         { Header: 'Cashier Name', accessor: 'cashierName' },
         { Header: 'Cash Sale', accessor: 'cashSale' },

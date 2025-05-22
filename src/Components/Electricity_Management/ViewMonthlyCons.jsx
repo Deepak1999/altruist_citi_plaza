@@ -48,21 +48,20 @@ const ViewMonthlyCons = () => {
     }, []);
 
     const columns = useMemo(() => [
-        // { Header: 'Bill Month', accessor: 'lesseeName' },
         {
-            Header: 'Bill Month',
+            Header: 'Month',
             accessor: 'monthYear',
             Cell: ({ value }) => {
                 const date = new Date(value);
                 return date.toLocaleString('default', { month: 'long', year: 'numeric' });
             }
         },
-        { Header: 'No. Of Units', accessor: 'unit' },
+        { Header: 'Units', accessor: 'unit' },
         { Header: 'Solar Units', accessor: 'solarUnit' },
-        { Header: 'DSR Bill after Fixed Charges', accessor: 'dsrBill' },
-        { Header: 'Postpaid Bill Generation', accessor: 'postpaidBill' },
+        { Header: 'DSR Bill', accessor: 'dsrBill' },
+        { Header: 'Postpaid', accessor: 'postpaidBill' },
         { Header: 'Collection Details(A)', accessor: 'collectionAmountPostpaid' },
-        { Header: 'Prepaid Collection(B)', accessor: 'collectionAmountPrepaid' },
+        { Header: 'Prepaid(B)', accessor: 'collectionAmountPrepaid' },
         { Header: 'Grand Total(A+B)', accessor: 'totalAmount' },
 
     ], []);

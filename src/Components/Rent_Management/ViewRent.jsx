@@ -48,8 +48,16 @@ const ViewRent = () => {
     }, []);
 
     const columns = useMemo(() => [
-        { Header: 'Lessee Name', accessor: 'lesseeName' },
-        { Header: 'Monthly Rent Amount', accessor: 'rentAmount' },
+        {
+            Header: 'Lessee',
+            accessor: 'lesseeName',
+            Cell: ({ value }) => (
+                <span title={value}>
+                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+                </span>
+            )
+        },
+        { Header: 'Rent Amount', accessor: 'rentAmount' },
         {
             Header: 'Month & Year',
             accessor: 'monthYear',
@@ -58,10 +66,18 @@ const ViewRent = () => {
                 return date.toLocaleString('default', { month: 'long', year: 'numeric' });
             }
         },
-        { Header: 'Payment Mode', accessor: 'paymentMode' },
+        { Header: 'Mode', accessor: 'paymentMode' },
         { Header: 'Amount Paid', accessor: 'rentPaidAmount' },
-        { Header: 'Pending Rent Amount', accessor: 'rentPendingAmount' },
-        { Header: 'Remarks', accessor: 'remarks' },
+        { Header: 'Pending Amount', accessor: 'rentPendingAmount' },
+        {
+            Header: 'Remarks',
+            accessor: 'remarks',
+            Cell: ({ value }) => (
+                <span title={value}>
+                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+                </span>
+            )
+        }
     ], []);
 
     const {
@@ -95,10 +111,11 @@ const ViewRent = () => {
                                             <tr {...headerGroup.getHeaderGroupProps()}>
                                                 {headerGroup.headers.map(column => (
                                                     <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                                ))} 
+                                                ))}
                                             </tr>
                                         ))}
                                     </thead>
+
                                     <tbody {...getTableBodyProps()}>
                                         {page.map(row => {
                                             prepareRow(row);

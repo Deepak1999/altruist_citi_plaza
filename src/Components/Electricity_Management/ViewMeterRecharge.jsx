@@ -48,7 +48,15 @@ const ViewMeterRecharge = () => {
     }, []);
 
     const columns = useMemo(() => [
-        { Header: 'Lessee Name', accessor: 'lesseeId' },
+        {
+            Header: 'Lessee',
+            accessor: 'lesseeName',
+            Cell: ({ value }) => (
+                <span title={value}>
+                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+                </span>
+            )
+        },
         {
             Header: 'Month & Year',
             accessor: 'monthYear',
@@ -64,7 +72,15 @@ const ViewMeterRecharge = () => {
         },
         { Header: 'Amount Paid', accessor: 'amountPaid' },
         { Header: 'Payment Date', accessor: 'paymentDate' },
-        { Header: 'Remarks', accessor: 'remarks' },
+        {
+            Header: 'Remarks',
+            accessor: 'remarks',
+            Cell: ({ value }) => (
+                <span title={value}>
+                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+                </span>
+            )
+        }
 
     ], []);
 
