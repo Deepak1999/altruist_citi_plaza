@@ -16,6 +16,8 @@ import ViewGopal from './Components/SalesManagements/ViewGopal';
 import ViewAyaanCinema from './Components/SalesManagements/ViewAyaanCinema';
 import AddGopal from './Components/SalesManagements/AddGopal';
 import AddAyaanCinema from './Components/SalesManagements/AddAyaanCinema';
+import AddViewCoupons from './Components/Coupons_Managements/AddViewCoupons';
+import AddViewSolar from './Components/Solar_Management/AddViewSolar';
 
 const App = () => {
   return (
@@ -70,6 +72,14 @@ const App = () => {
           <Route
             path="/viewAyaanSales"
             element={<PrivateRoute element={<MainLayout><ViewAyaanCinema /></MainLayout>} />}
+          />
+          <Route
+            path="/addviewCoupons"
+            element={<PrivateRoute element={<MainLayout><AddViewCoupons /></MainLayout>} />}
+          />
+          <Route
+            path="/addviewSolar"
+            element={<PrivateRoute element={<MainLayout><AddViewSolar /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>
