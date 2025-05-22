@@ -5,7 +5,7 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
 const ViewMeterRecharge = () => {
 
-    const [electricityTableData, SeEelectricityTableData] = useState([]);
+    const [electricityTableData, SetEelectricityTableData] = useState([]);
 
     const handleGetMonthlyData = async () => {
 
@@ -31,7 +31,7 @@ const ViewMeterRecharge = () => {
                 const { statusCode, statusMessage } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    SeEelectricityTableData(data.electricityBillLogs || []);
+                    SetEelectricityTableData(data.electricityBillLogs || []);
                 } else {
                     toast.error(statusMessage || 'Logout failed');
                 }

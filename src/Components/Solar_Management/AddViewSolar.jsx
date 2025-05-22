@@ -8,25 +8,14 @@ const AddViewSolar = () => {
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
     const [rentAmounts, setRentAmounts] = useState([]);
     const [lesseeDetails, setLesseeDetails] = useState([]);
+    const [solarTableData, setSolarTableData] = useState([]);
+    const [solarPlantData, SetSolarPlantData] = useState([]);
     const [selectedRentAmount, setSelectedRentAmount] = useState('');
 
-    const [lesseeTableData, setLesseeTableData] = useState([
-        {
-            plant: 25000,
-            rentAmount: 25000,
-            monthYear: '2025-05-01'
-        },
-        {
-            plant: 25000,
-            rentAmount: 18000,
-            monthYear: '2025-04-01'
-        },
-        {
-            plant: 25000,
-            rentAmount: 32000,
-            monthYear: '2025-03-01'
-        }
-    ]);
+    const [productionDate, setProductionDate] = useState('');
+    const [plantId, setPlantId] = useState('');
+    const [unitProduced, setUnitProduced] = useState('');
+    const [plantName, setPlantName] = useState('');
 
     const handleGetLesseeDetails = async () => {
         const userId = localStorage.getItem('userId');
@@ -67,10 +56,135 @@ const AddViewSolar = () => {
     };
 
 
+    const handleGetSolarData = async () => {
+
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data for logout');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/solar/get-details`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, statusMessage } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    setSolarTableData(data.solarProductionLog || []);
+                } else {
+                    toast.error(statusMessage || 'Logout failed');
+                }
+            } else {
+                toast.error('Logout failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error during logout: ' + error.message);
+        }
+    };
+
+    const handleGetPlantData = async () => {
+
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data for logout');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/solar/get-plant-details`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, statusMessage } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    SetSolarPlantData(data.solarPlantMaster || []);
+                } else {
+                    toast.error(statusMessage || 'Logout failed');
+                }
+            } else {
+                toast.error('Logout failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error during logout: ' + error.message);
+        }
+    };
+
     useEffect(() => {
         handleGetLesseeDetails();
+        handleGetSolarData();
+        handleGetPlantData();
     }, []);
 
+    const formatSaleDateWithTime = (dateStr) => {
+        const date = new Date();
+        const timePart = date.toTimeString().split(' ')[0];
+        return `${dateStr} ${timePart}`;
+    };
+
+    const formattedDateTime = formatSaleDateWithTime(productionDate);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('Missing user ID');
+            return;
+        }
+
+        const selectedPlant = solarPlantData.find(p => p.id === parseInt(plantId));
+        if (!selectedPlant) {
+            toast.error('Please select a valid plant');
+            return;
+        }
+
+        const payload = {
+            productionDate: formattedDateTime,
+            plantId: parseInt(plantId),
+            plantName: selectedPlant.name,
+            unitProduced: parseFloat(unitProduced)
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/solar/save-details`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            if (response.ok && data.statusDescription?.statusCode === 200) {
+                toast.success(data?.statusDescription?.description || 'Solar production details saved successfully');
+                handleGetSolarData();
+            } else {
+                toast.error(data.statusDescription?.description || 'Save failed');
+            }
+        } catch (error) {
+            toast.error('Error saving data: ' + error.message);
+        }
+    };
 
     const handleLesseeChange = (e) => {
         const lesseeId = e.target.value;
@@ -94,14 +208,14 @@ const AddViewSolar = () => {
     const columns = useMemo(() => [
         {
             Header: 'Month & Year',
-            accessor: 'monthYear',
+            accessor: 'productionDate',
             Cell: ({ value }) => {
                 const date = new Date(value);
                 return date.toLocaleString('default', { month: 'long', year: 'numeric' });
             }
         },
-        { Header: 'Plant 1 units generate ', accessor: 'rentAmount' },
-        { Header: 'Plant 2 units generate  ', accessor: 'plant' },
+        { Header: 'Plant Name', accessor: 'plantName' },
+        { Header: 'Units Produced', accessor: 'unitProduced' },
 
     ], []);
 
@@ -118,7 +232,7 @@ const AddViewSolar = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: lesseeTableData, initialState: { pageIndex: 0, pageSize: 5 } },
+        { columns, data: solarTableData, initialState: { pageIndex: 0, pageSize: 5 } },
         usePagination
     );
 
@@ -130,33 +244,41 @@ const AddViewSolar = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Add Solar Production Details</h5>
-                                <form onSubmit={''}>
+                                <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
                                         <div className="col-md-4">
                                             <label className="form-label">Date</label>
                                             <input
                                                 type="date"
                                                 className="form-control"
-                                                name="saleDate"
-                                                value={''}
+                                                value={productionDate}
+                                                onChange={(e) => setProductionDate(e.target.value)}
                                                 required
                                             />
                                         </div>
                                         <div className="col-md-4">
-                                            <label className="form-label">Plant 1 Units Generate</label>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={''}
+                                            <label className="form-label">Plant</label>
+                                            <select
+                                                className="form-select"
+                                                value={plantId}
+                                                onChange={(e) => setPlantId(e.target.value)}
                                                 required
-                                            />
+                                            >
+                                                <option value="">Select Plant</option>
+                                                {solarPlantData.map((plant) => (
+                                                    <option key={plant.id} value={plant.id}>
+                                                        {plant.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                         <div className="col-md-4">
-                                            <label className="form-label">Plant 2 Units Generate</label>
+                                            <label className="form-label">Units Produced</label>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 className="form-control"
-                                                value={''}
+                                                value={unitProduced}
+                                                onChange={(e) => setUnitProduced(e.target.value)}
                                                 required
                                             />
                                         </div>
