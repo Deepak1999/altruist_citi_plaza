@@ -6,27 +6,10 @@ import { usePagination, useTable } from 'react-table';
 const AddViewCoupons = () => {
 
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
-    const [rentAmounts, setRentAmounts] = useState([]);
     const [lesseeDetails, setLesseeDetails] = useState([]);
-    const [selectedRentAmount, setSelectedRentAmount] = useState('');
-
-    const [lesseeTableData, setLesseeTableData] = useState([
-        {
-            lesseeName: 'Sunrise Properties Pvt Ltd',
-            rentAmount: 25000,
-            monthYear: '2025-05-01'
-        },
-        {
-            lesseeName: 'GreenLeaf Enterprises',
-            rentAmount: 18000,
-            monthYear: '2025-04-01'
-        },
-        {
-            lesseeName: 'Skyline Builders and Developers',
-            rentAmount: 32000,
-            monthYear: '2025-03-01'
-        }
-    ]);
+    const [couponsTableData, setCouponsTableData] = useState([]);
+    const [couponBalance, setCouponBalance] = useState('');
+    const [balanceMonth, setBalanceMonth] = useState('');
 
     const handleGetLesseeDetails = async () => {
         const userId = localStorage.getItem('userId');
@@ -67,29 +50,97 @@ const AddViewCoupons = () => {
     };
 
 
-    useEffect(() => {
-        handleGetLesseeDetails();
-    }, []);
+    const handleGetCouponsTableData = async () => {
 
+        const userId = localStorage.getItem('userId');
 
-    const handleLesseeChange = (e) => {
-        const lesseeId = e.target.value;
-        setSelectedLesseeId(lesseeId);
+        if (!userId) {
+            toast.error('Missing necessary data for logout');
+            return;
+        }
 
-        const selectedLessee = lesseeDetails.find(l => l.id === parseInt(lesseeId));
+        try {
+            const response = await fetch(`${ApiBaseUrl}/coupon/get-details`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
 
-        if (selectedLessee) {
-            const activeAgreements = selectedLessee.rentAgreements.filter(ra => ra.isActive);
-            const amounts = activeAgreements.map(ra => ra.fixedRentAmount);
-            setRentAmounts(amounts);
-        } else {
-            setRentAmounts([]);
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, statusMessage } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    setCouponsTableData(data.couponBalanceLog || []);
+                } else {
+                    toast.error(statusMessage || 'Logout failed');
+                }
+            } else {
+                toast.error('Logout failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error during logout: ' + error.message);
         }
     };
 
-    const handleRentAmountChange = (e) => {
-        setSelectedRentAmount(e.target.value);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID not found');
+            return;
+        }
+
+        const selectedLessee = lesseeDetails.find(l => l.id === parseInt(selectedLesseeId));
+        if (!selectedLessee) {
+            toast.error('Please select a valid lessee');
+            return;
+        }
+
+        const payload = {
+            lesseeId: selectedLessee.id,
+            lesseeName: selectedLessee.name,
+            couponBalance: parseFloat(couponBalance),
+            balanceMonth: balanceMonth,
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/coupon/save-details`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            if (response.ok && data.statusDescription.statusCode === 200) {
+                toast.success(data?.statusDescription?.description || 'Coupon details saved successfully!');
+                handlereset();
+                handleGetCouponsTableData();
+            } else {
+                toast.error(data.statusDescription?.description || 'Failed to save data');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
     };
+
+    const handlereset = () => {
+        setCouponBalance('');
+        setBalanceMonth('');
+        setSelectedLesseeId('');
+    };
+
+    useEffect(() => {
+        handleGetLesseeDetails();
+        handleGetCouponsTableData();
+    }, []);
 
     const columns = useMemo(() => [
         {
@@ -101,10 +152,10 @@ const AddViewCoupons = () => {
                 </span>
             )
         },
-        { Header: 'Coupon Balance', accessor: 'rentAmount' },
+        { Header: 'Coupon Balance', accessor: 'couponBalance' },
         {
             Header: 'Month & Year',
-            accessor: 'monthYear',
+            accessor: 'balanceMonth',
             Cell: ({ value }) => {
                 const date = new Date(value);
                 return date.toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -126,7 +177,7 @@ const AddViewCoupons = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: lesseeTableData, initialState: { pageIndex: 0, pageSize: 5 } },
+        { columns, data: couponsTableData, initialState: { pageIndex: 0, pageSize: 5 } },
         usePagination
     );
 
@@ -138,14 +189,15 @@ const AddViewCoupons = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Add Coupons Details</h5>
-                                <form onSubmit={''}>
+                                <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
                                         <div className="col-md-4">
                                             <label className="form-label">Lessee Name</label>
                                             <select
                                                 className="form-select"
                                                 value={selectedLesseeId}
-                                                onChange={handleLesseeChange}
+                                                onChange={(e) => setSelectedLesseeId(e.target.value)}
+                                                required
                                             >
                                                 <option value="">Select Lessee</option>
                                                 {lesseeDetails.map((lessee) => (
@@ -157,31 +209,28 @@ const AddViewCoupons = () => {
                                         </div>
                                         <div className="col-md-4">
                                             <label className="form-label">Coupon Balance</label>
-                                            <select
-                                                className="form-select"
-                                                value={selectedRentAmount}
-                                                onChange={handleRentAmountChange}
-                                            >
-                                                <option value="">Select Rent Amount</option>
-                                                {rentAmounts.length === 0 ? (
-                                                    <option>No rent agreement available</option>
-                                                ) : (
-                                                    rentAmounts.map(amount => (
-                                                        <option key={amount} value={amount}>
-                                                            ₹{amount.toLocaleString()}
-                                                        </option>
-                                                    ))
-                                                )}
-                                            </select>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={couponBalance}
+                                                onChange={(e) => setCouponBalance(e.target.value)}
+                                                required
+                                            />
                                         </div>
                                         <div className="col-md-4">
                                             <label className="form-label">Month & Year</label>
-                                            <input type="month" className="form-control" required />
+                                            <input
+                                                type="month"
+                                                className="form-control"
+                                                value={balanceMonth}
+                                                onChange={(e) => setBalanceMonth(e.target.value)}
+                                                required
+                                            />
                                         </div>
                                     </div>
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-primary me-3">Submit</button>
-                                        <button type="reset" className="btn btn-secondary">Reset</button>
+                                        <button type="reset" className="btn btn-secondary" onClick={handlereset} >Reset</button>
                                     </div>
                                 </form>
                             </div>
