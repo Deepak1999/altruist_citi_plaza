@@ -108,7 +108,7 @@ const AddMonthlyCons = () => {
                                             />
                                         </div>
                                         <div className="col-md-3">
-                                            <label className="form-label">No of Units</label>
+                                            <label className="form-label">No of Units Consumed</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -119,7 +119,7 @@ const AddMonthlyCons = () => {
                                             />
                                         </div>
                                         <div className="col-md-3">
-                                            <label className="form-label">Solar Units</label>
+                                            <label className="form-label">Solar Units Consumed</label>
                                             <input
                                                 type="text"
                                                 className="form-control"

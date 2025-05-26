@@ -267,7 +267,7 @@ const AddMeterRecharge = () => {
                                                 {billType === '2' && (
                                                     <>
                                                         <div className="col-md-3">
-                                                            <label className="form-label">Paid Amount</label>
+                                                            <label className="form-label">Amount Received</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
@@ -314,7 +314,7 @@ const AddMeterRecharge = () => {
                                                             />
                                                         </div>
                                                         <div className="col-md-3">
-                                                            <label className="form-label">Paid Amount</label>
+                                                            <label className="form-label">Amount Receivedt</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"

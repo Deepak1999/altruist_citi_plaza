@@ -210,7 +210,7 @@ const AddRent = () => {
                                 <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
                                         <div className="col-md-3">
-                                            <label className="form-label">Lessee</label>
+                                            <label className="form-label">Lessee Name</label>
                                             <select
                                                 className="form-select"
                                                 value={selectedLesseeId}
@@ -251,7 +251,7 @@ const AddRent = () => {
                                         </div>
 
                                         <div className="col-md-3">
-                                            <label className="form-label">Paid Amount</label>
+                                            <label className="form-label">Amount Received</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
