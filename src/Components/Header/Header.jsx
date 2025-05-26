@@ -75,10 +75,10 @@ const Header = () => {
             </div>
 
             <div className="search-bar">
-                <form className="search-form d-flex align-items-center">
+                <formm className="search-form d-flex align-items-center">
                     <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
                     <button type="submit" title="Search"><i className="bi bi-search"></i></button>
-                </form>
+                </formm>
             </div>
 
             <nav className="header-nav ms-auto">
@@ -92,7 +92,7 @@ const Header = () => {
                     <li className="nav-item dropdown pe-3">
                         <a className="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown">
                             <img src="assets/img/profile-img.jpg" alt="Profile" className="rounded-circle" />
-                            <span className="d-none d-md-block dropdown-toggle ps-2">{Name}</span>
+                            <span className="d-none d-md-block dropdown-toggle ps-2" style={{ cursor: 'pointer' }}>{Name}</span>
                         </a>
 
                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">

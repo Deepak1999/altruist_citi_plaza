@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { usePagination, useTable } from 'react-table';
 import { toast, ToastContainer } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const ViewMeterRecharge = () => {
 
@@ -101,6 +103,32 @@ const ViewMeterRecharge = () => {
         usePagination
     );
 
+
+    const handleDownloadExcel = () => {
+        if (!electricityTableData.length) {
+            toast.warn('No data to download');
+            return;
+        }
+
+        const formattedData = electricityTableData.map(row => ({
+            'Lessee': row.lesseeName?.length > 20 ? `${row.lesseeName.slice(0, 20)}...` : row.lesseeName,
+            'Month & Year': new Date(row.monthYear).toLocaleString('default', { month: 'long', year: 'numeric' }),
+            'Bill Type': row.billType === 1 ? 'Postpaid' : row.billType === 2 ? 'Prepaid' : '',
+            'Amount Paid': row.amountPaid,
+            'Payment Date': row.paymentDate,
+            'Remarks': row.remarks?.length > 20 ? `${row.remarks.slice(0, 20)}...` : row.remarks,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Rent Details');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        saveAs(data, 'MeterRechargeDetails.xlsx');
+    };
+
     return (
         <main id="main" className="main">
             <section className="section dashboard">
@@ -108,7 +136,17 @@ const ViewMeterRecharge = () => {
                     <div className="col-lg-12">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title">View Meter Recharge Details</h5>
+                                {/* <h5 className="card-title">View Meter Recharge Details</h5> */}
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 className="card-title mb-0">Meter Recharge Details</h5>
+                                    <i
+                                        className="fa-solid fa-circle-down"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={handleDownloadExcel}
+                                    >
+                                        <span className="ms-2">download</span>
+                                    </i>
+                                </div>
                                 <table {...getTableProps()} className="table table-striped">
                                     <thead>
                                         {headerGroups.map(headerGroup => (

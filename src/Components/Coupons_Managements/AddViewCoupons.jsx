@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { toast } from 'react-toastify';
 import { usePagination, useTable } from 'react-table';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const AddViewCoupons = () => {
 
@@ -181,6 +183,28 @@ const AddViewCoupons = () => {
         usePagination
     );
 
+    const handleDownloadExcel = () => {
+        if (!couponsTableData.length) {
+            toast.warn('No data to download');
+            return;
+        }
+
+        const formattedData = couponsTableData.map(row => ({
+            'Lessee Name': row.lesseeName?.length > 25 ? `${row.lesseeName.slice(0, 25)}...` : row.lesseeName,
+            'Coupon Balance': row.couponBalance,
+            'Month & Year': new Date(row.balanceMonth).toLocaleString('default', { month: 'long', year: 'numeric' }),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Coupon Balance Report');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        saveAs(data, 'CouponBalanceReport.xlsx');
+    };
+
     return (
         <main id="main" className="main">
             <section className="section dashboard">
@@ -240,7 +264,17 @@ const AddViewCoupons = () => {
                         {/* view table code  */}
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title">View Coupons Details</h5>
+                                {/* <h5 className="card-title">View Coupons Details</h5> */}
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 className="card-title mb-0">Coupons Details</h5>
+                                    <i
+                                        className="fa-solid fa-circle-down"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={handleDownloadExcel}
+                                    >
+                                        <span className="ms-2">download</span>
+                                    </i>
+                                </div>
                                 <table {...getTableProps()} className="table table-striped">
                                     <thead>
                                         {headerGroups.map(headerGroup => (
