@@ -23,6 +23,10 @@ const AddViewCoupons = () => {
     const [consumedBy, setConsumedBy] = useState('');
     const [remarks, setRemarks] = useState('');
 
+    const staticLesseeDetails = [
+        { id: '1', name: 'Gopal Sweets' },
+        { id: '2', name: 'Pro Saloon' }
+    ];
 
     const handleGetLesseeDetails = async () => {
         const userId = localStorage.getItem('userId');
@@ -107,59 +111,18 @@ const AddViewCoupons = () => {
         const selectedId = e.target.value;
         setLesseeId(selectedId);
 
-        const lessee = lesseeDetails.find(l => l.id.toString() === selectedId);
-        setLesseeName(lessee?.name || '');
+        const staticLesseeMap = {
+            '1': 'Gopal Sweets',
+            '2': 'Pro Saloon'
+        };
+
+        setLesseeName(staticLesseeMap[selectedId] || '');
     };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) {
-    //         toast.error('User ID not found');
-    //         return;
-    //     }
-
-    //     const selectedLessee = lesseeDetails.find(l => l.id === parseInt(selectedLesseeId));
-    //     if (!selectedLessee) {
-    //         toast.error('Please select a valid lessee');
-    //         return;
-    //     }
-
-    //     const payload = {
-    //         lesseeId: selectedLessee.id,
-    //         lesseeName: selectedLessee.name,
-    //         couponBalance: parseFloat(couponBalance),
-    //         balanceMonth: balanceMonth,
-    //     };
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/coupon/save-details`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 userId: userId,
-    //             },
-    //             body: JSON.stringify(payload),
-    //         });
-
-    //         const data = await response.json();
-    //         if (response.ok && data.statusDescription.statusCode === 200) {
-    //             toast.success(data?.statusDescription?.description || 'Coupon details saved successfully!');
-    //             handlereset();
-    //             handleGetCouponsTableData();
-    //         } else {
-    //             toast.error(data.statusDescription?.description || 'Failed to save data');
-    //         }
-    //     } catch (error) {
-    //         toast.error('API error: ' + error.message);
-    //     }
-    // };
 
     const now = new Date();
     const pad = (n) => n.toString().padStart(2, '0');
     const currentTime = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-    const balanceMonthNow = `${date}T${currentTime}`;
+    const balanceMonthNow = `${date} ${currentTime}`;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -313,7 +276,7 @@ const AddViewCoupons = () => {
                     <div className="col-lg-12">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title">Add Coupons Details</h5>
+                                <h5 className="card-title">Add Coupon Transaction</h5>
                                 <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
                                         <div className="col-md-3">
@@ -325,8 +288,8 @@ const AddViewCoupons = () => {
                                                 required
                                             >
                                                 <option value="">Select Type</option>
-                                                <option value="1">Use Coupons</option>
-                                                <option value="0">Add Coupons</option>
+                                                <option value="1">Coupon Used</option>
+                                                <option value="0">Add Coupon</option>
                                             </select>
                                         </div>
                                     </div>
@@ -342,7 +305,7 @@ const AddViewCoupons = () => {
                                                     required
                                                 >
                                                     <option value="">Select Lessee</option>
-                                                    {lesseeDetails.map((lessee) => (
+                                                    {staticLesseeDetails.map((lessee) => (
                                                         <option key={lessee.id} value={lessee.id}>
                                                             {lessee.name}
                                                         </option>
@@ -385,7 +348,7 @@ const AddViewCoupons = () => {
                                                     required
                                                 >
                                                     <option value="">Select Lessee</option>
-                                                    {lesseeDetails.map((lessee) => (
+                                                    {staticLesseeDetails.map((lessee) => (
                                                         <option key={lessee.id} value={lessee.id}>
                                                             {lessee.name}
                                                         </option>
@@ -421,7 +384,7 @@ const AddViewCoupons = () => {
                             <div className="card-body">
                                 {/* <h5 className="card-title">View Coupons Details</h5> */}
                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title mb-0">Coupons Transaction Details</h5>
+                                    <h5 className="card-title mb-0">Coupon Transaction Details</h5>
                                     <i
                                         className="fa-solid fa-circle-down"
                                         style={{ cursor: 'pointer' }}
