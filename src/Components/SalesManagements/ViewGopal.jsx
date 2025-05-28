@@ -57,7 +57,7 @@ const ViewGopal = () => {
         { Header: 'Cashier Name', accessor: 'cashierName' },
         { Header: 'Cash Sale', accessor: 'cashSale' },
         { Header: 'Card Sale/ Online Order', accessor: 'cardOnlineSale' },
-        { Header: 'Void Bill Amt', accessor: 'voidBillAmount' },
+        // { Header: 'Void Bill Amt', accessor: 'voidBillAmount' },
         { Header: 'Sub Total (B)', accessor: 'subTotal' },
 
     ], []);

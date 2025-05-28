@@ -314,7 +314,7 @@ const AddMeterRecharge = () => {
                                                             />
                                                         </div>
                                                         <div className="col-md-3">
-                                                            <label className="form-label">Amount Receivedt</label>
+                                                            <label className="form-label">Amount Received</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"

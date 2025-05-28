@@ -54,14 +54,14 @@ const ViewAyaanCinema = () => {
             Header: 'Date',
             accessor: 'reportDate',
         },
-        { Header: 'Box Office Admits', accessor: 'boxOfficeAdmits' },
-        { Header: 'Net Box Office Sales ', accessor: 'netBoxOfficeSales' },
-        { Header: 'Gross Box Office Sales', accessor: 'grossBoxOfficeSales' },
+        { Header: 'Box Off. Admits', accessor: 'boxOfficeAdmits' },
+        { Header: 'Net Box Off. Sales ', accessor: 'netBoxOfficeSales' },
+        { Header: 'Gross Box Off. Sales', accessor: 'grossBoxOfficeSales' },
         { Header: 'Net Concs. Sales', accessor: 'netConcessionsSales' },
         { Header: 'Gross Concs. Sales', accessor: 'grossConcessionsSales' },
         { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
         { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
-        { Header: 'Total (A+B)', accessor: 'totalDsrShare' },
+        { Header: 'Total(A+B)', accessor: 'totalDsrShare' },
 
     ], []);
 
@@ -129,7 +129,7 @@ const ViewAyaanCinema = () => {
                                     </i>
                                 </div>
                                 <table {...getTableProps()} className="table table-striped">
-                                    <thead>
+                                    <thead style={{ fontSize: '12px' }}>
                                         {headerGroups.map(headerGroup => (
                                             <tr {...headerGroup.getHeaderGroupProps()}>
                                                 {headerGroup.headers.map(column => (

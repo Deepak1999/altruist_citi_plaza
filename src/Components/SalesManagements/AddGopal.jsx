@@ -9,7 +9,7 @@ const AddGopal = () => {
         saleDate: '',
         cashSale: '',
         cardOnlineSale: '',
-        voidBillAmount: '',
+        // voidBillAmount: '',
         subTotal: ''
     });
 
@@ -169,20 +169,6 @@ const AddGopal = () => {
                                                         required
                                                     />
                                                 </div>
-                                                <div className="col-md-3">
-                                                    <label className="form-label">Void Bill Amt</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        name="voidBillAmount"
-                                                        value={formData.voidBillAmount}
-                                                        onChange={handleChange}
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="row mb-3">
                                                 <div className="col-md-3">
                                                     <label className="form-label">Sub Total</label>
                                                     <input

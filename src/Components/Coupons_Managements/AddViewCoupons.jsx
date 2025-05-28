@@ -12,6 +12,17 @@ const AddViewCoupons = () => {
     const [couponsTableData, setCouponsTableData] = useState([]);
     const [couponBalance, setCouponBalance] = useState('');
     const [balanceMonth, setBalanceMonth] = useState('');
+    const [transactionType, setTransactionType] = useState('');
+
+
+    const [lesseeId, setLesseeId] = useState('');
+    const [lesseeName, setLesseeName] = useState('');
+    const [date, setDate] = useState('');
+    const [couponsConsumed, setCouponsConsumed] = useState('');
+    const [couponsAdded, setCouponsAdded] = useState('');
+    const [consumedBy, setConsumedBy] = useState('');
+    const [remarks, setRemarks] = useState('');
+
 
     const handleGetLesseeDetails = async () => {
         const userId = localStorage.getItem('userId');
@@ -88,26 +99,85 @@ const AddViewCoupons = () => {
         }
     };
 
+    const handleTransactionChange = (e) => {
+        setTransactionType(e.target.value);
+    };
+
+    const handleLesseeChange = (e) => {
+        const selectedId = e.target.value;
+        setLesseeId(selectedId);
+
+        const lessee = lesseeDetails.find(l => l.id.toString() === selectedId);
+        setLesseeName(lessee?.name || '');
+    };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     const userId = localStorage.getItem('userId');
+    //     if (!userId) {
+    //         toast.error('User ID not found');
+    //         return;
+    //     }
+
+    //     const selectedLessee = lesseeDetails.find(l => l.id === parseInt(selectedLesseeId));
+    //     if (!selectedLessee) {
+    //         toast.error('Please select a valid lessee');
+    //         return;
+    //     }
+
+    //     const payload = {
+    //         lesseeId: selectedLessee.id,
+    //         lesseeName: selectedLessee.name,
+    //         couponBalance: parseFloat(couponBalance),
+    //         balanceMonth: balanceMonth,
+    //     };
+
+    //     try {
+    //         const response = await fetch(`${ApiBaseUrl}/coupon/save-details`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 userId: userId,
+    //             },
+    //             body: JSON.stringify(payload),
+    //         });
+
+    //         const data = await response.json();
+    //         if (response.ok && data.statusDescription.statusCode === 200) {
+    //             toast.success(data?.statusDescription?.description || 'Coupon details saved successfully!');
+    //             handlereset();
+    //             handleGetCouponsTableData();
+    //         } else {
+    //             toast.error(data.statusDescription?.description || 'Failed to save data');
+    //         }
+    //     } catch (error) {
+    //         toast.error('API error: ' + error.message);
+    //     }
+    // };
+
+    const now = new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+    const currentTime = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const balanceMonthNow = `${date}T${currentTime}`;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const userId = localStorage.getItem('userId');
-        if (!userId) {
-            toast.error('User ID not found');
-            return;
-        }
-
-        const selectedLessee = lesseeDetails.find(l => l.id === parseInt(selectedLesseeId));
-        if (!selectedLessee) {
-            toast.error('Please select a valid lessee');
-            return;
-        }
 
         const payload = {
-            lesseeId: selectedLessee.id,
-            lesseeName: selectedLessee.name,
-            couponBalance: parseFloat(couponBalance),
-            balanceMonth: balanceMonth,
+            couponBalanceLog: {
+                lesseeName: lesseeName,
+                lesseeId: lesseeId,
+                couponsBalance: 0,
+                couponsConsumed: transactionType === '1' ? Number(couponsConsumed) : 0,
+                couponsAdded: transactionType === '0' ? Number(couponsAdded) : 0,
+                consumedBy: transactionType === '1' ? consumedBy : '',
+                balanceMonth: balanceMonthNow,
+                transactionType: Number(transactionType),
+                remarks: remarks
+            }
         };
 
         try {
@@ -115,9 +185,9 @@ const AddViewCoupons = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    userId: userId,
+                    userId: userId
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -137,6 +207,14 @@ const AddViewCoupons = () => {
         setCouponBalance('');
         setBalanceMonth('');
         setSelectedLesseeId('');
+        setTransactionType('');
+        setLesseeId('');
+        setLesseeName('');
+        setDate('');
+        setCouponsConsumed('');
+        setCouponsAdded('');
+        setConsumedBy('');
+        setRemarks('');
     };
 
     useEffect(() => {
@@ -154,15 +232,27 @@ const AddViewCoupons = () => {
                 </span>
             )
         },
-        { Header: 'Coupon Balance', accessor: 'couponBalance' },
+        { Header: 'Added', accessor: 'couponsAdded' },
+        { Header: 'Consumed', accessor: 'couponsConsumed' },
+        { Header: 'Balance', accessor: 'couponsBalance' },
+        { Header: 'Consumed By', accessor: 'consumedBy' },
         {
-            Header: 'Month & Year',
+            Header: 'Date',
             accessor: 'balanceMonth',
             Cell: ({ value }) => {
                 const date = new Date(value);
-                return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                const pad = (n) => n.toString().padStart(2, '0');
+                const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+                return formattedDate;
             }
-        }
+        },
+        {
+            Header: 'Transaction',
+            accessor: 'transactionType',
+            Cell: ({ value }) => (value === 0 ? 'Credit' : 'Debit')
+        },
+        { Header: 'Remarks', accessor: 'remarks' },
+
 
     ], []);
 
@@ -189,11 +279,22 @@ const AddViewCoupons = () => {
             return;
         }
 
-        const formattedData = couponsTableData.map(row => ({
-            'Lessee Name': row.lesseeName?.length > 25 ? `${row.lesseeName.slice(0, 25)}...` : row.lesseeName,
-            'Coupon Balance': row.couponBalance,
-            'Month & Year': new Date(row.balanceMonth).toLocaleString('default', { month: 'long', year: 'numeric' }),
-        }));
+        const formattedData = couponsTableData.map(row => {
+            const date = new Date(row.balanceMonth);
+            const pad = (n) => n.toString().padStart(2, '0');
+            const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+
+            return {
+                'Lessee Name': row.lesseeName?.length > 25 ? `${row.lesseeName.slice(0, 25)}...` : row.lesseeName,
+                'Added': row.couponsAdded,
+                'Consumed': row.couponsConsumed,
+                'Balance': row.couponsBalance,
+                'Consumed By': row.consumedBy,
+                'Date': formattedDate,
+                'Transaction': row.transactionType === 0 ? 'Credit' : 'Debit',
+                'Remarks': row.remarks || ''
+            };
+        });
 
         const worksheet = XLSX.utils.json_to_sheet(formattedData);
         const workbook = XLSX.utils.book_new();
@@ -215,46 +316,100 @@ const AddViewCoupons = () => {
                                 <h5 className="card-title">Add Coupons Details</h5>
                                 <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
-                                        <div className="col-md-4">
-                                            <label className="form-label">Lessee Name</label>
+                                        <div className="col-md-3">
+                                            <label className="form-label">Select Transaction Type</label>
                                             <select
                                                 className="form-select"
-                                                value={selectedLesseeId}
-                                                onChange={(e) => setSelectedLesseeId(e.target.value)}
+                                                value={transactionType}
+                                                onChange={handleTransactionChange}
                                                 required
                                             >
-                                                <option value="">Select Lessee</option>
-                                                {lesseeDetails.map((lessee) => (
-                                                    <option key={lessee.id} value={lessee.id}>
-                                                        {lessee.name}
-                                                    </option>
-                                                ))}
+                                                <option value="">Select Type</option>
+                                                <option value="1">Use Coupons</option>
+                                                <option value="0">Add Coupons</option>
                                             </select>
                                         </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label">Coupon Balance</label>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={couponBalance}
-                                                onChange={(e) => setCouponBalance(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label">Month & Year</label>
-                                            <input
-                                                type="month"
-                                                className="form-control"
-                                                value={balanceMonth}
-                                                onChange={(e) => setBalanceMonth(e.target.value)}
-                                                required
-                                            />
-                                        </div>
                                     </div>
+
+                                    {transactionType === '1' && (
+                                        <div className="row mb-3">
+                                            <div className="col-md-3">
+                                                <label className="form-label">Lessee Name</label>
+                                                <select
+                                                    className="form-select"
+                                                    value={lesseeId}
+                                                    onChange={handleLesseeChange}
+                                                    required
+                                                >
+                                                    <option value="">Select Lessee</option>
+                                                    {lesseeDetails.map((lessee) => (
+                                                        <option key={lessee.id} value={lessee.id}>
+                                                            {lessee.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Date</label>
+                                                <input type="date" className="form-control" required value={date} onChange={(e) => setDate(e.target.value)} />
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Coupons Consumed</label>
+                                                <input type="number" className="form-control" required value={couponsConsumed} onChange={(e) => setCouponsConsumed(e.target.value)} />
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Coupon Consumed By</label>
+                                                <select className="form-select" required value={consumedBy} onChange={(e) => setConsumedBy(e.target.value)}>
+                                                    <option value="">Consumed By</option>
+                                                    <option value="Police">Police</option>
+                                                    <option value="Family">Family</option>
+                                                    <option value="Office Staff">Office Staff</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Remarks</label>
+                                                <input type="text" className="form-control" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {transactionType === '0' && (
+                                        <div className="row mb-3">
+                                            <div className="col-md-3">
+                                                <label className="form-label">Lessee Name</label>
+                                                <select
+                                                    className="form-select"
+                                                    value={lesseeId}
+                                                    onChange={handleLesseeChange}
+                                                    required
+                                                >
+                                                    <option value="">Select Lessee</option>
+                                                    {lesseeDetails.map((lessee) => (
+                                                        <option key={lessee.id} value={lessee.id}>
+                                                            {lessee.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Date</label>
+                                                <input type="date" className="form-control" required value={date} onChange={(e) => setDate(e.target.value)} />
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Coupons Amount</label>
+                                                <input type="number" className="form-control" required value={couponsAdded} onChange={(e) => setCouponsAdded(e.target.value)} />
+                                            </div>
+                                            <div className="col-md-3">
+                                                <label className="form-label">Remarks</label>
+                                                <input type="text" className="form-control" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-primary me-3">Submit</button>
-                                        <button type="reset" className="btn btn-secondary" onClick={handlereset} >Reset</button>
+                                        <button type="reset" className="btn btn-secondary" onClick={handlereset}>Reset</button>
                                     </div>
                                 </form>
                             </div>
@@ -266,7 +421,7 @@ const AddViewCoupons = () => {
                             <div className="card-body">
                                 {/* <h5 className="card-title">View Coupons Details</h5> */}
                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title mb-0">Coupons Details</h5>
+                                    <h5 className="card-title mb-0">Coupons Transaction Details</h5>
                                     <i
                                         className="fa-solid fa-circle-down"
                                         style={{ cursor: 'pointer' }}
