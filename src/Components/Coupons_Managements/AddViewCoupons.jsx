@@ -181,7 +181,7 @@ const AddViewCoupons = () => {
     };
 
     useEffect(() => {
-        handleGetLesseeDetails();
+        // handleGetLesseeDetails();
         handleGetCouponsTableData();
     }, []);
 
