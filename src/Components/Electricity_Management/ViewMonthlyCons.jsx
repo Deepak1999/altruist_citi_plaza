@@ -132,7 +132,7 @@ const ViewMonthlyCons = () => {
                                     </i>
                                 </div>
                                 <div className='table-responsive mb-3'>
-                                    <table {...getTableProps()} className="table table-stripedm-0">
+                                    <table {...getTableProps()} className="table table-striped m-0">
                                         <thead>
                                             {headerGroups.map(headerGroup => (
                                                 <tr {...headerGroup.getHeaderGroupProps()}>
