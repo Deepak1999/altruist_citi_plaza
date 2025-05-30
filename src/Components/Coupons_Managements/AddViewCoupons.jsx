@@ -404,7 +404,6 @@ const AddViewCoupons = () => {
                                                 </tr>
                                             ))}
                                         </thead>
-
                                         <tbody {...getTableBodyProps()}>
                                             {page.map(row => {
                                                 prepareRow(row);
