@@ -5,6 +5,73 @@ import { usePagination, useTable } from "react-table";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+const EditModal = ({ show, onClose, onSave, data }) => {
+
+    const [couponsConsumed, setCouponsConsumed] = useState(data?.unitProduced || '');
+    const [remarks, setRemarks] = useState(data?.remarks || '');
+
+    useEffect(() => {
+        if (data) {
+            setCouponsConsumed(data.unitProduced || '0');
+            setRemarks(data.remarks || 'N/A');
+        }
+    }, [data]);
+
+    if (!show) return null;
+
+    return (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Edit Solar Production Details</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label className="form-label">Units Produced</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={couponsConsumed}
+                                onChange={(e) => setCouponsConsumed(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Remarks</label>
+                            <textarea
+                                className="form-control"
+                                value={remarks || ''}
+                                onChange={(e) => setRemarks(e.target.value)}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() =>
+                                onSave({
+                                    ...data,
+                                    unitProduced: couponsConsumed,
+                                    remarks,
+                                })
+                            }
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
 const AddViewSolar = () => {
 
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
@@ -227,6 +294,31 @@ const AddViewSolar = () => {
         },
         { Header: 'Plant Name', accessor: 'plantName' },
         { Header: 'Units Produced', accessor: 'unitProduced' },
+        {
+            Header: 'Remarks',
+            accessor: 'remarks',
+            Cell: ({ value }) => {
+                if (!value || !value.trim()) return 'N/A';
+
+                const words = value.trim().split(/\s+/);
+                const shortText = words.slice(0, 10).join(' ');
+                const isTruncated = words.length > 10;
+
+                return (
+                    <span title={value}>
+                        {shortText}{isTruncated ? '...' : ''}
+                    </span>
+                );
+            }
+        },
+        {
+            Header: 'Action',
+            Cell: ({ row }) => (
+                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )
+        }
 
     ], []);
 
@@ -281,6 +373,60 @@ const AddViewSolar = () => {
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
         saveAs(data, 'ProductionReport.xlsx');
+    };
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const handleOpenModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedRowData(null);
+    };
+
+    const handleSaveModal = async (updatedData) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID missing in localStorage');
+            return;
+        }
+
+        const payload = {
+            toBeUpdated: updatedData.id,
+            newUnitsProduced: Number(updatedData.unitProduced),
+            updateRemarks: updatedData.remarks
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/solar/update-details`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription?.statusCode === 200) {
+                toast.success(result?.statusDescription?.description || 'Update successful!');
+
+                setSolarTableData(prev =>
+                    prev.map(item => item.id === updatedData.id ? updatedData : item)
+                );
+
+                handleCloseModal();
+            } else {
+                toast.error(result.statusDescription?.description || 'Failed to update');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
     };
 
     return (
@@ -410,6 +556,12 @@ const AddViewSolar = () => {
                     </div>
                 </div>
             </section>
+            <EditModal
+                show={showModal}
+                onClose={handleCloseModal}
+                onSave={handleSaveModal}
+                data={selectedRowData}
+            />
         </main>
     );
 };

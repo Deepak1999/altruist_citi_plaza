@@ -5,6 +5,96 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+const EditModal = ({ show, onClose, onSave, data }) => {
+
+    const [cashSale, setCashSale] = useState(data?.cashSale || '');
+    const [cardSale, setCardSale] = useState(data?.cardOnlineSale || '');
+    const [subTotal, setSubTotal] = useState(data?.subTotal || '');
+    const [remarks, setRemarks] = useState(data?.remarks || 'N/A');
+
+    useEffect(() => {
+        if (data) {
+            setCashSale(data.cashSale || '');
+            setCardSale(data.cardOnlineSale || '');
+            setSubTotal(data.subTotal || '');
+            setRemarks(data.remarks || 'N/A');
+        }
+    }, [data]);
+
+    if (!show) return null;
+
+    return (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Edit Gopal Sales Details</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label className="form-label">Cash Sale</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={cashSale}
+                                onChange={(e) => setCashSale(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Card Sale / Online Order</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={cardSale}
+                                onChange={(e) => setCardSale(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Sub Total (B)</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={subTotal}
+                                onChange={(e) => setSubTotal(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Remarks</label>
+                            <textarea
+                                className="form-control"
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() =>
+                                onSave({
+                                    ...data,
+                                    cashSale: Number(cashSale),
+                                    cardSale: Number(cardSale),
+                                    subTotal: Number(subTotal),
+                                    remarks: remarks,
+                                })
+                            }
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const ViewGopal = () => {
 
     const [gopalSaleLogs, setgopalSaleLogs] = useState([]);
@@ -56,9 +146,20 @@ const ViewGopal = () => {
         },
         { Header: 'Cashier Name', accessor: 'cashierName' },
         { Header: 'Cash Sale', accessor: 'cashSale' },
-        { Header: 'Card Sale/ Online Order', accessor: 'cardOnlineSale' },
-        // { Header: 'Void Bill Amt', accessor: 'voidBillAmount' },
-        { Header: 'Sub Total (B)', accessor: 'subTotal' },
+        { Header: 'Card Sale/Online Order', accessor: 'cardOnlineSale' },
+        { Header: 'Sub Total(B)', accessor: 'subTotal' },
+        {
+            Header: 'Remarks',
+            accessor: row => row.remarks ? row.remarks : 'N/A'
+        },
+        {
+            Header: 'Action',
+            Cell: ({ row }) => (
+                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )
+        }
 
     ], []);
 
@@ -102,6 +203,63 @@ const ViewGopal = () => {
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
         saveAs(data, 'GopalSaleSummary.xlsx');
+    };
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const handleOpenModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedRowData(null);
+    };
+
+    const handleSaveModal = async (updatedData) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID missing in localStorage');
+            return;
+        }
+
+        const payload = {
+            toBeUpdated: updatedData.id,
+            // newUnitsProduced: Number(updatedData.unitProduced),
+            updatedCashSale: updatedData.cashSale,
+            updatedCardOnlineSale: updatedData.cardSale,
+            updatedSubTotal: updatedData.subTotal,
+            updateRemarks: updatedData.remarks
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/sale-logs/gopal/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription?.statusCode === 200) {
+                toast.success(result?.statusDescription?.description || 'Update successful!');
+
+                setgopalSaleLogs(prev =>
+                    prev.map(item => item.id === updatedData.id ? updatedData : item)
+                );
+
+                handleCloseModal();
+            } else {
+                toast.error(result.statusDescription?.description || 'Failed to update');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
     };
 
     return (
@@ -177,6 +335,12 @@ const ViewGopal = () => {
                     </div>
                 </div>
             </section>
+            <EditModal
+                show={showModal}
+                onClose={handleCloseModal}
+                onSave={handleSaveModal}
+                data={selectedRowData}
+            />
             <ToastContainer />
         </main>
     );

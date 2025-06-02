@@ -262,15 +262,23 @@ const AddViewCoupons = () => {
             accessor: 'transactionType',
             Cell: ({ value }) => (value === 0 ? 'Credit' : 'Debit')
         },
-        { Header: 'Remarks', accessor: 'remarks' },
         {
-            Header: 'Action',
-            Cell: ({ row }) => (
-                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
-                    <i className="fa-solid fa-pen-to-square"></i>
-                </button>
+            Header: 'Remarks',
+            accessor: 'remarks',
+            Cell: ({ value }) => (
+                <span title={value}>
+                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+                </span>
             )
-        }
+        },
+        // {
+        //     Header: 'Action',
+        //     Cell: ({ row }) => (
+        //         <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+        //             <i className="fa-solid fa-pen-to-square"></i>
+        //         </button>
+        //     )
+        // }
 
     ], []);
 
