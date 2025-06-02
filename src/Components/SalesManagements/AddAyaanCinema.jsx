@@ -29,7 +29,7 @@ const AddAyaanCinema = () => {
         const userId = localStorage.getItem("userId");
 
         const now = new Date();
-        const timePart = now.toTimeString().split(" ")[0]; // HH:mm:ss
+        const timePart = now.toTimeString().split(" ")[0];
         const reportDateTime = `${formData.reportDate} ${timePart}`;
 
         try {

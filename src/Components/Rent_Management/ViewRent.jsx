@@ -70,7 +70,7 @@ const ViewRent = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -86,18 +86,18 @@ const ViewRent = () => {
             const data = await response.json();
 
             if (response.ok) {
-                const { statusCode, statusMessage } = data.statusDescription;
+                const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
                     setLesseeTableData(data.monthlyRentLogs || []);
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.error(description || 'failed to fetch data');
                 }
             } else {
-                toast.error('Logout failed with status: ' + response.status);
+                toast.error('failed to fetch data with status: ' + response.status);
             }
         } catch (error) {
-            toast.error('Error during logout: ' + error.message);
+            toast.error('Error during fetch data : ' + error.message);
         }
     };
 
@@ -206,7 +206,7 @@ const ViewRent = () => {
     const handleSaveModal = async (updatedData) => {
         const userId = localStorage.getItem('userId');
         if (!userId) {
-            toast.error('User ID missing');
+            toast.error('User ID missing in localStorage');
             return;
         }
 
@@ -229,7 +229,7 @@ const ViewRent = () => {
             const result = await response.json();
 
             if (response.ok && result.statusDescription?.statusCode === 200) {
-                toast.success('Update successful!');
+                toast.success(result?.statusDescription?.description || 'Update successful!');
 
                 setLesseeTableData(prev =>
                     prev.map(item => item.rentId === updatedData.rentId ? updatedData : item)
@@ -237,7 +237,7 @@ const ViewRent = () => {
 
                 handleCloseModal();
             } else {
-                toast.error(result.statusDescription?.statusMessage || 'Failed to update');
+                toast.error(result.statusDescription?.description || 'Failed to update');
             }
         } catch (error) {
             toast.error('API error: ' + error.message);

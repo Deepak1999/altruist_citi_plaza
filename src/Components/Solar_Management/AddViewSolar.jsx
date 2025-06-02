@@ -23,7 +23,7 @@ const AddViewSolar = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -63,7 +63,7 @@ const AddViewSolar = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -84,13 +84,13 @@ const AddViewSolar = () => {
                 if (statusCode === 200) {
                     setSolarTableData(data.solarProductionLog || []);
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.error(statusMessage || 'failed to fetch solar data');
                 }
             } else {
-                toast.error('Logout failed with status: ' + response.status);
+                toast.error('failed to fetch with status: ' + response.status);
             }
         } catch (error) {
-            toast.error('Error during logout: ' + error.message);
+            toast.error('Error during fetch : ' + error.message);
         }
     };
 
@@ -99,7 +99,7 @@ const AddViewSolar = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -120,13 +120,13 @@ const AddViewSolar = () => {
                 if (statusCode === 200) {
                     SetSolarPlantData(data.solarPlantMaster || []);
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.error(statusMessage || 'failed to fetch solar plant data');
                 }
             } else {
-                toast.error('Logout failed with status: ' + response.status);
+                toast.error('failed to fetch data with status: ' + response.status);
             }
         } catch (error) {
-            toast.error('Error during logout: ' + error.message);
+            toast.error('Error during fetch: ' + error.message);
         }
     };
 

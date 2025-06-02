@@ -27,7 +27,7 @@ const Header = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 

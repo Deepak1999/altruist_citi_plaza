@@ -5,6 +5,96 @@ import { usePagination, useTable } from 'react-table';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+const EditModal = ({ show, onClose, onSave, data }) => {
+    const [amountAdded, setAmountAdded] = useState(data?.couponsAdded || '');
+    const [amountConsumed, setAmountConsumed] = useState(data?.couponsConsumed || '');
+    const [consumedBy, setConsumedBy] = useState(data?.consumedBy || '');
+    const [remarks, setRemarks] = useState(data?.remarks || '');
+
+    useEffect(() => {
+        if (data) {
+            setAmountAdded(data.couponsAdded || '');
+            setAmountConsumed(data.couponsConsumed || '');
+            setConsumedBy(data.consumedBy || '');
+            setRemarks(data.remarks || '');
+        }
+    }, [data]);
+
+    if (!show) return null;
+
+    return (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Edit Coupon Transaction Details</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label className="form-label">Added</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={amountAdded}
+                                onChange={(e) => setAmountAdded(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Consumed</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={amountConsumed}
+                                onChange={(e) => setAmountConsumed(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Consumed By</label>
+                            <select
+                                className="form-control"
+                                value={consumedBy}
+                                onChange={(e) => setConsumedBy(e.target.value)}
+                            >
+                                <option value="">Select</option>
+                                <option value="Police">Police</option>
+                                <option value="Family">Family</option>
+                                <option value="Office Staff">Office Staff</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Remarks</label>
+                            <textarea
+                                className="form-control"
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => onSave({
+                                ...data,
+                                couponsAdded: amountAdded,
+                                couponsConsumed: amountConsumed,
+                                consumedBy,
+                                remarks
+                            })}
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 const AddViewCoupons = () => {
 
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
@@ -13,8 +103,6 @@ const AddViewCoupons = () => {
     const [couponBalance, setCouponBalance] = useState('');
     const [balanceMonth, setBalanceMonth] = useState('');
     const [transactionType, setTransactionType] = useState('');
-
-
     const [lesseeId, setLesseeId] = useState('');
     const [lesseeName, setLesseeName] = useState('');
     const [date, setDate] = useState('');
@@ -28,51 +116,12 @@ const AddViewCoupons = () => {
         { id: '2', name: 'Pro Saloon' }
     ];
 
-    const handleGetLesseeDetails = async () => {
-        const userId = localStorage.getItem('userId');
-
-        if (!userId) {
-            toast.error('Missing necessary data for logout');
-            return;
-        }
-
-        try {
-            const response = await fetch(`${ApiBaseUrl}/rent/lessee-details-all`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    userId: userId,
-                },
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                const { statusCode, statusMessage } = data.statusDescription;
-                if (statusCode === 200) {
-                    const lesseeDetails = data.lesseeDetails.map((mode) => ({
-                        id: mode.id,
-                        name: mode.name,
-                        rentAgreements: mode.rentAgreements || [],
-                    }));
-                    setLesseeDetails(lesseeDetails);
-                } else {
-                    toast.error(statusMessage || 'Failed to fetch lessee details');
-                }
-            } else {
-                toast.error('Failed to fetch lessee details with status: ' + response.status);
-            }
-        } catch (error) {
-            toast.error('Error during fetching lessee details: ' + error.message);
-        }
-    };
-
-
     const handleGetCouponsTableData = async () => {
 
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -181,7 +230,6 @@ const AddViewCoupons = () => {
     };
 
     useEffect(() => {
-        // handleGetLesseeDetails();
         handleGetCouponsTableData();
     }, []);
 
@@ -215,7 +263,14 @@ const AddViewCoupons = () => {
             Cell: ({ value }) => (value === 0 ? 'Credit' : 'Debit')
         },
         { Header: 'Remarks', accessor: 'remarks' },
-
+        {
+            Header: 'Action',
+            Cell: ({ row }) => (
+                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )
+        }
 
     ], []);
 
@@ -267,6 +322,60 @@ const AddViewCoupons = () => {
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
         saveAs(data, 'CouponBalanceReport.xlsx');
+    };
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const handleOpenModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedRowData(null);
+    };
+
+    const handleSaveModal = async (updatedData) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID missing in localStorage');
+            return;
+        }
+
+        const payload = {
+            toBeUpdated: updatedData.rentId,
+            updatedLogAmount: Number(updatedData.rentPaidAmount),
+            updateRemarks: updatedData.remarks
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/coupon/update-details`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription?.statusCode === 200) {
+                toast.success(result?.statusDescription?.description || 'Update successful!');
+
+                // setLesseeTableData(prev =>
+                //     prev.map(item => item.rentId === updatedData.rentId ? updatedData : item)
+                // );
+
+                handleCloseModal();
+            } else {
+                toast.error(result.statusDescription?.description || 'Failed to update');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
     };
 
     return (
@@ -323,7 +432,7 @@ const AddViewCoupons = () => {
                                             <div className="col-md-3">
                                                 <label className="form-label">Coupon Consumed By</label>
                                                 <select className="form-select" required value={consumedBy} onChange={(e) => setConsumedBy(e.target.value)}>
-                                                    <option value="">Consumed By</option>
+                                                    <option value="">Select</option>
                                                     <option value="Police">Police</option>
                                                     <option value="Family">Family</option>
                                                     <option value="Office Staff">Office Staff</option>
@@ -377,12 +486,9 @@ const AddViewCoupons = () => {
                                 </form>
                             </div>
                         </div>
-
-
                         {/* view table code  */}
                         <div className="card">
                             <div className="card-body">
-                                {/* <h5 className="card-title">View Coupons Details</h5> */}
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h5 className="card-title mb-0">Coupon Transaction Details</h5>
                                     <i
@@ -445,10 +551,15 @@ const AddViewCoupons = () => {
                             </div>
                         </div>
                         {/* view table code end */}
-
                     </div>
                 </div>
             </section>
+            <EditModal
+                show={showModal}
+                onClose={handleCloseModal}
+                onSave={handleSaveModal}
+                data={selectedRowData}
+            />
         </main>
     );
 };

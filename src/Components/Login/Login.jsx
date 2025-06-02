@@ -34,7 +34,7 @@ const Login = () => {
             const statusMessage = data?.statusDescription?.statusMessage;
 
             if (statusCode === 200) {
-                setShowOtp(true); // Show OTP input
+                setShowOtp(true);
                 toast.success(statusMessage || 'OTP sent to your registered email');
             } else {
                 toast.error(statusMessage || 'Invalid credentials');

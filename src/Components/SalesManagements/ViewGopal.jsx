@@ -14,7 +14,7 @@ const ViewGopal = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data for logout');
+            toast.error('Missing necessary data in localStorage');
             return;
         }
 
@@ -35,13 +35,13 @@ const ViewGopal = () => {
                 if (statusCode === 200) {
                     setgopalSaleLogs(data.gopalSaleLogs || []);
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.error(statusMessage || 'failed to fetch data');
                 }
             } else {
-                toast.error('Logout failed with status: ' + response.status);
+                toast.error('failed to fetch data with status: ' + response.status);
             }
         } catch (error) {
-            toast.error('Error during logout: ' + error.message);
+            toast.error('Error during fetch: ' + error.message);
         }
     };
 
