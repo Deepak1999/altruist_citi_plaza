@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { useNavigate } from 'react-router-dom';
 
 const AddAyaanCinema = () => {
 
@@ -15,6 +16,8 @@ const AddAyaanCinema = () => {
         dsrShareNetConcessions: "",
         totalDsrShare: "",
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,6 +57,9 @@ const AddAyaanCinema = () => {
             if (response.ok && result.statusDescription?.statusCode === 200) {
                 toast.success(result?.statusDescription?.description || "Data saved successfully!");
                 handleReset();
+                setTimeout(() => {
+                    navigate('/viewAyaanSales');
+                }, 3000);
             } else {
                 toast.error(result.statusDescription?.description || "Save failed");
             }

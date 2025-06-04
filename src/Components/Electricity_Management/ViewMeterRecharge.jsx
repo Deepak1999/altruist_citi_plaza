@@ -5,6 +5,70 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+const EditModal = ({ show, onClose, onSave, data }) => {
+    const [amountPaid, setAmountPaid] = useState(data?.amountPaid || '');
+    const [remarks, setRemarks] = useState(data?.remarks || 'N/A');
+
+    useEffect(() => {
+        if (data) {
+            setAmountPaid(data.amountPaid || '');
+            setRemarks(data.remarks || 'N/A');
+        }
+    }, [data]);
+
+    if (!show) return null;
+
+    return (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Edit Recharge Details</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label className="form-label">Amount Paid</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={amountPaid}
+                                onChange={(e) => setAmountPaid(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Remarks</label>
+                            <textarea
+                                className="form-control"
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() =>
+                                onSave({
+                                    ...data,
+                                    amountPaid: Number(amountPaid),
+                                    remarks: remarks.trim() || 'N/A',
+                                })
+                            }
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
 const ViewMeterRecharge = () => {
 
     const [electricityTableData, SetEelectricityTableData] = useState([]);
@@ -82,6 +146,14 @@ const ViewMeterRecharge = () => {
                     {value.length > 20 ? `${value.slice(0, 20)}...` : value}
                 </span>
             )
+        },
+        {
+            Header: 'Action',
+            Cell: ({ row }) => (
+                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )
         }
 
     ], []);
@@ -128,6 +200,62 @@ const ViewMeterRecharge = () => {
 
         saveAs(data, 'MeterRechargeDetails.xlsx');
     };
+
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const handleOpenModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedRowData(null);
+    };
+
+    const handleSaveModal = async (updatedData) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID missing in localStorage');
+            return;
+        }
+
+        const payload = {
+            toBeUpdated: updatedData.id,
+            updateRemarks: updatedData.remarks,
+            updatedLogAmount: updatedData.amountPaid,
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/electricity/bill-logs/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription?.statusCode === 200) {
+                toast.success(result?.statusDescription?.description || 'Update successful!');
+
+                SetEelectricityTableData(prev =>
+                    prev.map(item => item.id === updatedData.id ? updatedData : item)
+                );
+
+                handleCloseModal();
+            } else {
+                toast.error(result.statusDescription?.description || 'Failed to update');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
+    };
+
 
     return (
         <main id="main" className="main">
@@ -202,6 +330,12 @@ const ViewMeterRecharge = () => {
                     </div>
                 </div>
             </section>
+            <EditModal
+                show={showModal}
+                onClose={handleCloseModal}
+                onSave={handleSaveModal}
+                data={selectedRowData}
+            />
             <ToastContainer />
         </main>
     );

@@ -5,6 +5,124 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+const EditModal = ({ show, onClose, onSave, data }) => {
+    const [boxOfficeAdmits, setBoxOfficeAdmits] = useState(data?.boxOfficeAdmits || '');
+    const [netBoxOfficeSales, setNetBoxOfficeSales] = useState(data?.netBoxOfficeSales || '');
+    const [grossBoxOfficeSales, setGrossBoxOfficeSales] = useState(data?.grossBoxOfficeSales || '');
+    const [netConcessionsSales, setNetConcessionsSales] = useState(data?.netConcessionsSales || '');
+    const [grossConcessionsSales, setGrossConcessionsSales] = useState(data?.grossConcessionsSales || '');
+    const [dsrShareNetBoxOffice, setDsrShareNetBoxOffice] = useState(data?.dsrShareNetBoxOffice || '');
+    const [dsrShareNetConcessions, setDsrShareNetConcessions] = useState(data?.dsrShareNetConcessions || '');
+    const [totalDsrShare, setTotalDsrShare] = useState(data?.totalDsrShare || '');
+    const [remarks, setRemarks] = useState(data?.remarks || 'N/A');
+
+    useEffect(() => {
+        if (data) {
+            setBoxOfficeAdmits(data.boxOfficeAdmits || '');
+            setNetBoxOfficeSales(data.netBoxOfficeSales || '');
+            setGrossBoxOfficeSales(data.grossBoxOfficeSales || '');
+            setNetConcessionsSales(data.netConcessionsSales || '');
+            setGrossConcessionsSales(data.grossConcessionsSales || '');
+            setDsrShareNetBoxOffice(data.dsrShareNetBoxOffice || '');
+            setDsrShareNetConcessions(data.dsrShareNetConcessions || '');
+            setTotalDsrShare(data.totalDsrShare || '');
+            setRemarks(data.remarks || 'N/A');
+        }
+    }, [data]);
+
+    if (!show) return null;
+
+    return (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Edit Ayaan Cinema Sales Details</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="form-label">Box Off. Admits</label>
+                                <input className="form-control" value={boxOfficeAdmits} onChange={(e) => setBoxOfficeAdmits(e.target.value)} />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Net Box Off. Sales</label>
+                                <input className="form-control" value={netBoxOfficeSales} onChange={(e) => setNetBoxOfficeSales(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="form-label">Gross Box Off. Sales</label>
+                                <input className="form-control" value={grossBoxOfficeSales} onChange={(e) => setGrossBoxOfficeSales(e.target.value)} />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Net Concs. Sales</label>
+                                <input className="form-control" value={netConcessionsSales} onChange={(e) => setNetConcessionsSales(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="form-label">Gross Concs. Sales</label>
+                                <input className="form-control" value={grossConcessionsSales} onChange={(e) => setGrossConcessionsSales(e.target.value)} />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">DSR Net Box Off. Sales (A)</label>
+                                <input className="form-control" value={dsrShareNetBoxOffice} onChange={(e) => setDsrShareNetBoxOffice(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="form-label">DSR Net Concs. (B)</label>
+                                <input className="form-control" value={dsrShareNetConcessions} onChange={(e) => setDsrShareNetConcessions(e.target.value)} />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Total (A+B)</label>
+                                <input className="form-control" value={totalDsrShare} onChange={(e) => setTotalDsrShare(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="form-label">Remarks</label>
+                            <textarea className="form-control" value={remarks} onChange={(e) => setRemarks(e.target.value)}></textarea>
+                        </div>
+                    </div>
+
+
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() =>
+                                onSave({
+                                    ...data,
+                                    boxOfficeAdmits,
+                                    netBoxOfficeSales: Number(netBoxOfficeSales),
+                                    grossBoxOfficeSales: Number(grossBoxOfficeSales),
+                                    netConcessionsSales: Number(netConcessionsSales),
+                                    grossConcessionsSales: Number(grossConcessionsSales),
+                                    dsrShareNetBoxOffice: Number(dsrShareNetBoxOffice),
+                                    dsrShareNetConcessions: Number(dsrShareNetConcessions),
+                                    totalDsrShare: Number(totalDsrShare),
+                                    remarks: remarks.trim() || 'N/A',
+                                })
+                            }
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
 const ViewAyaanCinema = () => {
 
     const [boxOfficeConcessionSales, setboxOfficeConcessionSales] = useState([]);
@@ -30,18 +148,18 @@ const ViewAyaanCinema = () => {
             const data = await response.json();
 
             if (response.ok) {
-                const { statusCode, statusMessage } = data.statusDescription;
+                const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
                     setboxOfficeConcessionSales(data.boxOfficeConcessionSales || []);
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.warning(description || 'failed to fetch data');
                 }
             } else {
-                toast.error('Logout failed with status: ' + response.status);
+                toast.error('failed to fetch data with status: ' + response.status);
             }
         } catch (error) {
-            toast.error('Error during logout: ' + error.message);
+            toast.error('Error during fetch data: ' + error.message);
         }
     };
 
@@ -53,6 +171,7 @@ const ViewAyaanCinema = () => {
         {
             Header: 'Date',
             accessor: 'reportDate',
+            Cell: ({ value }) => value ? value.split(' ')[0] : '',
         },
         { Header: 'Box Off. Admits', accessor: 'boxOfficeAdmits' },
         { Header: 'Net Box Off. Sales ', accessor: 'netBoxOfficeSales' },
@@ -62,6 +181,31 @@ const ViewAyaanCinema = () => {
         { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
         { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
         { Header: 'Total(A+B)', accessor: 'totalDsrShare' },
+        {
+            Header: 'Remarks',
+            accessor: 'remarks',
+            Cell: ({ value }) => {
+                if (!value || !value.trim()) return 'N/A';
+
+                const words = value.trim().split(/\s+/);
+                const shortText = words.slice(0, 10).join(' ');
+                const isTruncated = words.length > 10;
+
+                return (
+                    <span title={value}>
+                        {shortText}{isTruncated ? '...' : ''}
+                    </span>
+                );
+            }
+        },
+        {
+            Header: 'Action',
+            Cell: ({ row }) => (
+                <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )
+        }
 
     ], []);
 
@@ -97,6 +241,7 @@ const ViewAyaanCinema = () => {
             'Gross Concs. Sales': row.grossConcessionsSales,
             'DSR Net Box Off. Sales(A)': row.dsrShareNetBoxOffice,
             'DSR net Concs.(B)': row.dsrShareNetConcessions,
+            'Remarks': row.remarks || 'N/A',
             'Total (A+B)': row.totalDsrShare,
         }));
 
@@ -108,6 +253,66 @@ const ViewAyaanCinema = () => {
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
         saveAs(data, 'DSRSalesReport.xlsx');
+    };
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const handleOpenModal = (rowData) => {
+        setSelectedRowData(rowData);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedRowData(null);
+    };
+
+    const handleSaveModal = async (updatedData) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error('User ID missing in localStorage');
+            return;
+        }
+
+        const payload = {
+            toBeUpdated: updatedData.id,
+            updateRemarks: updatedData.remarks,
+            netBoxOfficeSales: updatedData.netBoxOfficeSales,
+            grossBoxOfficeSales: updatedData.grossBoxOfficeSales,
+            netConcessionsSales: updatedData.netConcessionsSales,
+            grossConcessionsSales: updatedData.grossConcessionsSales,
+            dsrShareNetBoxOffice: updatedData.dsrShareNetBoxOffice,
+            dsrShareNetConcessions: updatedData.dsrShareNetConcessions,
+            totalDsrShare: updatedData.totalDsrShare,
+        };
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/sale-logs/box-office-concession/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription?.statusCode === 200) {
+                toast.success(result?.statusDescription?.description || 'Update successful!');
+
+                setboxOfficeConcessionSales(prev =>
+                    prev.map(item => item.id === updatedData.id ? updatedData : item)
+                );
+
+                handleCloseModal();
+            } else {
+                toast.error(result.statusDescription?.description || 'Failed to update');
+            }
+        } catch (error) {
+            toast.error('API error: ' + error.message);
+        }
     };
 
     return (
@@ -183,6 +388,12 @@ const ViewAyaanCinema = () => {
                     </div>
                 </div>
             </section>
+            <EditModal
+                show={showModal}
+                onClose={handleCloseModal}
+                onSave={handleSaveModal}
+                data={selectedRowData}
+            />
             <ToastContainer />
         </main>
     );

@@ -24,6 +24,14 @@ const EditModal = ({ show, onClose, onSave, data }) => {
 
     if (!show) return null;
 
+    const parsedCash = Number(cashSale);
+    const parsedCard = Number(cardSale);
+
+    if (isNaN(parsedCash) || isNaN(parsedCard)) {
+        toast.error("Cash Sale and Card Sale must be valid numbers.");
+        return;
+    }
+
     return (
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog">
@@ -36,7 +44,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
                         <div className="mb-3">
                             <label className="form-label">Cash Sale</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 value={cashSale}
                                 onChange={(e) => setCashSale(e.target.value)}
@@ -45,19 +53,28 @@ const EditModal = ({ show, onClose, onSave, data }) => {
                         <div className="mb-3">
                             <label className="form-label">Card Sale / Online Order</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 value={cardSale}
                                 onChange={(e) => setCardSale(e.target.value)}
                             />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label className="form-label">Sub Total (B)</label>
                             <input
                                 type="number"
                                 className="form-control"
                                 value={subTotal}
                                 onChange={(e) => setSubTotal(e.target.value)}
+                            />
+                        </div> */}
+                        <div className="mb-3">
+                            <label className="form-label">Sub Total (B)</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Number(cashSale) + Number(cardSale)}
+                                readOnly
                             />
                         </div>
                         <div className="mb-3">
@@ -76,15 +93,17 @@ const EditModal = ({ show, onClose, onSave, data }) => {
                         <button
                             type="button"
                             className="btn btn-primary"
-                            onClick={() =>
+                            onClick={() => {
+                                const calculatedSubTotal = Number(cashSale) + Number(cardSale);
+
                                 onSave({
                                     ...data,
                                     cashSale: Number(cashSale),
                                     cardSale: Number(cardSale),
-                                    subTotal: Number(subTotal),
-                                    remarks: remarks,
-                                })
-                            }
+                                    subTotal: calculatedSubTotal,
+                                    remarks: remarks.trim() || 'N/A',
+                                });
+                            }}
                         >
                             Save Changes
                         </button>
@@ -227,7 +246,6 @@ const ViewGopal = () => {
 
         const payload = {
             toBeUpdated: updatedData.id,
-            // newUnitsProduced: Number(updatedData.unitProduced),
             updatedCashSale: updatedData.cashSale,
             updatedCardOnlineSale: updatedData.cardSale,
             updatedSubTotal: updatedData.subTotal,

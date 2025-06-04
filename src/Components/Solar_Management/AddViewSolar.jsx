@@ -32,7 +32,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
                         <div className="mb-3">
                             <label className="form-label">Units Produced</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 value={couponsConsumed}
                                 onChange={(e) => setCouponsConsumed(e.target.value)}
