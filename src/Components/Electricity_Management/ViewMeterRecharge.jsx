@@ -248,6 +248,7 @@ const ViewMeterRecharge = () => {
                 );
 
                 handleCloseModal();
+                handleGetMonthlyData();
             } else {
                 toast.error(result.statusDescription?.description || 'Failed to update');
             }

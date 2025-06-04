@@ -421,6 +421,7 @@ const AddViewSolar = () => {
                 );
 
                 handleCloseModal();
+                handleGetLesseeDetails();
             } else {
                 toast.error(result.statusDescription?.description || 'Failed to update');
             }

@@ -18,6 +18,8 @@ import AddGopal from './Components/SalesManagements/AddGopal';
 import AddAyaanCinema from './Components/SalesManagements/AddAyaanCinema';
 import AddViewCoupons from './Components/Coupons_Managements/AddViewCoupons';
 import AddViewSolar from './Components/Solar_Management/AddViewSolar';
+import TataPower from './Components/SalesManagements/TataPower';
+import MySoho from './Components/SalesManagements/MySoho';
 
 const App = () => {
   return (
@@ -80,6 +82,14 @@ const App = () => {
           <Route
             path="/addviewSolar"
             element={<PrivateRoute element={<MainLayout><AddViewSolar /></MainLayout>} />}
+          />
+          <Route
+            path="/addviewtatapower"
+            element={<PrivateRoute element={<MainLayout><TataPower /></MainLayout>} />}
+          />
+          <Route
+            path="/addviewsoho"
+            element={<PrivateRoute element={<MainLayout><MySoho /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>

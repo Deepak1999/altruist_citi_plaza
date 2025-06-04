@@ -272,6 +272,7 @@ const ViewGopal = () => {
                 );
 
                 handleCloseModal();
+                handleGetGopalData();
             } else {
                 toast.error(result.statusDescription?.description || 'Failed to update');
             }
