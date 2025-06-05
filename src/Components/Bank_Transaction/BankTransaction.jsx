@@ -1,28 +1,28 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { usePagination, useTable } from 'react-table';
 
-const MySoho = () => {
+const BankTransaction = () => {
 
-    const [monthlyRent, setMonthlyRent] = useState('');
-    const [monthYear, setMonthYear] = useState('');
-    const [amountReceived, setAmountReceived] = useState('');
-    const [paymentMode, setPaymentMode] = useState('');
-    const [remarks, setRemarks] = useState('');
 
-    const mySohoTableData = useMemo(() => [
+    const openingBalance = 5000;
+    const closingBalance = 4000;
+
+    const bankTxnsTableData = useMemo(() => [
         {
-            date: '2025-05-01',
-            rentAmount: 50000,
-            amountReceived: 50000,
-            paymentMode: 'Bank Transfer',
-            remarks: 'Full rent received on time',
+            date: '2025-05-02',
+            rentAmount: 'Salary paid to DBD Staff',
+            amountReceived: 11000,
+            paymentMode: 5000,
+            txnId: 'TXN123456',
+            closingBalance: 6000,
         },
         {
             date: '2025-05-02',
-            rentAmount: 60000,
-            amountReceived: 30000,
-            paymentMode: 'Cheque',
-            remarks: 'Partial payment received',
+            rentAmount: 'Salary paid to DBD Staff',
+            amountReceived: 11000,
+            paymentMode: 5000,
+            txnId: 'TXN123456',
+            closingBalance: 6000,
         },
 
     ], []);
@@ -33,20 +33,24 @@ const MySoho = () => {
             accessor: 'date',
         },
         {
-            Header: 'Rent Amount',
+            Header: 'Narration',
             accessor: 'rentAmount',
         },
         {
-            Header: 'Amount Received',
+            Header: 'Amount Received (Debit)',
             accessor: 'amountReceived',
         },
         {
-            Header: 'Payment Mode',
+            Header: 'Receipt Amount (Credit)',
             accessor: 'paymentMode',
         },
         {
-            Header: 'Remarks',
-            accessor: 'remarks',
+            Header: 'Reference No.(Txn. ID)',
+            accessor: 'txnId',
+        },
+        {
+            Header: 'Closing Balance',
+            accessor: 'closingBalance',
         },
 
     ], []);
@@ -64,7 +68,7 @@ const MySoho = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: mySohoTableData, initialState: { pageIndex: 0, pageSize: 5 } },
+        { columns, data: bankTxnsTableData, initialState: { pageIndex: 0, pageSize: 5 } },
         usePagination
     );
 
@@ -75,65 +79,59 @@ const MySoho = () => {
                     <div className="col-lg-12">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title mb-3">Add My Soho Deatils</h5>
+                                <h5 className="card-title">Bank Transaction Details</h5>
                                 <form onSubmit={''}>
                                     <div className="row mb-3">
                                         <div className="col-md-3">
-                                            <label className="form-label">Month & Year</label>
-                                            <input type="month" className="form-control"
-                                                value={monthYear}
-                                                onChange={(e) => setMonthYear(e.target.value)}
+                                            <label className="form-label">Date</label>
+                                            <input type="date" className="form-control"
+                                                value={''}
                                                 required />
                                         </div>
                                         <div className="col-md-3">
-                                            <label className="form-label">Monthly Rent Amount</label>
-                                            <select
-                                                className="form-select"
-                                                value={monthlyRent}
-                                                onChange={(e) => setMonthlyRent(e.target.value)}
-                                            >
-                                                <option value="">Select Rent Amount</option>
-                                                <option value="10000">₹10,000</option>
-                                                <option value="15000">₹15,000</option>
-                                                <option value="20000">₹20,000</option>
-                                                <option value="25000">₹25,000</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className="form-label">Amount Received</label>
+                                            <label className="form-label">Narration</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                value={amountReceived}
-                                                onChange={(e) => setAmountReceived(e.target.value)}
+                                                value={''}
                                                 required
                                             />
                                         </div>
                                         <div className="col-md-3">
-                                            <label className="form-label">Payment Mode</label>
-                                            <select
-                                                className="form-select"
-                                                value={paymentMode}
-                                                onChange={(e) => setPaymentMode(e.target.value)}
-                                            >
-                                                <option value="">Select Mode</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Cheque">Cheque</option>
-                                                <option value="Online">Online</option>
-                                                <option value="UPI">UPI</option>
-                                                <option value="Card">Card</option>
-                                            </select>
+                                            <label className="form-label">Payment Amount (Debit)</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={''}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label">Receipt Amount (Credit)</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={''}
+                                                required
+                                            />
                                         </div>
                                     </div>
 
                                     <div className="row mb-3">
-                                        <div className="col-md-6">
-                                            <label className="form-label">Remarks</label>
+                                        <div className="col-md-3">
+                                            <label className="form-label">Reference No.(Txn. ID)</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                value={remarks}
-                                                onChange={(e) => setRemarks(e.target.value)}
+                                                value={''}
+                                            />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label">Closing Balance</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={''}
                                             />
                                         </div>
                                     </div>
@@ -149,7 +147,7 @@ const MySoho = () => {
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title mb-0">View My Soho Deatils</h5>
+                                    <h5 className="card-title mb-0">View Bank Transaction Deatils</h5>
                                     <i
                                         className="fa-solid fa-circle-down"
                                         style={{ cursor: 'pointer' }}
@@ -158,6 +156,14 @@ const MySoho = () => {
                                         <span className="ms-2">download</span>
                                     </i>
                                 </div>
+
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 className="card-title mb-0">
+                                        <span style={{ color: 'green' }}>Opening Balance: ₹{openingBalance}</span>
+                                        <span style={{ marginLeft: '1rem', color: 'blue' }}>Closing Balance: ₹{closingBalance}</span>
+                                    </h6>
+                                </div>
+
                                 <div className='table-responsive mb-3'>
                                     <table {...getTableProps()} className="table table-striped m-0">
                                         <thead>
@@ -217,4 +223,4 @@ const MySoho = () => {
     );
 };
 
-export default MySoho
+export default BankTransaction

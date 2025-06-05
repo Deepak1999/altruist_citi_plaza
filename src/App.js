@@ -20,6 +20,7 @@ import AddViewCoupons from './Components/Coupons_Managements/AddViewCoupons';
 import AddViewSolar from './Components/Solar_Management/AddViewSolar';
 import TataPower from './Components/Rent_Management/TataPower';
 import MySoho from './Components/Rent_Management/MySoho';
+import BankTransaction from './Components/Bank_Transaction/BankTransaction';
 
 const App = () => {
   return (
@@ -90,6 +91,10 @@ const App = () => {
           <Route
             path="/addviewsoho"
             element={<PrivateRoute element={<MainLayout><MySoho /></MainLayout>} />}
+          />
+          <Route
+            path="/bnkTxns"
+            element={<PrivateRoute element={<MainLayout><BankTransaction /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>
