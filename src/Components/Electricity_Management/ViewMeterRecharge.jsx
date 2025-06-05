@@ -24,7 +24,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Edit Recharge Details</h5>
+                        <h5 className="modal-title">Update Recharge Details</h5>
                         <button type="button" className="btn-close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">

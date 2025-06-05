@@ -36,7 +36,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Edit Monthly Consumption Details</h5>
+                        <h5 className="modal-title">Update Monthly Consumption Details</h5>
                         <button type="button" className="btn-close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">

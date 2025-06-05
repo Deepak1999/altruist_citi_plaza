@@ -18,8 +18,8 @@ import AddGopal from './Components/SalesManagements/AddGopal';
 import AddAyaanCinema from './Components/SalesManagements/AddAyaanCinema';
 import AddViewCoupons from './Components/Coupons_Managements/AddViewCoupons';
 import AddViewSolar from './Components/Solar_Management/AddViewSolar';
-import TataPower from './Components/SalesManagements/TataPower';
-import MySoho from './Components/SalesManagements/MySoho';
+import TataPower from './Components/Rent_Management/TataPower';
+import MySoho from './Components/Rent_Management/MySoho';
 
 const App = () => {
   return (

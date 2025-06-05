@@ -2,7 +2,7 @@ import React from 'react'
 
 const MySoho = () => {
     return (
-         <main id="main" className="main">
+        <main id="main" className="main">
             <section className="section dashboard">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
@@ -23,7 +23,7 @@ const MySoho = () => {
                 </div>
             </section>
         </main>
-    )
-}
+    );
+};
 
 export default MySoho
