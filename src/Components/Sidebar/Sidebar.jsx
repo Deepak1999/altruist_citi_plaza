@@ -82,9 +82,10 @@ const Sidebar = () => {
 
                 {menuData?.map((menu) => {
                     const menuMaster = menu.menuMaster;
+                     if (!menuMaster.status) return null;
                     const menuName = menuMaster.menuName;
                     const icon = menuMaster.menuIcon || 'bi bi-folder';
-                    const subMenus = menuMaster.subMenuMaster || [];
+                    const subMenus = menuMaster.subMenuMaster?.filter(sub => sub.status) || [];
 
                     if (subMenus.length === 0) {
                         return (
