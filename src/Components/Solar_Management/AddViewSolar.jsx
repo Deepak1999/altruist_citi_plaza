@@ -489,7 +489,6 @@ const AddViewSolar = () => {
                         {/* view table code  */}
                         <div className="card">
                             <div className="card-body">
-                                {/* <h5 className="card-title">View Solar Production Details</h5> */}
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h5 className="card-title mb-0">Solar Production Details</h5>
                                     <i
@@ -497,41 +496,54 @@ const AddViewSolar = () => {
                                         style={{ cursor: 'pointer' }}
                                         onClick={handleDownloadExcel}
                                     >
-                                        <span className="ms-2">download</span>
+                                        <span className="ms-2">Download</span>
                                     </i>
                                 </div>
-                                <div className='table-responsive mb-3'>
+
+                                <div className="table-responsive mb-3">
                                     <table {...getTableProps()} className="table table-striped m-0">
                                         <thead>
-                                            {headerGroups.map(headerGroup => (
-                                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                                    {headerGroup.headers.map(column => (
-                                                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                                    ))}
-                                                </tr>
-                                            ))}
+                                            {headerGroups.map(headerGroup => {
+                                                const { key, ...groupProps } = headerGroup.getHeaderGroupProps();
+                                                return (
+                                                    <tr key={key} {...groupProps}>
+                                                        {headerGroup.headers.map(column => {
+                                                            const { key, ...colProps } = column.getHeaderProps();
+                                                            return (
+                                                                <th key={key} {...colProps}>
+                                                                    {column.render('Header')}
+                                                                </th>
+                                                            );
+                                                        })}
+                                                    </tr>
+                                                );
+                                            })}
                                         </thead>
 
                                         <tbody {...getTableBodyProps()}>
                                             {page.map(row => {
                                                 prepareRow(row);
+                                                const { key, ...rowProps } = row.getRowProps();
                                                 return (
-                                                    <tr {...row.getRowProps()}>
-                                                        {row.cells.map(cell => (
-                                                            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                        ))}
+                                                    <tr key={key} {...rowProps}>
+                                                        {row.cells.map(cell => {
+                                                            const { key, ...cellProps } = cell.getCellProps();
+                                                            return (
+                                                                <td key={key} {...cellProps}>
+                                                                    {cell.render('Cell')}
+                                                                </td>
+                                                            );
+                                                        })}
                                                     </tr>
                                                 );
                                             })}
                                         </tbody>
                                     </table>
                                 </div>
+
                                 <div className="d-flex justify-content-between align-items-center mt-3">
                                     <span>
-                                        Page{' '}
-                                        <strong>
-                                            {pageIndex + 1} of {pageOptions.length}
-                                        </strong>
+                                        Page <strong>{pageIndex + 1} of {pageOptions.length}</strong>
                                     </span>
                                     <div>
                                         <button
@@ -552,6 +564,7 @@ const AddViewSolar = () => {
                                 </div>
                             </div>
                         </div>
+
                         {/* view table code end */}
 
                     </div>
