@@ -302,6 +302,7 @@ const BankTransaction = () => {
                                                 className="form-control"
                                                 value={transactionId}
                                                 onChange={(e) => setTransactionId(e.target.value)}
+                                                required
                                             />
                                         </div>
                                         <div className="col-md-3">
@@ -311,6 +312,7 @@ const BankTransaction = () => {
                                                 className="form-control"
                                                 value={closingBalance}
                                                 onChange={(e) => setClosingBalance(e.target.value)}
+                                                required
                                             />
                                         </div>
                                     </div>
@@ -322,54 +324,6 @@ const BankTransaction = () => {
                             </div>
                         </div>
                         {/* --- Transaction Table --- */}
-                        {/* <div className="card">
-                            <div className="card-body">
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title mb-0">View Bank Transaction Details</h5>
-                                    <i className="fa-solid fa-circle-down" style={{ cursor: 'pointer' }}>
-                                        <span className="ms-2">Download</span>
-                                    </i>
-                                </div>
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 className="card-title mb-0">
-                                        <span style={{ color: 'green' }}>Opening Balance: ₹{openingBalance}</span>
-                                        <span style={{ marginLeft: '1rem', color: 'blue' }}>Closing Balance: ₹{closingBal}</span>
-                                    </h6>
-                                </div>
-                                <div className='table-responsive mb-3'>
-                                    <table {...getTxnTableProps()} className="table table-striped m-0">
-                                        <thead>
-                                            {txnHeaderGroups.map(headerGroup => (
-                                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                                    {headerGroup.headers.map(column => (
-                                                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                                    ))}
-                                                </tr>
-                                            ))}
-                                        </thead>
-                                        <tbody {...getTxnBodyProps()}>
-                                            {txnPage.map(row => {
-                                                prepareTxnRow(row);
-                                                return (
-                                                    <tr {...row.getRowProps()}>
-                                                        {row.cells.map(cell => (
-                                                            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                        ))}
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div className="d-flex justify-content-between align-items-center mt-3">
-                                    <span>Page <strong>{txnPageIndex + 1} of {txnPageOptions.length}</strong></span>
-                                    <div>
-                                        <button className="btn btn-sm btn-primary me-2" onClick={() => prevTxnPage()} disabled={!canPrevTxnPage}>Previous</button>
-                                        <button className="btn btn-sm btn-primary" onClick={() => nextTxnPage()} disabled={!canNextTxnPage}>Next</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
