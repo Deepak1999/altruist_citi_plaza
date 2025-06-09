@@ -249,7 +249,6 @@ const BankTransaction = () => {
             <section className="section dashboard">
                 <div className="row">
                     <div className="col-lg-12">
-                        {/* --- Transaction Form --- */}
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Bank Transaction Details</h5>
@@ -323,7 +322,6 @@ const BankTransaction = () => {
                                 </form>
                             </div>
                         </div>
-                        {/* --- Transaction Table --- */}
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -332,18 +330,16 @@ const BankTransaction = () => {
                                         <span className="ms-2">Download</span>
                                     </i>
                                 </div>
-
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h6 className="card-title mb-0">
                                         <span style={{ color: 'green' }}>
-                                            Opening Balance: ₹{openingBalance}
+                                            Opening Balance: ₹{new Intl.NumberFormat('en-IN').format(openingBalance)}
                                         </span>
                                         <span style={{ marginLeft: '1rem', color: 'blue' }}>
-                                            Closing Balance: ₹{closingBal}
+                                            Closing Balance: ₹{new Intl.NumberFormat('en-IN').format(closingBal)}
                                         </span>
                                     </h6>
                                 </div>
-
                                 <div className="table-responsive mb-3">
                                     <table {...getTxnTableProps()} className="table table-striped m-0">
                                         <thead>
@@ -408,7 +404,6 @@ const BankTransaction = () => {
                             </div>
                         </div>
 
-                        {/* --- Bank Balance Table --- */}
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">

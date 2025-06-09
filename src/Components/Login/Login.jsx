@@ -90,7 +90,8 @@ const Login = () => {
                         <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <div className="d-flex justify-content-center py-4">
                                 <a className="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.png" alt="logo" />
+                                    {/* <img src="assets/img/logo.png" alt="logo" /> */}
+                                    <img src="assets/img/altruistlogo.png" alt="logo" />
                                     <span className="d-none d-lg-block">Altruist Citi Plaza</span>
                                 </a>
                             </div>

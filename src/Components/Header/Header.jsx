@@ -43,14 +43,14 @@ const Header = () => {
             const data = await response.json();
 
             if (response.ok) {
-                const { statusCode, statusMessage } = data.statusDescription;
+                const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    toast.success(statusMessage || 'Logout successful');
+                    toast.success(description || 'Logout successful');
                     localStorage.clear();
                     window.location.href = '/';
                 } else {
-                    toast.error(statusMessage || 'Logout failed');
+                    toast.error(description || 'Logout failed');
                 }
             } else {
                 toast.error('Logout failed with status: ' + response.status);
@@ -64,8 +64,9 @@ const Header = () => {
         <header id="header" className="header fixed-top d-flex align-items-center">
             <div className="d-flex align-items-center justify-content-between">
                 <a className="logo d-flex align-items-center">
-                    <img src="assets/img/logo.png" alt="" />
-                    <span className="d-none d-lg-block">Citi Plaza Mall</span>
+                    {/* <img src="assets/img/logo.png" alt="" /> */}
+                    <img src="assets/img/altruistlogo.png" alt="" />
+                    <span className="d-none d-lg-block">Altruist Citi Plaza</span>
                 </a>
                 <i
                     className="bi bi-list toggle-sidebar-btn"
