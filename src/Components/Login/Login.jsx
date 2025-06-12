@@ -156,6 +156,8 @@ const Login = () => {
                                                     value={otp}
                                                     onChange={(e) => setOtp(e.target.value)}
                                                     placeholder="Enter OTP"
+                                                    inputMode="numeric"
+                                                    pattern="[0-9]*"
                                                 />
                                             </div>
                                             <div className="col-12 mt-3">
