@@ -75,18 +75,18 @@ const Header = () => {
                 ></i>
             </div>
 
-            <div className="search-bar">
+            {/* <div className="search-bar">
                 <formm className="search-form d-flex align-items-center">
                     <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
                     <button type="submit" title="Search"><i className="bi bi-search"></i></button>
                 </formm>
-            </div>
+            </div> */}
 
             <nav className="header-nav ms-auto">
                 <ul className="d-flex align-items-center">
                     <li className="nav-item d-block d-lg-none">
                         <a className="nav-link nav-icon search-bar-toggle ">
-                            <i className="bi bi-search"></i>
+                            {/* <i className="bi bi-search"></i> */}
                         </a>
                     </li>
 

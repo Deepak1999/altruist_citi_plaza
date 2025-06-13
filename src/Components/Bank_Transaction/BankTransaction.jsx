@@ -404,7 +404,7 @@ const BankTransaction = () => {
                             </div>
                         </div>
 
-                        <div className="card">
+                        {/* <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h5 className="card-title mb-0">View Bank Balance Details</h5>
@@ -475,7 +475,7 @@ const BankTransaction = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
                 </div>

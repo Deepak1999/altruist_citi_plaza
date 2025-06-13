@@ -21,6 +21,8 @@ import AddViewSolar from './Components/Solar_Management/AddViewSolar';
 import TataPower from './Components/Rent_Management/TataPower';
 import MySoho from './Components/Rent_Management/MySoho';
 import BankTransaction from './Components/Bank_Transaction/BankTransaction';
+import BankEntry from './Components/BankEntry/BankEntry';
+import DocMgnt from './Components/DocumentsManagements/DocMgnt';
 
 const App = () => {
   return (
@@ -95,6 +97,14 @@ const App = () => {
           <Route
             path="/bnkTxns"
             element={<PrivateRoute element={<MainLayout><BankTransaction /></MainLayout>} />}
+          />
+          <Route
+            path="/bnkEntry"
+            element={<PrivateRoute element={<MainLayout><BankEntry /></MainLayout>} />}
+          />
+          <Route
+            path="/docMgnt"
+            element={<PrivateRoute element={<MainLayout><DocMgnt /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>
