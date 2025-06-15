@@ -17,6 +17,12 @@ const BankEntry = () => {
         netBalance: ''
     });
 
+    const now = new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+
+    const currentTime = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const entryDateTime = `${formData.date} ${currentTime}`;
+
     const handleGetBankBalanceData = async () => {
 
         const userId = localStorage.getItem('userId');
@@ -27,7 +33,7 @@ const BankEntry = () => {
         }
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/electricity/bill-logs/all`, {
+            const response = await fetch(`${ApiBaseUrl}/bank-summary/all`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +47,7 @@ const BankEntry = () => {
                 const { statusCode, statusMessage } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    setBankBalanceTableData(data.electricityBillLogs || []);
+                    setBankBalanceTableData(data.dailyBankSummary || []);
                 } else {
                     toast.error(statusMessage || 'failed to fetch data');
                 }
@@ -71,16 +77,18 @@ const BankEntry = () => {
         }
 
         const payload = {
-            date: formData.date,
-            bank_balance: formData.bankBalance,
-            mobisoft_balance: formData.mobisoft,
-            atpl_balance: formData.atpl,
-            r_s_hospital_balance: formData.rsHospitality,
-            net_balance: formData.netBalance
+            dailyBankSummary: {
+                entryDate: entryDateTime,
+                bankBalance: formData.bankBalance,
+                mobisoft: formData.mobisoft,
+                atpl: formData.atpl,
+                rsHospitality: formData.rsHospitality,
+                netBalance: formData.netBalance
+            },
         };
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/transaction/transactions/save`, {
+            const response = await fetch(`${ApiBaseUrl}/bank-summary/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,34 +119,10 @@ const BankEntry = () => {
         setFormData({ date: '', bankBalance: '', mobisoft: '', atpl: '', rsHospitality: '', netBalance: '' })
     };
 
-    const dummyData = useMemo(() => [
-        {
-            paymentDate: '2025-06-12',
-            bankbal: '₹12,000',
-            mobisoft: '₹3,000',
-            atpl: '₹4,000',
-            rshospitality: '₹5,000',
-            netbal: '₹24,000',
-            openingbalance: '₹10,000',
-            closingbalance: '₹14,000',
-        },
-        {
-            paymentDate: '2025-06-12',
-            bankbal: '₹12,000',
-            mobisoft: '₹3,000',
-            atpl: '₹4,000',
-            rshospitality: '₹5,000',
-            netbal: '₹24,000',
-            openingbalance: '₹10,000',
-            closingbalance: '₹14,000',
-        },
-
-    ], []);
-
     const columns = useMemo(() => [
         {
             Header: 'Date & Time',
-            accessor: 'paymentDate',
+            accessor: 'entryDate',
             // Cell: ({ value }) => {
             //     const date = new Date(value);
 
@@ -153,13 +137,41 @@ const BankEntry = () => {
             //     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
             // }
         },
-        { Header: 'Bank Balance', accessor: 'bankbal' },
-        { Header: 'Mobisoft Balance', accessor: 'mobisoft' },
-        { Header: 'Atpl Balance', accessor: 'atpl' },
-        { Header: 'R S Hospitality Balance', accessor: 'rshospitality' },
-        { Header: 'Net Balance', accessor: 'netbal' },
-        { Header: 'Opening Balance', accessor: 'openingbalance' },
-        { Header: 'Closing Balance', accessor: 'closingbalance' },
+        {
+            Header: 'Bank Balance',
+            accessor: 'bankBalance',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'Mobisoft Balance',
+            accessor: 'mobisoft',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'Atpl Balance',
+            accessor: 'atpl',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'R S Hospitality Balance',
+            accessor: 'rsHospitality',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'Net Balance',
+            accessor: 'netBalance',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'Opening Balance',
+            accessor: 'openingbalance',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
+        {
+            Header: 'Closing Balance',
+            accessor: 'closingbalance',
+            Cell: ({ value }) => value != null ? value : 'N/A'
+        },
 
     ], []);
 
@@ -176,7 +188,7 @@ const BankEntry = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: dummyData, initialState: { pageIndex: 0, pageSize: 5 } },
+        { columns, data: bankBalanceTableData, initialState: { pageIndex: 0, pageSize: 5 } },
         usePagination
     );
 
@@ -229,7 +241,7 @@ const BankEntry = () => {
                             <div className="card-body">
                                 <h5 className="card-title">Add Bank Balance Details</h5>
                                 <form onSubmit={handleSubmit}>
-                                    <div className="row mb-3">
+                                    <div className="row mb-4">
                                         <div className="col-md-3">
                                             <label className="form-label">Date</label>
                                             <input

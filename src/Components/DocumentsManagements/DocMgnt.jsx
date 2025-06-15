@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { toast, ToastContainer } from 'react-toastify';
 import { usePagination, useTable } from 'react-table';
@@ -10,6 +10,42 @@ const DocMgnt = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [viewDocumentTableData, setViewDocumentTableData] = useState([]);
     const MAX_FILE_SIZE_MB = 50;
+
+    const handleGetDocumentsFile = async () => {
+
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/documents/list`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, statusMessage } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    setViewDocumentTableData(data.documentList || []);
+                } else {
+                    toast.error(statusMessage || 'failed to fetch data');
+                }
+            } else {
+                toast.error('failed to fetch data with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error during fetch data: ' + error.message);
+        }
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -41,24 +77,25 @@ const DocMgnt = () => {
         }
 
         const formData = new FormData();
-        formData.append('fileName', fileName);
-        formData.append('fileDescription', fileDescription);
+        formData.append('name', fileName);
+        formData.append('desc', fileDescription);
         formData.append('file', selectedFile);
 
         try {
-            const response = await fetch(`${ApiBaseUrl}/transaction/transactions/save`, {
+            const response = await fetch(`${ApiBaseUrl}/documents/upload`, {
                 method: 'POST',
                 headers: {
-                    'userId': userId
+                    userId: userId
                 },
                 body: formData
             });
 
             const data = await response.json();
 
-            if (response.ok && data.statusDescription.statusCode === 200) {
+            if (response.ok && data?.statusDescription?.statusCode === 200) {
                 toast.success(data?.statusDescription?.description || 'File uploaded successfully!');
                 handleReset();
+                handleGetDocumentsFile();
             } else {
                 toast.warning(data?.statusDescription?.description || 'Failed to upload file.');
             }
@@ -78,28 +115,19 @@ const DocMgnt = () => {
             unitProduced: 'All vendor invoices for February 2025',
             filePath: 'uploads/invoices_feb_2025.zip',
         },
-        {
-            plantName: 'Audit Trail Q1',
-            unitProduced: 'Audit logs for Q1 activities and balance sheets',
-            filePath: 'documents/audit_q1_2025.xlsx',
-        },
-        {
-            plantName: 'Transaction Ledger - April',
-            unitProduced: 'Detailed ledger of all banking transactions - April',
-            filePath: 'ledgers/ledger_april.csv',
-        }
+
     ], []);
 
     const columns = useMemo(() => [
-        { Header: 'File Name', accessor: 'plantName' },
-        { Header: 'FIle Description', accessor: 'unitProduced' },
+        { Header: 'File Name', accessor: 'docName' },
+        { Header: 'FIle Description', accessor: 'docDesc' },
         {
             Header: 'Action',
             accessor: 'filePath',
             Cell: ({ value }) => (
                 <div className="d-flex justify-content-center">
                     <a
-                        href={`${ApiBaseUrl}/transaction/transactions/download?filePath=${value}`}
+                        href={`${ApiBaseUrl}/documents/documents/view?filePath=${value}`}
                         className="btn btn-sm btn-primary me-2"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -107,7 +135,7 @@ const DocMgnt = () => {
                         <i className="fa-solid fa-download"></i>
                     </a>
                     <a
-                        href={`${ApiBaseUrl}/transaction/transactions/view?filePath=${value}`}
+                        href={`${ApiBaseUrl}/documents/documents/view?filePath=${value}`}
                         className="btn btn-sm btn-secondary"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -134,15 +162,19 @@ const DocMgnt = () => {
         pageOptions,
         state: { pageIndex },
     } = useTable(
-        { columns, data: dummyData, initialState: { pageIndex: 0, pageSize: 5 } },
+        { columns, data: viewDocumentTableData, initialState: { pageIndex: 0, pageSize: 5 } },
         usePagination
     );
 
     const handleReset = () => {
         setFileName('');
         setFileDescription('');
-        setSelectedFile(null);
+        setSelectedFile('');
     };
+
+    useEffect(() => {
+        handleGetDocumentsFile();
+    }, []);
 
     return (
         <main id="main" className="main">
