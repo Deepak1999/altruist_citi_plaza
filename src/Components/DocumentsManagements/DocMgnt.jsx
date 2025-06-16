@@ -50,7 +50,7 @@ const DocMgnt = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-            alert('File size exceeds 50 MB limit');
+            toast.warning('File size exceeds 50 MB limit');
             e.target.value = null;
             return;
         }
@@ -104,50 +104,55 @@ const DocMgnt = () => {
         }
     };
 
-    const dummyData = useMemo(() => [
-        {
-            plantName: 'Monthly Report - January',
-            unitProduced: 'Summary of all financial transactions for January',
-            filePath: 'reports/january_report.pdf',
-        },
-        {
-            plantName: 'Invoice Backup - Feb 2025',
-            unitProduced: 'All vendor invoices for February 2025',
-            filePath: 'uploads/invoices_feb_2025.zip',
-        },
-
-    ], []);
-
     const columns = useMemo(() => [
         { Header: 'File Name', accessor: 'docName' },
-        { Header: 'FIle Description', accessor: 'docDesc' },
+        { Header: 'File Description', accessor: 'docDesc' },
+        { Header: 'Created By', accessor: 'createdBy' },
+        {
+            Header: 'Created DateTime',
+            accessor: 'createdAt',
+            Cell: ({ value }) => {
+                if (!value) return '-';
+                const localDate = new Date(value).toLocaleString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                });
+                return localDate;
+            }
+        },
         {
             Header: 'Action',
-            accessor: 'filePath',
-            Cell: ({ value }) => (
-                <div className="d-flex justify-content-center">
-                    <a
-                        href={`${ApiBaseUrl}/documents/documents/view?filePath=${value}`}
-                        className="btn btn-sm btn-primary me-2"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <i className="fa-solid fa-download"></i>
-                    </a>
-                    <a
-                        href={`${ApiBaseUrl}/documents/documents/view?filePath=${value}`}
-                        className="btn btn-sm btn-secondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
-                </div>
-
-            )
+            Cell: ({ row }) => {
+                const { docName } = row.original;
+                return (
+                    <div className="d-flex justify-content-center">
+                        <a
+                            href={`${ApiBaseUrl}/documents/view?fileName=${docName}`}
+                            className="btn btn-sm btn-primary me-2"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i className="fa-solid fa-download"></i>
+                        </a>
+                        <a
+                            href={`${ApiBaseUrl}/documents/view?fileName=${docName}`}
+                            className="btn btn-sm btn-secondary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i className="fa-solid fa-eye"></i>
+                        </a>
+                    </div>
+                );
+            }
         },
-
     ], []);
+
 
     const {
         getTableProps,
