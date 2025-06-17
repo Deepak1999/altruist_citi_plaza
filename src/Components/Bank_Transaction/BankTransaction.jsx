@@ -200,16 +200,36 @@ const BankTransaction = () => {
             return;
         }
 
-        const payload = {
-            transaction: {
-                creditAmount: parseFloat(creditAmount) || 0,
-                debitAmount: parseFloat(debitAmount) || 0,
-                closingBalance: parseFloat(closingBalance) || 0,
-                note,
-                transactionDate: formatDateTime(),
-                transactionId
-            },
+        // const payload = {
+        //     transaction: {
+        //         creditAmount: parseFloat(creditAmount) || 0,
+        //         debitAmount: parseFloat(debitAmount) || 0,
+        //         closingBalance: parseFloat(closingBalance) || 0,
+        //         note,
+        //         transactionDate: formatDateTime(),
+        //         transactionId
+        //     },
+        // };
+        const transaction = {
+            closingBalance: parseFloat(closingBalance) || 0,
+            note,
+            // transactionDate: formatDateTime(),
+            transactionDate,
+            transactionId
         };
+
+        // Only add creditAmount if it's provided and > 0
+        if (creditAmount && parseFloat(creditAmount) > 0) {
+            transaction.creditAmount = parseFloat(creditAmount);
+        }
+
+        // Only add debitAmount if it's provided and > 0
+        if (debitAmount && parseFloat(debitAmount) > 0) {
+            transaction.debitAmount = parseFloat(debitAmount);
+        }
+
+        const payload = { transaction };
+
 
         try {
             const response = await fetch(`${ApiBaseUrl}/transaction/transactions/save`, {
@@ -304,7 +324,7 @@ const BankTransaction = () => {
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-3">
+                                        {/* <div className="col-md-3">
                                             <label className="form-label">Closing Balance</label>
                                             <input
                                                 type="text"
@@ -313,7 +333,7 @@ const BankTransaction = () => {
                                                 onChange={(e) => setClosingBalance(e.target.value)}
                                                 required
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-primary me-3">Submit</button>

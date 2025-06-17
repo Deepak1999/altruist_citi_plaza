@@ -9,6 +9,7 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState([]);
     const openingBalance = 10000;
     const closingBalance = 5000;
+    const dateTime = new Date().toISOString().split('T')[0];
 
     const handleGetBankBalanceData = async () => {
         const userId = localStorage.getItem('userId');
@@ -149,7 +150,7 @@ const Dashboard = () => {
                 trigger: 'axis',
             },
             legend: {
-                data: ['Rent Collected', 'Rent Pending'],
+                data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
                 top: 25,
             },
             xAxis: {
@@ -161,11 +162,19 @@ const Dashboard = () => {
             },
             series: [
                 {
+                    name: 'Total Rent',
+                    type: 'bar',
+                    data: [69, 79, 89, 99, 111, 131, 151],
+                    itemStyle: {
+                        color: '#4caf50',
+                    },
+                },
+                {
                     name: 'Rent Collected',
                     type: 'bar',
                     data: [65, 59, 80, 81, 56, 55, 40],
                     itemStyle: {
-                        color: '#4caf50', // green
+                        color: '#0baade',
                     },
                 },
                 {
@@ -173,7 +182,7 @@ const Dashboard = () => {
                     type: 'bar',
                     data: [10, 20, 5, 15, 8, 12, 6],
                     itemStyle: {
-                        color: '#ff9800', // orange
+                        color: '#ff9800',
                     },
                 },
             ],
@@ -228,14 +237,14 @@ const Dashboard = () => {
 
         const option = {
             title: {
-                text: 'Sales Trend',
+                text: 'Sales Trend & Share',
                 left: 'center',
             },
             tooltip: {
                 trigger: 'axis',
             },
             legend: {
-                data: ['Gopal', 'Ayaan Cinema'],
+                data: ['Gopal', 'Ayaan Cinema', 'Altruist Share'],
                 top: 25,
             },
             xAxis: {
@@ -270,6 +279,13 @@ const Dashboard = () => {
                         color: '#ff9800',
                     },
                 },
+                {
+                    name: 'Altruist Share',
+                    type: 'line',
+                    smooth: true,
+                    data: [15, 15, 15, 15, 15, 15, 15],
+                    lineStyle: { color: '#2196f3' },
+                },
             ],
         };
 
@@ -282,6 +298,7 @@ const Dashboard = () => {
             electricityChartInstance.resize();
             chartInstance.resize();
         };
+
         window.addEventListener('resize', handleResize);
 
         return () => {
@@ -292,8 +309,6 @@ const Dashboard = () => {
         };
     }, []);
 
-
-
     return (
         <>
             <main id="main" className="main">
@@ -302,21 +317,29 @@ const Dashboard = () => {
                         <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title" style={{ color: 'green' }}>Opening Balance : ₹{openingBalance}</h6>
+                                    <h6 className="card-title" style={{ color: 'green' }}>
+                                        Date: {dateTime}
+                                        <br />
+                                        Opening Balance : ₹{openingBalance}
+                                    </h6>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title" style={{ color: 'blue' }}>Closing Balance : ₹{closingBalance}</h6>
+                                    <h6 className="card-title" style={{ color: 'blue' }}>
+                                        Date: {dateTime}
+                                        <br />
+                                        Closing Balance : ₹{closingBalance}
+                                    </h6>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h5 className="card-title">Bank Balance Distribution</h5>
+                                    <h5 className="card-title">Bank Balance</h5>
                                     <div
                                         ref={doughnutRef}
                                         style={{ width: '100%', height: '300px' }}
@@ -343,7 +366,7 @@ const Dashboard = () => {
                         <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h5 className="card-title">Gopal & Ayaan Sale Summary</h5>
+                                    <h5 className="card-title">Gopal & Ayaan Cinema Sale Summary</h5>
                                     <div ref={lineChartRef} style={{ width: '100%', height: '300px' }}></div>
                                 </div>
                             </div>

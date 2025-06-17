@@ -10,9 +10,14 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [showOtp, setShowOtp] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const { setMenuData } = useAuth();
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -121,7 +126,7 @@ const Login = () => {
                                             </div>
                                         </div>
 
-                                        <div className="col-12">
+                                        {/* <div className="col-12">
                                             <label htmlFor="yourPassword" className="form-label">Password</label>
                                             <input
                                                 type="password"
@@ -132,6 +137,32 @@ const Login = () => {
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
+                                            <div className="invalid-feedback">Please enter your password!</div>
+                                        </div> */}
+
+                                        <div className="col-12 position-relative">
+                                            <label htmlFor="yourPassword" className="form-label">Password</label>
+                                            <input
+                                                type={showPassword ? 'text' : 'password'}
+                                                name="password"
+                                                className="form-control pe-5"
+                                                id="yourPassword"
+                                                required
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+
+                                            <i
+                                                className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} position-absolute`}
+                                                style={{
+                                                    top: '38px',
+                                                    right: '15px',
+                                                    cursor: 'pointer',
+                                                    zIndex: 2,
+                                                }}
+                                                onClick={togglePasswordVisibility}
+                                            ></i>
+
                                             <div className="invalid-feedback">Please enter your password!</div>
                                         </div>
 
@@ -171,7 +202,7 @@ const Login = () => {
                             </div>
 
                             <div className="credits">
-                                Designed by <a>Altruist Tech Teams</a>
+                                Designed by <a>Altruist Technologies Pvt. Ltd.</a>
                             </div>
                         </div>
                     </div>
