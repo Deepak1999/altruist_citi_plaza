@@ -7,9 +7,11 @@ const Dashboard = () => {
 
     const doughnutRef = useRef(null);
     const [chartData, setChartData] = useState([]);
-    const openingBalance = 10000;
-    const closingBalance = 5000;
-    const dateTime = new Date().toISOString().split('T')[0];
+    const dateTime = new Date().toLocaleDateString('en-CA');
+    const [filter, setFilter] = useState('3M');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [openingBalance, setopeningBalance] = useState("0");
+    const [closingBalance, setclosingBalance] = useState("0");
 
     const handleGetBankBalanceData = async () => {
         const userId = localStorage.getItem('userId');
@@ -74,8 +76,45 @@ const Dashboard = () => {
         }
     };
 
+    const handleGetOpeningClosingBalance = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/opening-closing-balance`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    setopeningBalance(parseFloat(data.dashboardOpeningBalance));
+                    setclosingBalance(parseFloat(data.dashboardClosingBalance));
+                } else {
+                    toast.error(description || 'Failed to fetch balance data');
+                }
+            } else {
+                toast.error('Failed to fetch data. Status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching balance data: ' + error.message);
+        }
+    };
+
     useEffect(() => {
         handleGetBankBalanceData();
+        handleGetOpeningClosingBalance();
     }, []);
 
     useEffect(() => {
@@ -336,13 +375,63 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-6">
+                        {/* <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
                                     <h5 className="card-title">Bank Balance</h5>
                                     <div
                                         ref={doughnutRef}
                                         style={{ width: '100%', height: '300px' }}
+                                    ></div>
+                                </div>
+                            </div>
+                        </div> */}
+                        <div className="col-lg-6">
+                            <div className="card position-relative">
+                                <div className="card-body">
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <h5 className="card-title mb-0">Bank Balance</h5>
+
+                                        {/* Filter icon */}
+                                        <div style={{ position: 'relative' }}>
+                                            <i
+                                                className="fa-solid fa-filter"
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => setShowDropdown(!showDropdown)}
+                                            ></i>
+
+                                            {/* Dropdown */}
+                                            {showDropdown && (
+                                                <div
+                                                    className="dropdown-menu show"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '100%',
+                                                        right: 0,
+                                                        zIndex: 1000,
+                                                        display: 'block',
+                                                    }}
+                                                >
+                                                    {['3Month', '6Month', '9Month'].map((range) => (
+                                                        <button
+                                                            key={range}
+                                                            className="dropdown-item"
+                                                            onClick={() => {
+                                                                setFilter(range);
+                                                                setShowDropdown(false);
+                                                            }}
+                                                        >
+                                                            {range}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        ref={doughnutRef}
+                                        style={{ width: '100%', height: '300px', marginTop: '15px' }}
                                     ></div>
                                 </div>
                             </div>
