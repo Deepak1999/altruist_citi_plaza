@@ -3,6 +3,7 @@ import * as echarts from 'echarts';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
 const DashboardElectricitySummary = () => {
+    
     const electricityChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const [showRentDropdown, setShowRentDropdown] = useState(false);
@@ -16,8 +17,7 @@ const DashboardElectricitySummary = () => {
         }
 
         try {
-            const response = await fetch(
-                `${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`,
+            const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`,
                 {
                     headers: {
                         'userId': userId,
