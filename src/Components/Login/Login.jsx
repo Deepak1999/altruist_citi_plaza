@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ const Login = () => {
     const [otp, setOtp] = useState('');
     const [showOtp, setShowOtp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const otpInputRef = useRef(null);
 
     const navigate = useNavigate();
     const { setMenuData } = useAuth();
@@ -87,6 +88,12 @@ const Login = () => {
         }
     };
 
+    useEffect(() => {
+        if (showOtp && otpInputRef.current) {
+            otpInputRef.current.focus();
+        }
+    }, [showOtp]);
+
     return (
         <div className="container">
             <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -95,7 +102,6 @@ const Login = () => {
                         <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <div className="d-flex justify-content-center py-4">
                                 <a className="logo d-flex align-items-center w-auto">
-                                    {/* <img src="assets/img/logo.png" alt="logo" /> */}
                                     <img src="assets/img/altruistlogo.png" alt="logo" />
                                     <span className="d-none d-lg-block">Altruist Citi Plaza</span>
                                 </a>
@@ -125,20 +131,6 @@ const Login = () => {
                                                 <div className="invalid-feedback">Please enter your username.</div>
                                             </div>
                                         </div>
-
-                                        {/* <div className="col-12">
-                                            <label htmlFor="yourPassword" className="form-label">Password</label>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                className="form-control"
-                                                id="yourPassword"
-                                                required
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                            <div className="invalid-feedback">Please enter your password!</div>
-                                        </div> */}
 
                                         <div className="col-12 position-relative">
                                             <label htmlFor="yourPassword" className="form-label">Password</label>
@@ -175,8 +167,7 @@ const Login = () => {
                                         )}
                                     </form>
 
-                                    {/* OTP Input Section */}
-                                    {showOtp && (
+                                    {/* {showOtp && (
                                         <>
                                             <div className="col-12 mt-3">
                                                 <label htmlFor="otp" className="form-label">Enter OTP</label>
@@ -197,7 +188,31 @@ const Login = () => {
                                                 </button>
                                             </div>
                                         </>
+                                    )} */}
+                                    {showOtp && (
+                                        <>
+                                            <div className="col-12 mt-3">
+                                                <label htmlFor="otp" className="form-label">Enter OTP</label>
+                                                <input
+                                                    ref={otpInputRef}
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="otp"
+                                                    value={otp}
+                                                    onChange={(e) => setOtp(e.target.value)}
+                                                    placeholder="Enter OTP"
+                                                    inputMode="numeric"
+                                                    pattern="[0-9]*"
+                                                />
+                                            </div>
+                                            <div className="col-12 mt-3">
+                                                <button className="btn btn-success w-100" onClick={handleVerifyOtp}>
+                                                    Verify OTP
+                                                </button>
+                                            </div>
+                                        </>
                                     )}
+
                                 </div>
                             </div>
 

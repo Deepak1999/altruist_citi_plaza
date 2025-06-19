@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import * as echarts from 'echarts';
-
 const DashboardBankBalance = () => {
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -135,7 +134,8 @@ const DashboardBankBalance = () => {
         <div className="col-lg-6">
             <div className="card position-relative">
                 <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-center">
+                    <h5 className="card-title mb-0">Bank Balance</h5>
+                    {/* <div className="d-flex justify-content-between align-items-center">
                         <h5 className="card-title mb-0">Bank Balance</h5>
 
                         <div style={{ position: 'relative' }}>
@@ -171,7 +171,7 @@ const DashboardBankBalance = () => {
                                 </div>
                             )}
                         </div>
-                    </div>
+                    </div> */}
 
                     <div
                         ref={doughnutRef}

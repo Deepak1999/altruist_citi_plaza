@@ -8,9 +8,13 @@ import DashboardGopalAyaanSaleTrends from './DashboardGopalAyaanSaleTrends';
 
 const Dashboard = () => {
 
-    const dateTime = new Date().toLocaleDateString('en-CA');
     const [openingBalance, setopeningBalance] = useState("0");
     const [closingBalance, setclosingBalance] = useState("0");
+
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    const ClosingdateTime = today.toLocaleDateString('en-CA');
+    const OpeningdateTime = new Date().toLocaleDateString('en-CA');
 
     const handleGetOpeningClosingBalance = async () => {
         const userId = localStorage.getItem('userId');
@@ -60,7 +64,7 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green' }}>
-                                    Date: {dateTime}
+                                    Date: {OpeningdateTime}
                                     <br />
                                     Opening Balance : ₹{openingBalance}
                                 </h6>
@@ -71,7 +75,7 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'blue' }}>
-                                    Date: {dateTime}
+                                    Date: {ClosingdateTime}
                                     <br />
                                     Closing Balance : ₹{closingBalance}
                                 </h6>

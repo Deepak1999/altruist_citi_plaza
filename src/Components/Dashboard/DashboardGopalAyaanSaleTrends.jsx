@@ -41,7 +41,7 @@ const DashboardGopalAyaanSaleTrends = () => {
             });
 
             const option = {
-                title: { text: 'Gopal Trend & Share', left: 'center' },
+                title: { text: 'Sales Trend & Share', left: 'center' },
                 tooltip: { trigger: 'axis' },
                 legend: {
                     data: ['Gopal Sale', 'Ayaan Sale'],
@@ -57,16 +57,26 @@ const DashboardGopalAyaanSaleTrends = () => {
                 series: [
                     {
                         name: 'Gopal Sale',
-                        type: 'bar',
+                        type: 'line',
+                        smooth: true,
                         data: gopalAmount,
-                        itemStyle: { color: '#de0b8b' },
+                        lineStyle: {
+                            color: '#9c64f3',
+                        },
+                        itemStyle: { color: '#9c64f3' },
                     },
                     {
                         name: 'Ayaan Sale',
-                        type: 'bar',
+                        type: 'line',
+                        smooth: true,
                         data: ayaanAmount,
+                        lineStyle: {
+                            color: '#4caf50',
+                        },
                         itemStyle: { color: '#4caf50' },
+
                     },
+
                 ],
             };
 
