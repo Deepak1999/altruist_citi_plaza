@@ -33,18 +33,22 @@ const DashboardGopalAyaanSaleTrends = () => {
 
             const gopalAmount = [];
             const ayaanAmount = [];
+            const gopalAtplShare = [];
+            const ayaanAtplShare = [];
 
             months.forEach((month) => {
                 const data = gopalAyaanDetails[month];
                 gopalAmount.push(parseFloat(data.gopalAmount));
                 ayaanAmount.push(parseFloat(data.ayaanAmount));
+                gopalAtplShare.push(parseFloat(data.gopalAtplShare));
+                ayaanAtplShare.push(parseFloat(data.ayaanAtplShare));
             });
 
             const option = {
                 title: { text: 'Sales Trend & Share', left: 'center' },
                 tooltip: { trigger: 'axis' },
                 legend: {
-                    data: ['Gopal Sale', 'Ayaan Sale'],
+                    data: ['Gopal Sale', 'Ayaan Sale', 'Gopal Atpl Share', 'Ayaan Atpl Share'],
                     top: 25,
                 },
                 xAxis: {
@@ -76,7 +80,28 @@ const DashboardGopalAyaanSaleTrends = () => {
                         itemStyle: { color: '#4caf50' },
 
                     },
+                    {
+                        name: 'Gopal Atpl Share',
+                        type: 'line',
+                        smooth: true,
+                        data: gopalAtplShare,
+                        lineStyle: {
+                            color: '#4caf50',
+                        },
+                        itemStyle: { color: '#4caf50' },
 
+                    },
+                    {
+                        name: 'Ayaan Atpl Share',
+                        type: 'line',
+                        smooth: true,
+                        data: ayaanAtplShare,
+                        lineStyle: {
+                            color: '#4caf50',
+                        },
+                        itemStyle: { color: '#4caf50' },
+
+                    },
                 ],
             };
 

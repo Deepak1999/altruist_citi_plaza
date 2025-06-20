@@ -5,6 +5,8 @@ import DashboardBankBalance from './DashboardBankBalance';
 import DashboardRentSummary from './DashboardRentSummary';
 import DashboardElectricitySummary from './DashboardElectricitySummary';
 import DashboardGopalAyaanSaleTrends from './DashboardGopalAyaanSaleTrends';
+import DashboardCoupons from './DashboardCoupons';
+import DashboardSolar from './DashboardSolar';
 
 const Dashboard = () => {
 
@@ -86,6 +88,8 @@ const Dashboard = () => {
                     <DashboardRentSummary />
                     <DashboardElectricitySummary />
                     <DashboardGopalAyaanSaleTrends />
+                    <DashboardCoupons />
+                    <DashboardSolar />
                 </div>
             </section>
         </main>
