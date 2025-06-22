@@ -3,7 +3,7 @@ import * as echarts from 'echarts';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
 const DashboardElectricitySummary = () => {
-    
+
     const electricityChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const [showRentDropdown, setShowRentDropdown] = useState(false);
@@ -163,6 +163,26 @@ const DashboardElectricitySummary = () => {
                         ref={electricityChartRef}
                         style={{ width: '100%', height: '300px', marginTop: '15px' }}
                     ></div>
+
+                    <div className="d-flex justify-content-around text-center">
+                        <div>
+                            <h6>Total Billed Amt.</h6>
+                            <p className="mb-0">$10,000</p>
+                        </div>
+                        <div>
+                            <h6>Total Paid Amt.</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                        <div>
+                            <h6>Total Postpaid Amt.</h6>
+                            <p className="mb-0">$2,500</p>
+                        </div>
+                        <div>
+                            <h6>Total Prepaid Amt.</h6>
+                            <p className="mb-0">$2,500</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

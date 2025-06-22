@@ -135,48 +135,34 @@ const DashboardBankBalance = () => {
             <div className="card position-relative">
                 <div className="card-body">
                     <h5 className="card-title mb-0">Bank Balance</h5>
-                    {/* <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title mb-0">Bank Balance</h5>
-
-                        <div style={{ position: 'relative' }}>
-                            <i
-                                className="fa-solid fa-filter"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setShowDropdown(!showDropdown)}
-                            ></i>
-
-                            {showDropdown && (
-                                <div
-                                    className="dropdown-menu show"
-                                    style={{
-                                        position: 'absolute',
-                                        top: '100%',
-                                        right: 0,
-                                        zIndex: 1000,
-                                        display: 'block',
-                                    }}
-                                >
-                                    {['3Month', '6Month', '9Month'].map((range) => (
-                                        <button
-                                            key={range}
-                                            className="dropdown-item"
-                                            onClick={() => {
-                                                setFilter(range);
-                                                setShowDropdown(false);
-                                            }}
-                                        >
-                                            {range}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div> */}
-
                     <div
                         ref={doughnutRef}
                         style={{ width: '100%', height: '300px', marginTop: '15px' }}
                     ></div>
+
+                    <div className="d-flex justify-content-around text-center">
+                        <div>
+                            <h6>Bank Bal.</h6>
+                            <p className="mb-0">$10,000</p>
+                        </div>
+                        <div>
+                            <h6>Mobisoft Bal.</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                        <div>
+                            <h6>Atpl Bal.</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                        <div>
+                            <h6>RS Hospitality Bal.</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                        <div>
+                            <h6>Net Bal.</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

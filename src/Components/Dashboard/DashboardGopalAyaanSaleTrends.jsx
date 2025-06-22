@@ -181,6 +181,26 @@ const DashboardGopalAyaanSaleTrends = () => {
                         ref={lineChartRef}
                         style={{ width: '100%', height: '300px', marginTop: '15px' }}
                     ></div>
+
+                    <div className="d-flex justify-content-around text-center">
+                        <div>
+                            <h6>Total Gopal</h6>
+                            <p className="mb-0">$10,000</p>
+                        </div>
+                        <div>
+                            <h6>Total Ayaan</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                        <div>
+                            <h6>Total Gopal Atpl Sahre</h6>
+                            <p className="mb-0">$2,500</p>
+                        </div>
+                        <div>
+                            <h6>Total Ayaan Atpl Sahre</h6>
+                            <p className="mb-0">$2,500</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

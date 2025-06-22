@@ -173,6 +173,18 @@ const DashboardSolar = () => {
                         ref={chartRef}
                         style={{ maxHeight: '400px', width: '100%' }}
                     ></canvas>
+
+                    <div className="d-flex justify-content-around text-center">
+                        <div>
+                            <h6>Total Plant-1</h6>
+                            <p className="mb-0">$10,000</p>
+                        </div>
+                        <div>
+                            <h6>Total Plant-2</h6>
+                            <p className="mb-0">$7,500</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
