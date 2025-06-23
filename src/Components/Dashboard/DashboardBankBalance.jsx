@@ -138,28 +138,28 @@ const DashboardBankBalance = () => {
                     <div
                         ref={doughnutRef}
                         style={{ width: '100%', height: '300px', marginTop: '15px' }}
-                    ></div>
+                    ></div><br />
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Bank Bal.</h6>
-                            <p className="mb-0">$10,000</p>
+                            <p className="mb-0">₹---</p>
                         </div>
                         <div>
                             <h6>Mobisoft Bal.</h6>
-                            <p className="mb-0">$7,500</p>
+                            <p className="mb-0">₹---</p>
                         </div>
                         <div>
                             <h6>Atpl Bal.</h6>
-                            <p className="mb-0">$7,500</p>
+                            <p className="mb-0">₹---</p>
                         </div>
                         <div>
                             <h6>RS Hospitality Bal.</h6>
-                            <p className="mb-0">$7,500</p>
+                            <p className="mb-0">₹---</p>
                         </div>
                         <div>
                             <h6>Net Bal.</h6>
-                            <p className="mb-0">$7,500</p>
+                            <p className="mb-0">₹---</p>
                         </div>
                     </div>
 
