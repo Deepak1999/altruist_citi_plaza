@@ -455,25 +455,25 @@ const DashboardElectricitySummary = () => {
 
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Total Billed Amt.</h6>
+                            <h6>Billed</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Paid Amt.</h6>
+                            <h6>Paid</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Postpaid Amt.</h6>
+                            <h6>Postpaid</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Prepaid Amt.</h6>
+                            <h6>Prepaid</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toFixed(2)}
                             </p>

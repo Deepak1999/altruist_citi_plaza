@@ -404,19 +404,19 @@ const DashboardRentSummary = () => {
                     {/* Summary Totals (you can update these based on API if desired) */}
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Total Rent</h6>
+                            <h6>Rent</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Collected Rent</h6>
+                            <h6>Collected</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Pending Rent</h6>
+                            <h6>Pending</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalRentSummaryData.rentPending || 0).toFixed(2)}
                             </p>

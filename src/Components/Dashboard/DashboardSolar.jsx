@@ -227,13 +227,13 @@ const DashboardSolar = () => {
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
-                            <h6>Total Plant-1</h6>
+                            <h6>Plant-1</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalSolarSummaryData.plant1Produce || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Plant-2</h6>
+                            <h6>Plant-2</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalSolarSummaryData.plant2Produce || 0).toFixed(2)}
                             </p>

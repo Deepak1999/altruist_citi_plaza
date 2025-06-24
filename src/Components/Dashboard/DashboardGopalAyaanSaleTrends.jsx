@@ -461,25 +461,25 @@ const DashboardGopalAyaanSaleTrends = () => {
 
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Total Gopal</h6>
+                            <h6>Gopal</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Ayaan</h6>
+                            <h6>Ayaan</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAmount || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Gopal Atpl Share</h6>
+                            <h6>Gopal Share</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.gopalAtplShare || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Ayaan Atpl Share</h6>
+                            <h6>Ayaan Share</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toFixed(2)}
                             </p>

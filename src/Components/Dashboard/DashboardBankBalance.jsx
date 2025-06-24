@@ -159,31 +159,31 @@ const DashboardBankBalance = () => {
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
-                            <h6>Bank Bal.</h6>
+                            <h6>Total</h6>
                             <p className="mb-0">
                                 ₹{latestBalances.bankBalance != null ? parseFloat(latestBalances.bankBalance).toFixed(2) : "---"}
                             </p>
                         </div>
                         <div>
-                            <h6>Mobisoft Bal.</h6>
+                            <h6>Mobisoft</h6>
                             <p className="mb-0">
                                 ₹{latestBalances.mobisoft != null ? parseFloat(latestBalances.mobisoft).toFixed(2) : "---"}
                             </p>
                         </div>
                         <div>
-                            <h6>Atpl Bal.</h6>
+                            <h6>ATPL</h6>
                             <p className="mb-0">
                                 ₹{latestBalances.atpl != null ? parseFloat(latestBalances.atpl).toFixed(2) : "---"}
                             </p>
                         </div>
                         <div>
-                            <h6>RS Hospitality Bal.</h6>
+                            <h6>RS Hospitality</h6>
                             <p className="mb-0">
                                 ₹{latestBalances.rsHospitality != null ? parseFloat(latestBalances.rsHospitality).toFixed(2) : "---"}
                             </p>
                         </div>
                         <div>
-                            <h6>Net Bal.</h6>
+                            <h6>Net</h6>
                             <p className="mb-0">
                                 ₹{latestBalances.netBalance != null ? parseFloat(latestBalances.netBalance).toFixed(2) : "---"}
                             </p>

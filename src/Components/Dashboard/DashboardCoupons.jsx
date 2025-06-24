@@ -394,19 +394,19 @@ const DashboardCoupons = () => {
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
-                            <h6>Total Coupons Bal.</h6>
+                            <h6>Added</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Consumed Bal.</h6>
+                            <h6>Consumed</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toFixed(2)}
                             </p>
                         </div>
                         <div>
-                            <h6>Total Avl. Bal.</h6>
+                            <h6>Balance</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toFixed(2)}
                             </p>

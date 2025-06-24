@@ -30,18 +30,16 @@ const AddAyaanCinema = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // Temporary object for calculations
         const updatedFormData = {
             ...formData,
             [name]: value,
         };
 
         const netBoxOffice = parseFloat(updatedFormData.netBoxOfficeSales) || 0;
-        const grossBoxOffice = parseFloat(updatedFormData.grossBoxOfficeSales) || 0;
+        const netConcessions = parseFloat(updatedFormData.netConcessionsSales) || 0;
 
-        // Calculated values
         const dsrShareNetBoxOffice = (netBoxOffice * 0.18).toFixed(2);
-        const dsrShareNetConcessions = (grossBoxOffice * 0.18).toFixed(2);
+        const dsrShareNetConcessions = (netConcessions * 0.18).toFixed(2);
         const totalDsrShare = (
             parseFloat(dsrShareNetBoxOffice) + parseFloat(dsrShareNetConcessions)
         ).toFixed(2);
