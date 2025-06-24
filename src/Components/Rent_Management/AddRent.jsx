@@ -225,7 +225,7 @@ const AddRent = () => {
                                             </select>
                                         </div>
 
-                                        <div className="col-md-3">
+                                        {/* <div className="col-md-3">
                                             <label className="form-label">Monthly Rent Amount</label>
                                             <select
                                                 className="form-select"
@@ -243,6 +243,19 @@ const AddRent = () => {
                                                     ))
                                                 )}
                                             </select>
+                                        </div> */}
+
+                                        <div className="col-md-3">
+                                            <label className="form-label">Monthly Rent Amount</label>
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                value={selectedRentAmount}
+                                                onChange={handleRentAmountChange}
+                                                placeholder={rentAmounts.length > 0 ? `₹${rentAmounts[0].toLocaleString()}` : "Enter Rent Amount"}
+                                                min="0"
+                                                required
+                                            />
                                         </div>
 
                                         <div className="col-md-3">

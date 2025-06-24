@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { toast } from 'react-toastify';
 
 Chart.register(
     BarController,
@@ -26,6 +27,11 @@ const DashboardSolar = () => {
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('3Month');
+
+    const [totalSolarSummaryData, setTotalSolarSummaryData] = useState({
+        plant1Produce: 0,
+        plant2Produce: 0,
+    });
 
     const periodMap = {
         '3Month': 3,
@@ -134,6 +140,51 @@ const DashboardSolar = () => {
         };
     }, []);
 
+    const handleGetTotalSolarSummary = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/solar-logs-summary?period=-1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.data;
+
+                    if (summary) {
+                        setTotalSolarSummaryData(summary);
+                    } else {
+                        toast.success(description || 'Solar summary data is missing.');
+                    }
+                } else {
+                    toast.error(description || 'Failed to fetch Solar summary.');
+                }
+            } else {
+                toast.error('Request failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
+    useEffect(() => {
+        handleGetTotalSolarSummary();
+    }, []);
+
     return (
         <div className="col-lg-6">
             <div className="card">
@@ -177,11 +228,15 @@ const DashboardSolar = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Total Plant-1</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalSolarSummaryData.plant1Produce || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Plant-2</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalSolarSummaryData.plant2Produce || 0).toFixed(2)}
+                            </p>
                         </div>
                     </div>
 

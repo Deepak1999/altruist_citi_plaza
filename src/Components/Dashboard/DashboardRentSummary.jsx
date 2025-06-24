@@ -353,12 +353,12 @@ const DashboardRentSummary = () => {
                 const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    const summary = data.dashboardRentSummaryDetails?.Total;
+                    const summary = data.dashboardRentSummaryDetails?.total;
 
                     if (summary) {
                         setTotalRentSummaryData(summary);
                     } else {
-                        toast.error('Rent summary data is missing.');
+                        toast.success(description || 'Rent summary data is missing.');
                     }
                 } else {
                     toast.error(description || 'Failed to fetch rent summary.');
@@ -403,9 +403,24 @@ const DashboardRentSummary = () => {
 
                     {/* Summary Totals (you can update these based on API if desired) */}
                     <div className="d-flex justify-content-around text-center mt-3">
-                        <div><h6>Total Rent</h6><p className="mb-0">₹{totalRentSummaryData.totalRentAmount}</p></div>
-                        <div><h6>Collected Rent</h6><p className="mb-0">₹{totalRentSummaryData.rentPaid}</p></div>
-                        <div><h6>Pending Rent</h6><p className="mb-0">₹{totalRentSummaryData.rentPending}</p></div>
+                        <div>
+                            <h6>Total Rent</h6>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toFixed(2)}
+                            </p>
+                        </div>
+                        <div>
+                            <h6>Collected Rent</h6>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toFixed(2)}
+                            </p>
+                        </div>
+                        <div>
+                            <h6>Pending Rent</h6>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.rentPending || 0).toFixed(2)}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

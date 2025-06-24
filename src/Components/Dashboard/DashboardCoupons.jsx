@@ -165,6 +165,7 @@ import {
     Title,
 } from 'chart.js';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { toast } from 'react-toastify';
 
 Chart.register(
     LineController,
@@ -182,6 +183,12 @@ const DashboardCoupons = () => {
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('3Month');
+
+    const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
+        couponAdded: 0,
+        couponConsumed: 0,
+        couponBalance: 0,
+    });
 
     const periodMap = {
         '3Month': 3,
@@ -300,6 +307,51 @@ const DashboardCoupons = () => {
         };
     }, []);
 
+    const handleGetTotalCouponsSummary = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=-1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.data;
+
+                    if (summary) {
+                        setTotalCouponsSummaryData(summary);
+                    } else {
+                        toast.success(description || 'Coupons summary data is missing.');
+                    }
+                } else {
+                    toast.error(description || 'Failed to fetch Coupons summary.');
+                }
+            } else {
+                toast.error('Request failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
+    useEffect(() => {
+        handleGetTotalCouponsSummary();
+    }, []);
+
     return (
         <div className="col-lg-6">
             <div className="card">
@@ -343,18 +395,23 @@ const DashboardCoupons = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Total Coupons Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Consumed Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Avl. Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toFixed(2)}
+                            </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

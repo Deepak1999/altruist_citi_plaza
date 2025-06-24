@@ -9,6 +9,14 @@ const DashboardBankBalance = () => {
     const [filter, setFilter] = useState('3M');
     const [chartData, setChartData] = useState([]);
 
+    const [latestBalances, setLatestBalances] = useState({
+        bankBalance: 0,
+        mobisoft: 0,
+        atpl: 0,
+        rsHospitality: 0,
+        netBalance: 0,
+    });
+
     const handleGetBankBalanceData = async () => {
         const userId = localStorage.getItem('userId');
 
@@ -61,6 +69,15 @@ const DashboardBankBalance = () => {
                     }
 
                     setChartData(formatted);
+
+                    setLatestBalances({
+                        bankBalance: latest.bankBalance,
+                        mobisoft: latest.mobisoft,
+                        atpl: latest.atpl,
+                        rsHospitality: latest.rsHospitality,
+                        netBalance: latest.netBalance,
+                    });
+
                 } else {
                     toast.error(statusMessage || 'Failed to fetch data');
                 }
@@ -143,23 +160,33 @@ const DashboardBankBalance = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Bank Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{latestBalances.bankBalance != null ? parseFloat(latestBalances.bankBalance).toFixed(2) : "---"}
+                            </p>
                         </div>
                         <div>
                             <h6>Mobisoft Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{latestBalances.mobisoft != null ? parseFloat(latestBalances.mobisoft).toFixed(2) : "---"}
+                            </p>
                         </div>
                         <div>
                             <h6>Atpl Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{latestBalances.atpl != null ? parseFloat(latestBalances.atpl).toFixed(2) : "---"}
+                            </p>
                         </div>
                         <div>
                             <h6>RS Hospitality Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{latestBalances.rsHospitality != null ? parseFloat(latestBalances.rsHospitality).toFixed(2) : "---"}
+                            </p>
                         </div>
                         <div>
                             <h6>Net Bal.</h6>
-                            <p className="mb-0">₹---</p>
+                            <p className="mb-0">
+                                ₹{latestBalances.netBalance != null ? parseFloat(latestBalances.netBalance).toFixed(2) : "---"}
+                            </p>
                         </div>
                     </div>
 

@@ -213,12 +213,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { toast } from 'react-toastify';
 
 const DashboardGopalAyaanSaleTrends = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('3Month');
     const lineChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
+
+    const [totalGopalAyaanSummaryData, setTotalGopalAyaanSummaryData] = useState({
+        gopalAmount: 0,
+        ayaanAmount: 0,
+        gopalAtplShare: 0,
+        ayaanAtplShare: 0,
+    });
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
@@ -355,7 +363,6 @@ const DashboardGopalAyaanSaleTrends = () => {
             const series = params.seriesName;
             const month = params.name;
 
-            // fetchDetails(series, month);
             let category;
             if (series === 'Gopal Sale') category = 1;
             else if (series === 'Ayaan Sale') category = 2;
@@ -372,6 +379,51 @@ const DashboardGopalAyaanSaleTrends = () => {
             chart.dispose();
             window.removeEventListener('resize', chart.resize);
         };
+    }, []);
+
+    const handleGetTotalGopalAyaanSummary = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/sale-log-summary?period=-1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.dashboardSalesLogDetails?.total;
+
+                    if (summary) {
+                        setTotalGopalAyaanSummaryData(summary);
+                    } else {
+                        toast.success(description || 'Gopal & ayaan summary data is missing.');
+                    }
+                } else {
+                    toast.error(description || 'Failed to fetch Gopal & ayaan summary.');
+                }
+            } else {
+                toast.error('Request failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
+    useEffect(() => {
+        handleGetTotalGopalAyaanSummary();
     }, []);
 
     return (
@@ -410,19 +462,27 @@ const DashboardGopalAyaanSaleTrends = () => {
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
                             <h6>Total Gopal</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Ayaan</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAmount || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Gopal Atpl Share</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAtplShare || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Ayaan Atpl Share</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toFixed(2)}
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -197,12 +197,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import { toast } from 'react-toastify';
 
 const DashboardElectricitySummary = () => {
     const electricityChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [electricityFilter, setElectricityFilter] = useState('3Month');
+
+    const [totalElectricitySummaryData, setTotalElectricitySummaryData] = useState({
+        totalBilledAmount: 0,
+        totalPaidAmount: 0,
+        postPaidAmount: 0,
+        prePaidAmount: 0,
+    });
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
@@ -214,8 +222,7 @@ const DashboardElectricitySummary = () => {
         if (!userId) return;
 
         try {
-            const response = await fetch(
-                `${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`,
+            const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`,
                 {
                     headers: { userId },
                 }
@@ -368,6 +375,51 @@ const DashboardElectricitySummary = () => {
         };
     }, []);
 
+    const handleGetTotalElectricitySummary = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=-1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.dashboardElectricitySummaryDetails?.total;
+
+                    if (summary) {
+                        setTotalElectricitySummaryData(summary);
+                    } else {
+                        toast.success(description || 'Electricity summary data is missing.');
+                    }
+                } else {
+                    toast.error(description || 'Failed to fetch Electricity summary.');
+                }
+            } else {
+                toast.error('Request failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
+    useEffect(() => {
+        handleGetTotalElectricitySummary();
+    }, []);
+
     return (
         <div className="col-lg-6">
             <div className="card">
@@ -404,20 +456,29 @@ const DashboardElectricitySummary = () => {
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
                             <h6>Total Billed Amt.</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Paid Amt.</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Postpaid Amt.</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toFixed(2)}
+                            </p>
                         </div>
                         <div>
                             <h6>Total Prepaid Amt.</h6>
-                            <p className="mb-0">₹--</p>
+                            <p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toFixed(2)}
+                            </p>
                         </div>
+
                     </div>
                 </div>
             </div>
