@@ -59,12 +59,31 @@ const BankEntry = () => {
         }
     };
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData(prevState => ({
+    //         ...prevState,
+    //         [name]: value
+    //     }));
+    // };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
+        const updatedFormData = {
+            ...formData,
             [name]: value
-        }));
+        };
+
+        // Parse numeric values or fallback to 0
+        const bank = parseFloat(name === 'bankBalance' ? value : updatedFormData.bankBalance) || 0;
+        const mobi = parseFloat(name === 'mobisoft' ? value : updatedFormData.mobisoft) || 0;
+        const atpl = parseFloat(name === 'atpl' ? value : updatedFormData.atpl) || 0;
+        const rs = parseFloat(name === 'rsHospitality' ? value : updatedFormData.rsHospitality) || 0;
+
+        // Recalculate net balance
+        updatedFormData.netBalance = (bank + mobi + atpl + rs).toFixed(2);
+
+        setFormData(updatedFormData);
     };
 
     const handleSubmit = async (e) => {
@@ -149,16 +168,16 @@ const BankEntry = () => {
             accessor: 'netBalance',
             Cell: ({ value }) => value != null ? value : 'N/A'
         },
-        {
-            Header: 'Opening Balance',
-            accessor: 'openingbalance',
-            Cell: ({ value }) => value != null ? value : 'N/A'
-        },
-        {
-            Header: 'Closing Balance',
-            accessor: 'closingbalance',
-            Cell: ({ value }) => value != null ? value : 'N/A'
-        },
+        // {
+        //     Header: 'Opening Balance',
+        //     accessor: 'openingbalance',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
+        // {
+        //     Header: 'Closing Balance',
+        //     accessor: 'closingbalance',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
 
     ], []);
 
@@ -291,8 +310,7 @@ const BankEntry = () => {
                                                 name="netBalance"
                                                 className="form-control"
                                                 value={formData.netBalance}
-                                                onChange={handleChange}
-                                                required
+                                                readOnly
                                             />
                                         </div>
                                     </div>

@@ -32,12 +32,12 @@ const DocMgnt = () => {
             const data = await response.json();
 
             if (response.ok) {
-                const { statusCode, statusMessage } = data.statusDescription;
+                const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
                     setViewDocumentTableData(data.documentList || []);
                 } else {
-                    toast.error(statusMessage || 'failed to fetch data');
+                    toast.error(description || 'failed to fetch data');
                 }
             } else {
                 toast.error('failed to fetch data with status: ' + response.status);
@@ -212,7 +212,7 @@ const DocMgnt = () => {
                                             />
                                         </div>
                                         <div className="col-md-4">
-                                            <label className="form-label">Upload File (Max 50MB)</label>
+                                            <label className="form-label">Upload File (Max 20MB)</label>
                                             <input
                                                 type="file"
                                                 className="form-control"

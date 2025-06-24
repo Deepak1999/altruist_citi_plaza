@@ -17,13 +17,33 @@ const AddMonthlyCons = () => {
 
     const navigate = useNavigate();
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         [name]: value
+    //     }));
+    // };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
+        const updatedFormData = {
+            ...formData,
             [name]: value
-        }));
+        };
+
+        // Parse values safely
+        const postpaid = parseFloat(updatedFormData.collectionAmountPostpaid) || 0;
+        const prepaid = parseFloat(updatedFormData.collectionAmountPrepaid) || 0;
+
+        // Automatically update totalAmount if either A or B changes
+        if (name === 'collectionAmountPostpaid' || name === 'collectionAmountPrepaid') {
+            updatedFormData.totalAmount = (postpaid + prepaid).toFixed(2);
+        }
+
+        setFormData(updatedFormData);
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -177,14 +197,13 @@ const AddMonthlyCons = () => {
                                             />
                                         </div>
                                         <div className="col-md-3">
-                                            <label className="form-label">Grand Total (A + B)</label>
+                                            <label className="form-label">Grand Total (A+B)</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
                                                 name="totalAmount"
                                                 value={formData.totalAmount}
-                                                onChange={handleChange}
-                                                required
+                                                readOnly
                                             />
                                         </div>
                                     </div>
