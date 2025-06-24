@@ -19,13 +19,41 @@ const AddAyaanCinema = () => {
 
     const navigate = useNavigate();
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         [name]: value,
+    //     }));
+    // };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
+
+        // Temporary object for calculations
+        const updatedFormData = {
+            ...formData,
             [name]: value,
-        }));
+        };
+
+        const netBoxOffice = parseFloat(updatedFormData.netBoxOfficeSales) || 0;
+        const grossBoxOffice = parseFloat(updatedFormData.grossBoxOfficeSales) || 0;
+
+        // Calculated values
+        const dsrShareNetBoxOffice = (netBoxOffice * 0.18).toFixed(2);
+        const dsrShareNetConcessions = (grossBoxOffice * 0.18).toFixed(2);
+        const totalDsrShare = (
+            parseFloat(dsrShareNetBoxOffice) + parseFloat(dsrShareNetConcessions)
+        ).toFixed(2);
+
+        setFormData({
+            ...updatedFormData,
+            dsrShareNetBoxOffice,
+            dsrShareNetConcessions,
+            totalDsrShare,
+        });
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -165,8 +193,7 @@ const AddAyaanCinema = () => {
                                                 className="form-control"
                                                 name="dsrShareNetBoxOffice"
                                                 value={formData.dsrShareNetBoxOffice}
-                                                onChange={handleChange}
-                                                required
+                                                readOnly
                                             />
                                         </div>
                                         <div className="col-md-3">
@@ -176,8 +203,7 @@ const AddAyaanCinema = () => {
                                                 className="form-control"
                                                 name="dsrShareNetConcessions"
                                                 value={formData.dsrShareNetConcessions}
-                                                onChange={handleChange}
-                                                required
+                                                readOnly
                                             />
                                         </div>
                                         <div className="col-md-3">
@@ -187,8 +213,7 @@ const AddAyaanCinema = () => {
                                                 className="form-control"
                                                 name="totalDsrShare"
                                                 value={formData.totalDsrShare}
-                                                onChange={handleChange}
-                                                required
+                                                readOnly
                                             />
                                         </div>
                                     </div>
