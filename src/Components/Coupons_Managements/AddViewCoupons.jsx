@@ -111,6 +111,11 @@ const AddViewCoupons = () => {
     const [consumedBy, setConsumedBy] = useState('');
     const [remarks, setRemarks] = useState('');
 
+    const [totalCouponBalanceData, setTotalCouponBalanceData] = useState({
+        couponBalance: 0,
+        lastDayCouponBalance: 0
+    });
+
     const staticLesseeDetails = [
         { id: '1', name: 'Gopal Sweets' },
         { id: '2', name: 'Pro Saloon' }
@@ -229,8 +234,50 @@ const AddViewCoupons = () => {
         setRemarks('');
     };
 
+    const handleGetTotalCouponBalance = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing necessary data in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=-1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, description } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.data;
+
+                    if (summary) {
+                        setTotalCouponBalanceData(summary);
+                    } else {
+                        toast.success(description || 'Coupons summary data is missing.');
+                    }
+                } else {
+                    toast.error(description || 'Failed to fetch Coupons summary.');
+                }
+            } else {
+                toast.error('Request failed with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
     useEffect(() => {
         handleGetCouponsTableData();
+        handleGetTotalCouponBalance();
     }, []);
 
     const columns = useMemo(() => [
@@ -393,7 +440,18 @@ const AddViewCoupons = () => {
                     <div className="col-lg-12">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title">Add Coupon Transaction</h5>
+                                {/* <h5 className="card-title">Add Coupon Transaction</h5> */}
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 className="card-title mb-0">Add Coupon Transaction</h5>
+                                    <div className="d-flex gap-4">
+                                        <div>
+                                            <strong className="text-success">Current Balance:</strong> {totalCouponBalanceData.couponBalance}
+                                        </div>
+                                        <div>
+                                            <strong className="text-primary">Closing Balance:</strong> {totalCouponBalanceData.lastDayCouponBalance}
+                                        </div>
+                                    </div>
+                                </div>
                                 <form onSubmit={handleSubmit}>
                                     <div className="row mb-3">
                                         <div className="col-md-3">

@@ -40,9 +40,10 @@ const AddAyaanCinema = () => {
 
         const dsrShareNetBoxOffice = (netBoxOffice * 0.18).toFixed(2);
         const dsrShareNetConcessions = (netConcessions * 0.18).toFixed(2);
-        const totalDsrShare = (
+
+        const totalDsrShare = Math.round(
             parseFloat(dsrShareNetBoxOffice) + parseFloat(dsrShareNetConcessions)
-        ).toFixed(2);
+        );
 
         setFormData({
             ...updatedFormData,

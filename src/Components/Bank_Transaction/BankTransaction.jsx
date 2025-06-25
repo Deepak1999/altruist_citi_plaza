@@ -218,12 +218,10 @@ const BankTransaction = () => {
             transactionId
         };
 
-        // Only add creditAmount if it's provided and > 0
         if (creditAmount && parseFloat(creditAmount) > 0) {
             transaction.creditAmount = parseFloat(creditAmount);
         }
 
-        // Only add debitAmount if it's provided and > 0
         if (debitAmount && parseFloat(debitAmount) > 0) {
             transaction.debitAmount = parseFloat(debitAmount);
         }
