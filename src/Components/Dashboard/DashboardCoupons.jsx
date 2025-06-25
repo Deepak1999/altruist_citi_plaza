@@ -8,8 +8,10 @@
 //     PointElement,
 //     Tooltip,
 //     Legend,
-//     Title
+//     Title,
 // } from 'chart.js';
+// import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+// import { toast } from 'react-toastify';
 
 // Chart.register(
 //     LineController,
@@ -23,14 +25,63 @@
 // );
 
 // const DashboardCoupons = () => {
-
 //     const chartRef = useRef(null);
 //     const chartInstance = useRef(null);
-//     const [showRentDropdown, setShowRentDropdown] = useState(false);
+//     const [showDropdown, setShowDropdown] = useState(false);
+//     const [selectedPeriod, setSelectedPeriod] = useState('3Month');
 
-//     useEffect(() => {
+//     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
+//         couponAdded: 0,
+//         couponConsumed: 0,
+//         couponBalance: 0,
+//     });
+
+//     const periodMap = {
+//         '3Month': 3,
+//         '6Month': 6,
+//         '9Month': 9,
+//         '12Month': 12,
+//     };
+
+//     const fetchCouponData = async (period) => {
+//         const userId = localStorage.getItem('userId');
+//         if (!userId) {
+//             console.warn('userId not found in localStorage');
+//             return;
+//         }
+
+//         try {
+//             const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=${period}`,
+//                 {
+//                     headers: {
+//                         userId: userId,
+//                     },
+//                 }
+//             );
+
+//             const result = await response.json();
+//             const rawData = result.data || {};
+
+//             const months = Object.keys(rawData).sort();
+//             const couponAdded = [];
+//             const couponConsumed = [];
+//             const couponBalance = [];
+
+//             months.forEach((month) => {
+//                 const entry = rawData[month];
+//                 couponAdded.push(parseFloat(entry.couponAdded || 0));
+//                 couponConsumed.push(parseFloat(entry.couponConsumed || 0));
+//                 couponBalance.push(parseFloat(entry.couponBalance || 0));
+//             });
+
+//             updateChart(months, couponAdded, couponConsumed, couponBalance);
+//         } catch (error) {
+//             console.error('Error fetching coupon data:', error);
+//         }
+//     };
+
+//     const updateChart = (labels, added, consumed, balance) => {
 //         const ctx = chartRef.current.getContext('2d');
-
 //         if (chartInstance.current) {
 //             chartInstance.current.destroy();
 //         }
@@ -38,25 +89,25 @@
 //         chartInstance.current = new Chart(ctx, {
 //             type: 'line',
 //             data: {
-//                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+//                 labels,
 //                 datasets: [
 //                     {
-//                         label: 'Add Balance',
-//                         data: [120, 150, 180, 140, 200, 160, 190],
+//                         label: 'Coupon Added',
+//                         data: added,
 //                         borderColor: '#4caf50',
 //                         fill: false,
 //                         tension: 0.3,
 //                     },
 //                     {
-//                         label: 'Consumed Balance',
-//                         data: [100, 120, 90, 130, 150, 170, 160],
+//                         label: 'Coupon Consumed',
+//                         data: consumed,
 //                         borderColor: '#f44336',
 //                         fill: false,
 //                         tension: 0.3,
 //                     },
 //                     {
-//                         label: 'Available Balance',
-//                         data: [20, 30, 90, 10, 50, 10, 30],
+//                         label: 'Coupon Balance',
+//                         data: balance,
 //                         borderColor: '#2196f3',
 //                         fill: false,
 //                         tension: 0.3,
@@ -68,7 +119,7 @@
 //                 plugins: {
 //                     title: {
 //                         display: true,
-//                         text: 'Balance Summary (Monthly)',
+//                         text: `Coupon Balance Summary`,
 //                     },
 //                     legend: {
 //                         position: 'top',
@@ -81,28 +132,70 @@
 //                 },
 //             },
 //         });
+//     };
 
+//     const handlePeriodChange = (label) => {
+//         setSelectedPeriod(label);
+//         setShowDropdown(false);
+//         const period = periodMap[label];
+//         if (period) {
+//             fetchCouponData(period);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchCouponData(periodMap[selectedPeriod]);
 //         return () => {
-//             chartInstance.current.destroy();
+//             if (chartInstance.current) {
+//                 chartInstance.current.destroy();
+//             }
 //         };
 //     }, []);
 
-//     const updateCuponsChart = (rangeLabel) => {
-//         // setGopalAyaanCimenaFilter(rangeLabel);
-//         setShowRentDropdown(false);
+//     const handleGetTotalCouponsSummary = async () => {
+//         const userId = localStorage.getItem('userId');
 
-//         const periodMap = {
-//             '3Month': 3,
-//             '6Month': 6,
-//             '9Month': 9,
-//             '12Month': 12,
-//         };
+//         if (!userId) {
+//             toast.error('Missing necessary data in localStorage');
+//             return;
+//         }
 
-//         const period = periodMap[rangeLabel];
-//         if (period) {
-//             // fetchGopalAyaanCinemaData(period);
+//         try {
+//             const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=-1`, {
+//                 method: 'GET',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     userId: userId,
+//                 },
+//             });
+
+//             const data = await response.json();
+
+//             if (response.ok) {
+//                 const { statusCode, description } = data.statusDescription;
+
+//                 if (statusCode === 200) {
+//                     const summary = data.data;
+
+//                     if (summary) {
+//                         setTotalCouponsSummaryData(summary);
+//                     } else {
+//                         toast.success(description || 'Coupons summary data is missing.');
+//                     }
+//                 } else {
+//                     toast.error(description || 'Failed to fetch Coupons summary.');
+//                 }
+//             } else {
+//                 toast.error('Request failed with status: ' + response.status);
+//             }
+//         } catch (error) {
+//             toast.error('Error fetching data: ' + error.message);
 //         }
 //     };
+
+//     useEffect(() => {
+//         handleGetTotalCouponsSummary();
+//     }, []);
 
 //     return (
 //         <div className="col-lg-6">
@@ -114,9 +207,9 @@
 //                             <i
 //                                 className="fa-solid fa-filter"
 //                                 style={{ cursor: 'pointer' }}
-//                                 onClick={() => setShowRentDropdown(!showRentDropdown)}
+//                                 onClick={() => setShowDropdown(!showDropdown)}
 //                             ></i>
-//                             {showRentDropdown && (
+//                             {showDropdown && (
 //                                 <div
 //                                     className="dropdown-menu show"
 //                                     style={{
@@ -126,11 +219,11 @@
 //                                         zIndex: 1000,
 //                                     }}
 //                                 >
-//                                     {['3Month', '6Month', '9Month', '12Month'].map((range) => (
+//                                     {Object.keys(periodMap).map((range) => (
 //                                         <button
 //                                             key={range}
 //                                             className="dropdown-item"
-//                                             onClick={() => updateCuponsChart(range)}
+//                                             onClick={() => handlePeriodChange(range)}
 //                                         >
 //                                             {range}
 //                                         </button>
@@ -142,7 +235,28 @@
 //                     <canvas
 //                         ref={chartRef}
 //                         style={{ maxHeight: '400px', width: '100%' }}
-//                     ></canvas>
+//                     ></canvas><br />
+
+//                     <div className="d-flex justify-content-around text-center">
+//                         <div>
+//                             <h6>Added</h6>
+//                             <p className="mb-0">
+//                                 ₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toFixed(2)}
+//                             </p>
+//                         </div>
+//                         <div>
+//                             <h6>Consumed</h6>
+//                             <p className="mb-0">
+//                                 ₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toFixed(2)}
+//                             </p>
+//                         </div>
+//                         <div>
+//                             <h6>Balance</h6>
+//                             <p className="mb-0">
+//                                 ₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toFixed(2)}
+//                             </p>
+//                         </div>
+//                     </div>
 //                 </div>
 //             </div>
 //         </div>
@@ -190,6 +304,11 @@ const DashboardCoupons = () => {
         couponBalance: 0,
     });
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalColumns, setModalColumns] = useState([]);
+    const [modalRows, setModalRows] = useState([]);
+
     const periodMap = {
         '3Month': 3,
         '6Month': 6,
@@ -199,20 +318,12 @@ const DashboardCoupons = () => {
 
     const fetchCouponData = async (period) => {
         const userId = localStorage.getItem('userId');
-        if (!userId) {
-            console.warn('userId not found in localStorage');
-            return;
-        }
+        if (!userId) return;
 
         try {
-            const response = await fetch(
-                `${ApiBaseUrl}/dashboard/coupon-log-summary?period=${period}`,
-                {
-                    headers: {
-                        userId: userId,
-                    },
-                }
-            );
+            const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=${period}`, {
+                headers: { userId },
+            });
 
             const result = await response.json();
             const rawData = result.data || {};
@@ -222,7 +333,7 @@ const DashboardCoupons = () => {
             const couponConsumed = [];
             const couponBalance = [];
 
-            months.forEach((month) => {
+            months.forEach(month => {
                 const entry = rawData[month];
                 couponAdded.push(parseFloat(entry.couponAdded || 0));
                 couponConsumed.push(parseFloat(entry.couponConsumed || 0));
@@ -232,6 +343,56 @@ const DashboardCoupons = () => {
             updateChart(months, couponAdded, couponConsumed, couponBalance);
         } catch (error) {
             console.error('Error fetching coupon data:', error);
+        }
+    };
+
+    const fetchDetails = async (category, yearMonth, label) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/dashboard/consolidated-summary`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId,
+                },
+                body: JSON.stringify({
+                    group: 4,
+                    category,
+                    yearMonth,
+                }),
+            });
+
+            const result = await response.json();
+            const { statusCode, description } = result.statusDescription;
+
+            if (statusCode !== 200) {
+                toast.error(description || 'Failed to fetch detailed coupon data.');
+                return;
+            }
+
+            const data = result.data || {};
+            const rows = Object.entries(data).map(([id, value]) => ({
+                id,
+                value
+            }));
+
+            const modalLabels = {
+                1: 'Coupon Added',
+                2: 'Coupon Consumed',
+                3: 'Coupon Balance',
+            };
+
+            setModalTitle(`${modalLabels[category]} • ${yearMonth}`);
+            setModalColumns([
+                { key: 'id', label: 'ID' },
+                { key: 'value', label: modalLabels[category] },
+            ]);
+            setModalRows(rows);
+            setModalVisible(true);
+        } catch (error) {
+            toast.error('Error fetching detailed data: ' + error.message);
         }
     };
 
@@ -285,6 +446,21 @@ const DashboardCoupons = () => {
                         beginAtZero: true,
                     },
                 },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const datasetIndex = elements[0].datasetIndex;
+                        const index = elements[0].index;
+                        const month = chartInstance.current.data.labels[index];
+                        const seriesName = chartInstance.current.data.datasets[datasetIndex].label;
+                        const categoryMap = {
+                            'Coupon Added': '1',
+                            'Coupon Consumed': '2',
+                            'Coupon Balance': '3',
+                        };
+                        const category = categoryMap[seriesName];
+                        fetchDetails(category, month, seriesName);
+                    }
+                },
             },
         });
     };
@@ -293,9 +469,7 @@ const DashboardCoupons = () => {
         setSelectedPeriod(label);
         setShowDropdown(false);
         const period = periodMap[label];
-        if (period) {
-            fetchCouponData(period);
-        }
+        if (period) fetchCouponData(period);
     };
 
     useEffect(() => {
@@ -311,40 +485,28 @@ const DashboardCoupons = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-            toast.error('Missing necessary data in localStorage');
+            toast.error('Missing userId in localStorage');
             return;
         }
 
         try {
             const response = await fetch(`${ApiBaseUrl}/dashboard/coupon-log-summary?period=-1`, {
-                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    userId: userId,
+                    userId,
                 },
             });
 
-            const data = await response.json();
+            const result = await response.json();
+            const { statusCode, description } = result.statusDescription;
 
-            if (response.ok) {
-                const { statusCode, description } = data.statusDescription;
-
-                if (statusCode === 200) {
-                    const summary = data.data;
-
-                    if (summary) {
-                        setTotalCouponsSummaryData(summary);
-                    } else {
-                        toast.success(description || 'Coupons summary data is missing.');
-                    }
-                } else {
-                    toast.error(description || 'Failed to fetch Coupons summary.');
-                }
+            if (statusCode === 200) {
+                setTotalCouponsSummaryData(result.data || {});
             } else {
-                toast.error('Request failed with status: ' + response.status);
+                toast.error(description || 'Failed to fetch coupons summary.');
             }
         } catch (error) {
-            toast.error('Error fetching data: ' + error.message);
+            toast.error('Error fetching summary: ' + error.message);
         }
     };
 
@@ -365,15 +527,7 @@ const DashboardCoupons = () => {
                                 onClick={() => setShowDropdown(!showDropdown)}
                             ></i>
                             {showDropdown && (
-                                <div
-                                    className="dropdown-menu show"
-                                    style={{
-                                        position: 'absolute',
-                                        top: '100%',
-                                        right: 0,
-                                        zIndex: 1000,
-                                    }}
-                                >
+                                <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
                                     {Object.keys(periodMap).map((range) => (
                                         <button
                                             key={range}
@@ -387,33 +541,66 @@ const DashboardCoupons = () => {
                             )}
                         </div>
                     </div>
-                    <canvas
-                        ref={chartRef}
-                        style={{ maxHeight: '400px', width: '100%' }}
-                    ></canvas><br />
+
+                    <canvas ref={chartRef} style={{ maxHeight: '400px', width: '100%' }} />
+                    <br />
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Added</h6>
-                            <p className="mb-0">
-                                ₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toFixed(2)}
-                            </p>
+                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toFixed(2)}</p>
                         </div>
                         <div>
                             <h6>Consumed</h6>
-                            <p className="mb-0">
-                                ₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toFixed(2)}
-                            </p>
+                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toFixed(2)}</p>
                         </div>
                         <div>
                             <h6>Balance</h6>
-                            <p className="mb-0">
-                                ₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toFixed(2)}
-                            </p>
+                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            {modalVisible && (
+                <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{modalTitle}</h5>
+                                <button type="button" className="close" onClick={() => setModalVisible(false)}>
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {modalColumns.length > 0 ? (
+                                    <table className="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                {modalColumns.map((col) => (
+                                                    <th key={col.key}>{col.label}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {modalRows.map((row, i) => (
+                                                <tr key={i}>
+                                                    {modalColumns.map((col) => (
+                                                        <td key={col.key}>{row[col.key]}</td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p>No data available for this selection.</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

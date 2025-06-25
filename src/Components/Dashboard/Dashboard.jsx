@@ -65,7 +65,7 @@ const Dashboard = () => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'green' }}>
+                                <h6 className="card-title" style={{ color: 'green', height: '70px' }}>
                                     Date: {OpeningdateTime}
                                     <br />
                                     Opening Balance : ₹{closingBalance}
@@ -76,10 +76,11 @@ const Dashboard = () => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue' }}>
+                                <h6 className="card-title" style={{ color: 'blue', height: '70px' }}>
                                     Date: {ClosingdateTime}
                                     <br />
-                                    Opening Balance : ₹{openingBalance} Closing Balance : ₹{closingBalance}
+                                    Opening Balance : ₹{openingBalance}
+                                    <br /> Closing Balance : ₹{closingBalance}
                                 </h6>
                             </div>
                         </div>
@@ -92,7 +93,7 @@ const Dashboard = () => {
                     <DashboardSolar />
                 </div>
             </section>
-        </main>
+        </main >
     );
 };
 

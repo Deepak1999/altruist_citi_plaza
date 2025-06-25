@@ -319,6 +319,24 @@ const DashboardGopalAyaanSaleTrends = () => {
             const json = await response.json();
             const data = json.data || {};
 
+            // Case: Gopal or Ayaan Atpl Share (simple key:value map)
+            if (category === 3 || category === 4) {
+                const rows = Object.entries(data).map(([timestamp, amount]) => ({
+                    timestamp,
+                    amount,
+                }));
+
+                setModalTitle(`${seriesName} • ${yearMonth}`);
+                setModalColumns([
+                    { key: 'timestamp', label: 'Timestamp' },
+                    { key: 'amount', label: 'Amount' },
+                ]);
+                setModalRows(rows);
+                setModalVisible(true);
+                return;
+            }
+
+            // Case: Gopal Sale or Ayaan Sale (structured object)
             const isAyaan = seriesName.includes('Ayaan');
             const columns = isAyaan
                 ? [

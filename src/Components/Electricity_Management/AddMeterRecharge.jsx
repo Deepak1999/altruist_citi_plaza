@@ -331,22 +331,22 @@ const AddMeterRecharge = () => {
                                                                     className="form-check-input"
                                                                     type="radio"
                                                                     name="paymentStatus"
-                                                                    value="Paid"
-                                                                    checked={formData.paymentStatus === 'Paid'}
+                                                                    value="Received"
+                                                                    checked={formData.paymentStatus === 'Received'}
                                                                     onChange={handleChange}
                                                                 />
-                                                                <label className="form-check-label">Paid</label>
+                                                                <label className="form-check-label">Received</label>
                                                             </div>
                                                             <div className="form-check form-check-inline">
                                                                 <input
                                                                     className="form-check-input"
                                                                     type="radio"
                                                                     name="paymentStatus"
-                                                                    value="Unpaid"
-                                                                    checked={formData.paymentStatus === 'Unpaid'}
+                                                                    value="Pending"
+                                                                    checked={formData.paymentStatus === 'Pending'}
                                                                     onChange={handleChange}
                                                                 />
-                                                                <label className="form-check-label">Unpaid</label>
+                                                                <label className="form-check-label">Pending</label>
                                                             </div>
                                                         </div>
                                                         <div className="col-md-3">
