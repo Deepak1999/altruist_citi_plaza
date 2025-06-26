@@ -80,7 +80,7 @@ const Dashboard = () => {
                                     Date: {ClosingdateTime}
                                     <br />
                                     Opening Balance : ₹{openingBalance}
-                                    <br /> Closing Balance : ₹{closingBalance}
+                                    {/* <br /> Closing Balance : ₹{closingBalance} */}
                                 </h6>
                             </div>
                         </div>

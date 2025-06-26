@@ -35,7 +35,7 @@ const DashboardGopalAyaanSaleTrends = () => {
             const months = Object.keys(gopalAyaanDetails).sort();
 
             const gopalAmount = [], ayaanAmount = [], gopalAtplShare = [], ayaanAtplShare = [];
-
+            setTotalGopalAyaanSummaryData(result.totalData.total || {});
             months.forEach((month) => {
                 const d = gopalAyaanDetails[month];
                 gopalAmount.push(+d.gopalAmount);
@@ -238,9 +238,9 @@ const DashboardGopalAyaanSaleTrends = () => {
         }
     };
 
-    useEffect(() => {
-        handleGetTotalGopalAyaanSummary();
-    }, []);
+    // useEffect(() => {
+    //     handleGetTotalGopalAyaanSummary();
+    // }, []);
 
     return (
         <div className="col-lg-6">
@@ -280,7 +280,7 @@ const DashboardGopalAyaanSaleTrends = () => {
                             <h6>Gopal Sale</h6>
                             <p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
-                                
+
                             </p>
                         </div>
                         <div>

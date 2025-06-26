@@ -35,6 +35,9 @@ const DashboardSolar = () => {
             const months = Object.keys(rawData).sort();
             const plant1Data = [], plant2Data = [];
 
+
+            setTotalSolarSummaryData(result.totalData || []);
+
             months.forEach(month => {
                 const data = rawData[month];
                 plant1Data.push(data.plant1Produce || 0);
@@ -179,9 +182,9 @@ const DashboardSolar = () => {
         }
     };
 
-    useEffect(() => {
-        handleGetTotalSolarSummary();
-    }, []);
+    // useEffect(() => {
+    //     handleGetTotalSolarSummary();
+    // }, []);
 
     return (
         <div className="col-lg-6">

@@ -59,7 +59,7 @@ const DashboardCoupons = () => {
 
             const result = await response.json();
             const rawData = result.data || {};
-
+            setTotalCouponsSummaryData(result.totalData || {});
             const months = Object.keys(rawData).sort();
             const couponAdded = [];
             const couponConsumed = [];
@@ -249,9 +249,9 @@ const DashboardCoupons = () => {
         }
     };
 
-    useEffect(() => {
-        handleGetTotalCouponsSummary();
-    }, []);
+    // useEffect(() => {
+    //     handleGetTotalCouponsSummary();
+    // }, []);
 
     return (
         <div className="col-lg-6">
