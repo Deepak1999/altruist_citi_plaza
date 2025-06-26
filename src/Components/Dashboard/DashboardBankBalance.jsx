@@ -159,7 +159,7 @@ const DashboardBankBalance = () => {
 
                     <div className="d-flex justify-content-around text-center">
                         <div>
-                            <h6>Total</h6>
+                            {/* <h6>Total</h6> */}
                             <p className="mb-0">
                                 ₹{latestBalances.bankBalance != null
                                     ? Number(latestBalances.bankBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -167,7 +167,7 @@ const DashboardBankBalance = () => {
                             </p>
                         </div>
                         <div>
-                            <h6>Mobisoft</h6>
+                            {/* <h6>Mobisoft</h6> */}
                             <p className="mb-0">
                                 ₹{latestBalances.mobisoft != null
                                     ? Number(latestBalances.mobisoft).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -175,7 +175,7 @@ const DashboardBankBalance = () => {
                             </p>
                         </div>
                         <div>
-                            <h6>ATPL</h6>
+                            {/* <h6>ATPL</h6> */}
                             <p className="mb-0">
                                 ₹{latestBalances.atpl != null
                                     ? Number(latestBalances.atpl).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -183,7 +183,7 @@ const DashboardBankBalance = () => {
                             </p>
                         </div>
                         <div>
-                            <h6>RS Hospitality</h6>
+                            {/* <h6>RS Hospitality</h6> */}
                             <p className="mb-0">
                                 ₹{latestBalances.rsHospitality != null
                                     ? Number(latestBalances.rsHospitality).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -191,7 +191,7 @@ const DashboardBankBalance = () => {
                             </p>
                         </div>
                         <div>
-                            <h6>Net</h6>
+                            {/* <h6>Net</h6> */}
                             <p className="mb-0">
                                 ₹{latestBalances.netBalance != null
                                     ? Number(latestBalances.netBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
