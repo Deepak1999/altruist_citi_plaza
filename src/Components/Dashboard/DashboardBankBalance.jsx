@@ -97,8 +97,8 @@ const DashboardBankBalance = () => {
 
         const option = {
             title: {
-                text: 'Latest Bank Distribution',
-                left: 'center'
+                // text: 'Latest Bank Distribution',
+                // left: 'center'
             },
             tooltip: {
                 trigger: 'item',
@@ -161,35 +161,44 @@ const DashboardBankBalance = () => {
                         <div>
                             <h6>Total</h6>
                             <p className="mb-0">
-                                ₹{latestBalances.bankBalance != null ? parseFloat(latestBalances.bankBalance).toFixed(2) : "---"}
+                                ₹{latestBalances.bankBalance != null
+                                    ? Number(latestBalances.bankBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : "---"}
                             </p>
                         </div>
                         <div>
                             <h6>Mobisoft</h6>
                             <p className="mb-0">
-                                ₹{latestBalances.mobisoft != null ? parseFloat(latestBalances.mobisoft).toFixed(2) : "---"}
+                                ₹{latestBalances.mobisoft != null
+                                    ? Number(latestBalances.mobisoft).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : "---"}
                             </p>
                         </div>
                         <div>
                             <h6>ATPL</h6>
                             <p className="mb-0">
-                                ₹{latestBalances.atpl != null ? parseFloat(latestBalances.atpl).toFixed(2) : "---"}
+                                ₹{latestBalances.atpl != null
+                                    ? Number(latestBalances.atpl).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : "---"}
                             </p>
                         </div>
                         <div>
                             <h6>RS Hospitality</h6>
                             <p className="mb-0">
-                                ₹{latestBalances.rsHospitality != null ? parseFloat(latestBalances.rsHospitality).toFixed(2) : "---"}
+                                ₹{latestBalances.rsHospitality != null
+                                    ? Number(latestBalances.rsHospitality).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : "---"}
                             </p>
                         </div>
                         <div>
                             <h6>Net</h6>
                             <p className="mb-0">
-                                ₹{latestBalances.netBalance != null ? parseFloat(latestBalances.netBalance).toFixed(2) : "---"}
+                                ₹{latestBalances.netBalance != null
+                                    ? Number(latestBalances.netBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : "---"}
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

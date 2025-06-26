@@ -198,13 +198,11 @@ const DashboardRentSummary = () => {
         pendingRent: 0
     });
 
-    // Modal state
     const [modalVisible, setModalVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
-    const [modalColumns, setModalColumns] = useState([]); // [{ key, label }]
-    const [modalRows, setModalRows] = useState([]);       // [{ colKey: value }]
+    const [modalColumns, setModalColumns] = useState([]);
+    const [modalRows, setModalRows] = useState([]);
 
-    // Fetch timeseries
     const fetchRentData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -228,15 +226,46 @@ const DashboardRentSummary = () => {
 
             const chart = rentChartInstanceRef.current;
             chart.setOption({
-                title: { text: 'Rent Summary', left: 'center' },
+                // title: { text: 'Rent Summary', left: 'center' },
                 tooltip: { trigger: 'axis' },
-                legend: { data: ['Total Rent', 'Rent Collected', 'Rent Pending'], top: 25 },
-                xAxis: { type: 'category', data: months },
-                yAxis: { type: 'value' },
+                legend: {
+                    data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
+                    top: 25
+                },
+                xAxis: {
+                    type: 'category',
+                    data: months
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: function (value) {
+                            if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+                            if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+                            if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+                            return value;
+                        }
+                    }
+                },
                 series: [
-                    { name: 'Total Rent', type: 'bar', data: totalRent, itemStyle: { color: '#4caf50' } },
-                    { name: 'Rent Collected', type: 'bar', data: rentPaid, itemStyle: { color: '#0baade' } },
-                    { name: 'Rent Pending', type: 'bar', data: rentPending, itemStyle: { color: '#ff9800' } }
+                    {
+                        name: 'Total Rent',
+                        type: 'bar',
+                        data: totalRent,
+                        itemStyle: { color: '#4caf50' }
+                    },
+                    {
+                        name: 'Rent Collected',
+                        type: 'bar',
+                        data: rentPaid,
+                        itemStyle: { color: '#0baade' }
+                    },
+                    {
+                        name: 'Rent Pending',
+                        type: 'bar',
+                        data: rentPending,
+                        itemStyle: { color: '#ff9800' }
+                    }
                 ]
             });
         } catch (err) {
@@ -406,19 +435,19 @@ const DashboardRentSummary = () => {
                         <div>
                             <h6>Rent</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toFixed(2)}
+                                ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
                             <h6>Collected</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toFixed(2)}
+                                ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
                             <h6>Pending</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.rentPending || 0).toFixed(2)}
+                                ₹{parseFloat(totalRentSummaryData.rentPending || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                     </div>

@@ -247,40 +247,50 @@ const DashboardElectricitySummary = () => {
 
             const chart = chartInstanceRef.current;
             chart.setOption({
-                title: { text: 'Electricity Summary', left: 'center' },
+                // title: { text: 'Electricity Summary', left: 'center' },
                 tooltip: { trigger: 'axis' },
                 legend: {
                     data: [
-                        'Billed Amount',
-                        'Paid Amount',
-                        'Postpaid Amount',
-                        'Prepaid Amount',
+                        'Postpaid Billing',
+                        // 'Paid Amount',
+                        'Postpaid Collection',
+                        'Prepaid Collection',
                     ],
                     top: 25,
                 },
                 xAxis: { type: 'category', data: months },
-                yAxis: { type: 'value' },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: function (value) {
+                            if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+                            if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+                            if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+                            return value;
+                        }
+                    }
+                },
                 series: [
                     {
-                        name: 'Billed Amount',
+                        name: 'Postpaid Billing',
                         type: 'bar',
                         data: totalBilledAmount,
                         itemStyle: { color: '#de0b8b' },
                     },
+                    // {
+                    //     name: 'Paid Amount',
+                    //     type: 'bar',
+                    //     data: totalPaidAmount,
+                    //     itemStyle: { color: '#4caf50' },
+                    // },
                     {
-                        name: 'Paid Amount',
-                        type: 'bar',
-                        data: totalPaidAmount,
-                        itemStyle: { color: '#4caf50' },
-                    },
-                    {
-                        name: 'Postpaid Amount',
+                        name: 'Postpaid Collection',
                         type: 'bar',
                         data: postPaidAmount,
                         itemStyle: { color: '#0baade' },
                     },
                     {
-                        name: 'Prepaid Amount',
+                        name: 'Prepaid Collection',
                         type: 'bar',
                         data: prePaidAmount,
                         itemStyle: { color: '#ff9800' },
@@ -455,30 +465,29 @@ const DashboardElectricitySummary = () => {
 
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Billed</h6>
+                            <h6>Billing</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toFixed(2)}
+                                ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
-                            <h6>Paid</h6>
+                            <h6>Postpaid Collection</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toFixed(2)}
+                                ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
-                            <h6>Postpaid</h6>
+                            <h6>Prepaid Collection</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toFixed(2)}
+                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
-                            <h6>Prepaid</h6>
+                            <h6>Total Collection</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toFixed(2)}
+                                ₹{parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
-
                     </div>
                 </div>
             </div>
