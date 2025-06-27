@@ -125,7 +125,7 @@ const ViewRent = () => {
             }
         },
         { Header: 'Mode', accessor: 'paymentMode' },
-        { Header: 'Amount Paid', accessor: 'rentPaidAmount' },
+        { Header: 'Amount Received', accessor: 'rentPaidAmount' },
         { Header: 'Pending Amount', accessor: 'rentPendingAmount' },
         {
             Header: 'Remarks',

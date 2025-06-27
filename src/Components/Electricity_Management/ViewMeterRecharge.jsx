@@ -136,7 +136,7 @@ const ViewMeterRecharge = () => {
             accessor: 'billType',
             Cell: ({ value }) => (value === 1 ? 'Postpaid' : value === 2 ? 'Prepaid' : '')
         },
-        { Header: 'Amount Paid', accessor: 'amountPaid' },
+        { Header: 'Amount Received', accessor: 'amountPaid' },
         { Header: 'Payment Date', accessor: 'paymentDate' },
         {
             Header: 'Remarks',

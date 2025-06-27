@@ -9,7 +9,7 @@ const DashboardRentSummary = () => {
 
     const [showRentDropdown, setShowRentDropdown] = useState(false);
     const [rentFilter, setRentFilter] = useState('6Month');
-    const [filterType, setFilterType] = useState('');
+    const [filterType, setFilterType] = useState('6Month');
     const [totalRentSummaryData, setTotalRentSummaryData] = useState({
         totalRentAmount: 0,
         rentPaid: 0,

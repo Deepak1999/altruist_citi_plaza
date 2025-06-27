@@ -41,7 +41,7 @@ const Dashboard = () => {
                 const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    setopeningBalance(parseFloat(data.dashboardOpeningBalance));
+                    setopeningBalance(parseFloat(data.dashboardCurrentBalance));
                     setclosingBalance(parseFloat(data.dashboardClosingBalance));
                 } else {
                     toast.error(description || 'Failed to fetch balance data');
@@ -66,8 +66,7 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
-                                    Today's
-                                    Opening Balance : <strong>₹{Number(closingBalance).toLocaleString('en-IN')}</strong>
+                                    Current Balance : ₹{Number(openingBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>
@@ -78,7 +77,7 @@ const Dashboard = () => {
                                 <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
                                     {/* Date: {ClosingdateTime} */}
                                     Yesterday's
-                                    Opening Balance : <strong>₹{Number(openingBalance).toLocaleString('en-IN')}</strong>
+                                    Closing Balance : ₹{Number(closingBalance).toLocaleString('en-IN')}
                                     {/* <br /> Closing Balance : ₹{closingBalance} */}
                                 </h6>
                             </div>

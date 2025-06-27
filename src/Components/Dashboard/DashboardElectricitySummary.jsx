@@ -8,7 +8,7 @@ const DashboardElectricitySummary = () => {
     const chartInstanceRef = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [electricityFilter, setElectricityFilter] = useState('6Month');
-    const [filterType, setFilterType] = useState('');
+    const [filterType, setFilterType] = useState('6Month');
     const [totalElectricitySummaryData, setTotalElectricitySummaryData] = useState({
         totalBilledAmount: 0,
         totalPaidAmount: 0,

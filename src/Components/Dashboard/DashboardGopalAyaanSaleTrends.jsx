@@ -8,7 +8,7 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('6Month');
     const lineChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
-    const [filterType, setFilterType] = useState('');
+    const [filterType, setFilterType] = useState('6Month');
     const [totalGopalAyaanSummaryData, setTotalGopalAyaanSummaryData] = useState({
         gopalAmount: 0,
         ayaanAmount: 0,
@@ -225,7 +225,6 @@ const DashboardGopalAyaanSaleTrends = () => {
                 return;
             }
 
-            // Case: Gopal Sale or Ayaan Sale (structured object)
             const isAyaan = seriesName.includes('Ayaan');
             const columns = isAyaan
                 ? [

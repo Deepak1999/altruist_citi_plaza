@@ -29,7 +29,7 @@ const DashboardCoupons = () => {
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('6Month');
-    const [filterType, setFilterType] = useState('');
+    const [filterType, setFilterType] = useState('6Month');
     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
         couponAdded: 0,
         couponConsumed: 0,
