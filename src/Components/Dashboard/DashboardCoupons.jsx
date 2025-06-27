@@ -29,7 +29,7 @@ const DashboardCoupons = () => {
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('3Month');
-
+    const [filterType, setFilterType] = useState('');
     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
         couponAdded: 0,
         couponConsumed: 0,
@@ -42,6 +42,7 @@ const DashboardCoupons = () => {
     const [modalRows, setModalRows] = useState([]);
 
     const periodMap = {
+        'YoY': -1,
         '3Month': 3,
         '6Month': 6,
         '9Month': 9,
@@ -207,6 +208,7 @@ const DashboardCoupons = () => {
     const handlePeriodChange = (label) => {
         setSelectedPeriod(label);
         setShowDropdown(false);
+        setFilterType(label);
         const period = periodMap[label];
         if (period) fetchCouponData(period);
     };
@@ -258,7 +260,7 @@ const DashboardCoupons = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title">Coupon Balance Summary</h5>
+                        <h5 className="card-title">Coupon Balance Summary {filterType && `- ${filterType}`}</h5>
                         <div style={{ position: 'relative' }}>
                             <i
                                 className="fa-solid fa-filter"

@@ -9,7 +9,7 @@ const DashboardSolar = () => {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('3Month');
-
+    const [filterType, setFilterType] = useState('');
     const [totalSolarSummaryData, setTotalSolarSummaryData] = useState({
         plant1Produce: 0,
         plant2Produce: 0
@@ -127,8 +127,9 @@ const DashboardSolar = () => {
 
     const updateChart = (range) => {
         setSelectedPeriod(range);
+        setFilterType(range);
         setShowDropdown(false);
-        const map = { '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[range]) fetchSolarData(map[range]);
     };
 
@@ -191,13 +192,13 @@ const DashboardSolar = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title mb-0">Solar Plant Production Summary</h5>
+                        <h5 className="card-title mb-0">Solar Plant Production Summary {filterType && `- ${filterType}`}</h5>
                         <div style={{ position: 'relative' }}>
                             <i className="fa-solid fa-filter" style={{ cursor: 'pointer' }}
                                 onClick={() => setShowDropdown(!showDropdown)} />
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['3Month', '6Month', '9Month', '12Month'].map(label => (
+                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map(label => (
                                         <button key={label} className="dropdown-item" onClick={() => updateChart(label)}>
                                             {label}
                                         </button>
@@ -213,13 +214,13 @@ const DashboardSolar = () => {
                         <div>
                             <h6>Plant-1</h6>
                             <p className="mb-0">
-                                Units: {parseFloat(totalSolarSummaryData.plant1Produce || 0)}
+                                Units: {parseFloat(totalSolarSummaryData.plant1Produce || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
                             <h6>Plant-2</h6>
                             <p className="mb-0">
-                                Units: {parseFloat(totalSolarSummaryData.plant2Produce || 0)}
+                                Units: {parseFloat(totalSolarSummaryData.plant2Produce || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                     </div>

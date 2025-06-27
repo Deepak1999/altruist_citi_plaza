@@ -9,7 +9,7 @@ const DashboardRentSummary = () => {
 
     const [showRentDropdown, setShowRentDropdown] = useState(false);
     const [rentFilter, setRentFilter] = useState('3Month');
-
+    const [filterType, setFilterType] = useState('');
     const [totalRentSummaryData, setTotalRentSummaryData] = useState({
         totalRentAmount: 0,
         rentPaid: 0,
@@ -149,8 +149,9 @@ const DashboardRentSummary = () => {
 
     const updateRentChart = (range) => {
         setRentFilter(range);
+        setFilterType(range);
         setShowRentDropdown(false);
-        const map = { '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[range]) fetchRentData(map[range]);
     };
 
@@ -230,14 +231,14 @@ const DashboardRentSummary = () => {
                 <div className="card-body">
                     {/* Header + filter */}
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title mb-0">Rent Summary</h5>
+                        <h5 className="card-title mb-0">Rent Summary {filterType && `- ${filterType}`}</h5>
                         <div style={{ position: 'relative' }}>
                             <i className="fa-solid fa-filter"
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => setShowRentDropdown(!showRentDropdown)} />
                             {showRentDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['3Month', '6Month', '9Month', '12Month'].map(r => (
+                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map(r => (
                                         <button key={r} className="dropdown-item" onClick={() => updateRentChart(r)}>
                                             {r}
                                         </button>

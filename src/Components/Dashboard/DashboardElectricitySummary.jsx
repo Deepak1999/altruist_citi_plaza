@@ -8,7 +8,7 @@ const DashboardElectricitySummary = () => {
     const chartInstanceRef = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [electricityFilter, setElectricityFilter] = useState('3Month');
-
+    const [filterType, setFilterType] = useState('');
     const [totalElectricitySummaryData, setTotalElectricitySummaryData] = useState({
         totalBilledAmount: 0,
         totalPaidAmount: 0,
@@ -159,7 +159,8 @@ const DashboardElectricitySummary = () => {
     const updateElectricityChart = (rangeLabel) => {
         setElectricityFilter(rangeLabel);
         setShowDropdown(false);
-        const map = { '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        setFilterType(rangeLabel);
+        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[rangeLabel]) fetchElectricityData(map[rangeLabel]);
     };
 
@@ -172,10 +173,10 @@ const DashboardElectricitySummary = () => {
             const series = params.seriesName;
 
             let category;
-            if (series === 'Billed Amount') category = 1;
-            else if (series === 'Paid Amount') category = 2;
-            else if (series === 'Postpaid Amount') category = 3;
-            else if (series === 'Prepaid Amount') category = 4;
+            if (series === 'Postpaid Billing') category = 1;
+            // else if (series === 'Paid Amount') category = 2;
+            else if (series === 'Postpaid Collection') category = 3;
+            else if (series === 'Prepaid Collection') category = 4;
             else return;
 
             fetchDetails(category, month, series);
@@ -239,7 +240,7 @@ const DashboardElectricitySummary = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title">Electricity Summary</h5>
+                        <h5 className="card-title">Electricity Summary {filterType && `- ${filterType}`}</h5>
                         <div style={{ position: 'relative' }}>
                             <i
                                 className="fa-solid fa-filter"
@@ -248,7 +249,7 @@ const DashboardElectricitySummary = () => {
                             ></i>
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['3Month', '6Month', '9Month', '12Month'].map((range) => (
+                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map((range) => (
                                         <button
                                             key={range}
                                             className="dropdown-item"

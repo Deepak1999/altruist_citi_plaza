@@ -8,7 +8,7 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('3Month');
     const lineChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
-
+    const [filterType, setFilterType] = useState('');
     const [totalGopalAyaanSummaryData, setTotalGopalAyaanSummaryData] = useState({
         gopalAmount: 0,
         ayaanAmount: 0,
@@ -167,7 +167,8 @@ const DashboardGopalAyaanSaleTrends = () => {
     const updateGopalAyaanChart = (rangeLabel) => {
         setGopalAyaanCinemaFilter(rangeLabel);
         setShowDropdown(false);
-        const map = { '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        setFilterType(rangeLabel);
+        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[rangeLabel]) fetchGopalAyaanCinemaData(map[rangeLabel]);
     };
 
@@ -247,7 +248,7 @@ const DashboardGopalAyaanSaleTrends = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title">Gopal & Ayaan Cinema Sale Summary</h5>
+                        <h5 className="card-title">Gopal & Ayaan Cinema Sale Summary {filterType && `- ${filterType}`}</h5>
                         <div style={{ position: 'relative' }}>
                             <i
                                 className="fa-solid fa-filter"
@@ -256,7 +257,7 @@ const DashboardGopalAyaanSaleTrends = () => {
                             ></i>
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['3Month', '6Month', '9Month', '12Month'].map((range) => (
+                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map((range) => (
                                         <button
                                             key={range}
                                             className="dropdown-item"
