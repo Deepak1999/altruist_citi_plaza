@@ -367,28 +367,28 @@ const DashboardElectricitySummary = () => {
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
                             <h6>Billing</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Postpaid Collection</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Prepaid Collection</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
-                        <div>
+                        {/* <div>
                             <h6>Total Collection</h6>
                             <p className="mb-0">
                                 {parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toLocaleString('en-IN')}
                             </p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

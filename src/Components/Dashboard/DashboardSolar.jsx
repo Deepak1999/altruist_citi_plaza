@@ -270,60 +270,64 @@ const DashboardSolar = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Plant-1</h6>
-                            <p className="mb-0">
-                                Units: {parseFloat(totalSolarSummaryData.plant1Produce || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong>
+                                <p className="mb-0">
+                                    Units: {parseFloat(totalSolarSummaryData.plant1Produce || 0).toLocaleString('en-IN')}
+                                </p></strong>
                         </div>
                         <div>
                             <h6>Plant-2</h6>
-                            <p className="mb-0">
-                                Units: {parseFloat(totalSolarSummaryData.plant2Produce || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong>
+                                <p className="mb-0">
+                                    Units: {parseFloat(totalSolarSummaryData.plant2Produce || 0).toLocaleString('en-IN')}
+                                </p></strong>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {modalVisible && (
-                <div className="modal show d-block" tabIndex="-1"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <div className="modal-dialog modal-lg">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">{modalTitle}</h5>
-                                <button type="button" className="close" onClick={() => setModalVisible(false)}>
-                                    <span>&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                {modalRows.length > 0 ? (
-                                    <table className="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                {modalColumns.map(col => (
-                                                    <th key={col.key}>{col.label}</th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {modalRows.map((row, i) => (
-                                                <tr key={i}>
+            {
+                modalVisible && (
+                    <div className="modal show d-block" tabIndex="-1"
+                        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                        <div className="modal-dialog modal-lg">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">{modalTitle}</h5>
+                                    <button type="button" className="close" onClick={() => setModalVisible(false)}>
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    {modalRows.length > 0 ? (
+                                        <table className="table table-bordered">
+                                            <thead>
+                                                <tr>
                                                     {modalColumns.map(col => (
-                                                        <td key={col.key}>{row[col.key]}</td>
+                                                        <th key={col.key}>{col.label}</th>
                                                     ))}
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : (
-                                    <p>No data available for this selection.</p>
-                                )}
+                                            </thead>
+                                            <tbody>
+                                                {modalRows.map((row, i) => (
+                                                    <tr key={i}>
+                                                        {modalColumns.map(col => (
+                                                            <td key={col.key}>{row[col.key]}</td>
+                                                        ))}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    ) : (
+                                        <p>No data available for this selection.</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 

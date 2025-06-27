@@ -335,22 +335,22 @@ const DashboardRentSummary = () => {
                     {/* Summary Totals (you can update these based on API if desired) */}
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Rent</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalRentSummaryData.totalRentAmount || 0).toLocaleString('en-IN')}
-                            </p>
+                            <h6>Billed Rent</h6>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Collected</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalRentSummaryData.rentPaid || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Pending</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalRentSummaryData.rentPending || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalRentSummaryData.rentPending || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                     </div>
                 </div>

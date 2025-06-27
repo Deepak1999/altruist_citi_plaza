@@ -160,43 +160,43 @@ const DashboardBankBalance = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             {/* <h6>Total</h6> */}
-                            <p className="mb-0">
-                                {latestBalances.bankBalance != null
-                                    ? Number(latestBalances.bankBalance).toLocaleString('en-IN',)
+                            <strong> <p className="mb-0" style={{ color: 'rgb(84 112 198)' }}>
+                                ₹{latestBalances.bankBalance != null
+                                    ? Math.round(latestBalances.bankBalance).toLocaleString('en-IN')
                                     : "---"}
-                            </p>
+                            </p></strong>
                         </div>
                         <div>
                             {/* <h6>Mobisoft</h6> */}
-                            <p className="mb-0">
-                                {latestBalances.mobisoft != null
+                            <strong><p className="mb-0">
+                                ₹{latestBalances.mobisoft != null
                                     ? Number(latestBalances.mobisoft).toLocaleString('en-IN',)
                                     : "---"}
-                            </p>
+                            </p></strong>
                         </div>
                         <div>
                             {/* <h6>ATPL</h6> */}
-                            <p className="mb-0">
-                                {latestBalances.atpl != null
-                                    ? Number(latestBalances.atpl).toLocaleString('en-IN',)
+                            <strong><p className="mb-0" style={{ color: 'rgb(250 200 88)' }}>
+                                ₹{latestBalances.atpl != null
+                                    ? Math.round(latestBalances.atpl).toLocaleString('en-IN')
                                     : "---"}
-                            </p>
+                            </p></strong>
                         </div>
                         <div>
                             {/* <h6>RS Hospitality</h6> */}
-                            <p className="mb-0">
-                                {latestBalances.rsHospitality != null
-                                    ? Number(latestBalances.rsHospitality).toLocaleString('en-IN',)
+                            <strong><p className="mb-0" style={{ color: 'rgb(238 102 102)' }}>
+                                ₹{latestBalances.rsHospitality != null
+                                    ? Math.round(latestBalances.rsHospitality).toLocaleString('en-IN')
                                     : "---"}
-                            </p>
+                            </p></strong>
                         </div>
                         <div>
                             {/* <h6>Net</h6> */}
-                            <p className="mb-0">
-                                {latestBalances.netBalance != null
-                                    ? Number(latestBalances.netBalance).toLocaleString('en-IN',)
+                            <strong><p className="mb-0" style={{ color: 'rgb(84 112 198)' }}>
+                                ₹{latestBalances.netBalance != null
+                                    ? Math.round(latestBalances.netBalance).toLocaleString('en-IN')
                                     : "---"}
-                            </p>
+                            </p></strong>
                         </div>
                     </div>
                 </div>

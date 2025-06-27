@@ -65,11 +65,9 @@ const Dashboard = () => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'green', height: '70px' }}>
-                                    {/* Date: {OpeningdateTime} */}
+                                <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
                                     Today's
-                                    <br />
-                                    Opening Balance : ₹{closingBalance}
+                                    Opening Balance : <strong>₹{Number(closingBalance).toLocaleString('en-IN')}</strong>
                                 </h6>
                             </div>
                         </div>
@@ -77,11 +75,10 @@ const Dashboard = () => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue', height: '70px' }}>
+                                <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
                                     {/* Date: {ClosingdateTime} */}
                                     Yesterday's
-                                    <br />
-                                    Opening Balance : ₹{openingBalance}
+                                    Opening Balance : <strong>₹{Number(openingBalance).toLocaleString('en-IN')}</strong>
                                     {/* <br /> Closing Balance : ₹{closingBalance} */}
                                 </h6>
                             </div>

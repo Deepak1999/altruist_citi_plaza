@@ -370,28 +370,28 @@ const DashboardGopalAyaanSaleTrends = () => {
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
                             <h6>Gopal Sale</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
 
-                            </p>
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Gopal Atpl Share</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalGopalAyaanSummaryData.gopalAtplShare || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAtplShare || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Ayaan Sale</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalGopalAyaanSummaryData.ayaanAmount || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAmount || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                         <div>
                             <h6>Ayaan Atpl Share</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toLocaleString('en-IN')}
-                            </p>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toLocaleString('en-IN')}
+                            </p></strong>
                         </div>
                     </div>
                 </div>

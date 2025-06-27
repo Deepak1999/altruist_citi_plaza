@@ -220,6 +220,7 @@ const DashboardCoupons = () => {
                         label: 'Coupon Added',
                         data: added,
                         borderColor: '#4caf50',
+                        backgroundColor: '#4caf50',
                         fill: false,
                         tension: 0.3,
                     },
@@ -227,6 +228,7 @@ const DashboardCoupons = () => {
                         label: 'Coupon Consumed',
                         data: consumed,
                         borderColor: '#f44336',
+                        backgroundColor: '#f44336',
                         fill: false,
                         tension: 0.3,
                     },
@@ -234,6 +236,7 @@ const DashboardCoupons = () => {
                         label: 'Coupon Balance',
                         data: balance,
                         borderColor: '#2196f3',
+                        backgroundColor: '#2196f3',
                         fill: false,
                         tension: 0.3,
                     },
@@ -245,8 +248,21 @@ const DashboardCoupons = () => {
                     title: {
                         display: true,
                     },
+                    // legend: {
+                    //     position: 'top',
+                    // },
                     legend: {
                         position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded',
+                            boxWidth: 12,
+                            boxHeight: 12,
+                            padding: 8,
+                            font: {
+                                size: 11,
+                            },
+                        },
                     },
                     tooltip: {
                         callbacks: {
@@ -373,15 +389,15 @@ const DashboardCoupons = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Coupon Added</h6>
-                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponAdded || 0).toLocaleString('en-IN')}</p>
+                            <strong><p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toLocaleString('en-IN')}</p></strong>
                         </div>
                         <div>
                             <h6>Consumed</h6>
-                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toLocaleString('en-IN')}</p>
+                            <strong><p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toLocaleString('en-IN')}</p></strong>
                         </div>
                         <div>
                             <h6>Balance</h6>
-                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponBalance || 0).toLocaleString('en-IN')}</p>
+                            <strong><p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toLocaleString('en-IN')}</p></strong>
                         </div>
                     </div>
                 </div>
