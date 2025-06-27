@@ -66,7 +66,8 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green', height: '70px' }}>
-                                    Date: {OpeningdateTime}
+                                    {/* Date: {OpeningdateTime} */}
+                                    Today's
                                     <br />
                                     Opening Balance : ₹{closingBalance}
                                 </h6>
@@ -77,7 +78,8 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'blue', height: '70px' }}>
-                                    Date: {ClosingdateTime}
+                                    {/* Date: {ClosingdateTime} */}
+                                    Yesterday's
                                     <br />
                                     Opening Balance : ₹{openingBalance}
                                     {/* <br /> Closing Balance : ₹{closingBalance} */}

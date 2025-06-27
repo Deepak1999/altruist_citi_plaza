@@ -8,7 +8,7 @@ const DashboardRentSummary = () => {
     const rentChartInstanceRef = useRef(null);
 
     const [showRentDropdown, setShowRentDropdown] = useState(false);
-    const [rentFilter, setRentFilter] = useState('3Month');
+    const [rentFilter, setRentFilter] = useState('6Month');
     const [filterType, setFilterType] = useState('');
     const [totalRentSummaryData, setTotalRentSummaryData] = useState({
         totalRentAmount: 0,
@@ -20,6 +20,78 @@ const DashboardRentSummary = () => {
     const [modalTitle, setModalTitle] = useState('');
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
+
+    // const fetchRentData = async (period) => {
+    //     const userId = localStorage.getItem('userId');
+    //     if (!userId) return;
+
+    //     try {
+    //         const resp = await fetch(`${ApiBaseUrl}/dashboard/rent-summary?period=${period}`, {
+    //             headers: { userId }
+    //         });
+    //         const json = await resp.json();
+    //         const rentDetails = json.dashboardRentSummaryDetails || {};
+
+    //         setTotalRentSummaryData(json.totalData.total || {});
+
+    //         const months = Object.keys(rentDetails).sort();
+    //         const totalRent = [], rentPaid = [], rentPending = [];
+
+    //         months.forEach(month => {
+    //             const d = rentDetails[month];
+    //             totalRent.push(+d.totalRentAmount);
+    //             rentPaid.push(+d.rentPaid);
+    //             rentPending.push(+d.rentPending);
+    //         });
+
+    //         const chart = rentChartInstanceRef.current;
+    //         chart.setOption({
+    //             // title: { text: 'Rent Summary', left: 'center' },
+    //             tooltip: { trigger: 'axis' },
+    //             legend: {
+    //                 data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
+    //                 top: 25
+    //             },
+    //             xAxis: {
+    //                 type: 'category',
+    //                 data: months
+    //             },
+    //             yAxis: {
+    //                 type: 'value',
+    //                 axisLabel: {
+    //                     formatter: function (value) {
+    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                         return value;
+    //                     }
+    //                 }
+    //             },
+    //             series: [
+    //                 {
+    //                     name: 'Total Rent',
+    //                     type: 'bar',
+    //                     data: totalRent,
+    //                     itemStyle: { color: '#4caf50' }
+    //                 },
+    //                 {
+    //                     name: 'Rent Collected',
+    //                     type: 'bar',
+    //                     data: rentPaid,
+    //                     itemStyle: { color: '#0baade' }
+    //                 },
+    //                 {
+    //                     name: 'Rent Pending',
+    //                     type: 'bar',
+    //                     data: rentPending,
+    //                     itemStyle: { color: '#ff9800' }
+    //                 }
+    //             ]
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
     const fetchRentData = async (period) => {
         const userId = localStorage.getItem('userId');
@@ -46,8 +118,16 @@ const DashboardRentSummary = () => {
 
             const chart = rentChartInstanceRef.current;
             chart.setOption({
-                // title: { text: 'Rent Summary', left: 'center' },
-                tooltip: { trigger: 'axis' },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        let tooltipText = '';
+                        params.forEach(function (item) {
+                            tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
+                        });
+                        return tooltipText;
+                    }
+                },
                 legend: {
                     data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
                     top: 25
@@ -92,6 +172,7 @@ const DashboardRentSummary = () => {
             console.error(err);
         }
     };
+
 
     // Fetch details for modal
     const fetchDetails = async (category, yearMonth, seriesName) => {
@@ -172,7 +253,7 @@ const DashboardRentSummary = () => {
         });
 
         window.addEventListener('resize', chart.resize);
-        fetchRentData(3);
+        fetchRentData(6);
 
         return () => {
             chart.dispose();
@@ -256,19 +337,19 @@ const DashboardRentSummary = () => {
                         <div>
                             <h6>Rent</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.totalRentAmount || 0).toLocaleString('en-IN')}
+                                {parseFloat(totalRentSummaryData.totalRentAmount || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
                             <h6>Collected</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.rentPaid || 0).toLocaleString('en-IN')}
+                                {parseFloat(totalRentSummaryData.rentPaid || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                         <div>
                             <h6>Pending</h6>
                             <p className="mb-0">
-                                ₹{parseFloat(totalRentSummaryData.rentPending || 0).toLocaleString('en-IN')}
+                                {parseFloat(totalRentSummaryData.rentPending || 0).toLocaleString('en-IN')}
                             </p>
                         </div>
                     </div>

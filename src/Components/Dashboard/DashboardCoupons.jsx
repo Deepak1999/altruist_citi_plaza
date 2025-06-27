@@ -28,7 +28,7 @@ const DashboardCoupons = () => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPeriod, setSelectedPeriod] = useState('3Month');
+    const [selectedPeriod, setSelectedPeriod] = useState('6Month');
     const [filterType, setFilterType] = useState('');
     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
         couponAdded: 0,
@@ -129,6 +129,82 @@ const DashboardCoupons = () => {
         }
     };
 
+    // const updateChart = (labels, added, consumed, balance) => {
+    //     const ctx = chartRef.current.getContext('2d');
+    //     if (chartInstance.current) {
+    //         chartInstance.current.destroy();
+    //     }
+
+    //     chartInstance.current = new Chart(ctx, {
+    //         type: 'line',
+    //         data: {
+    //             labels,
+    //             datasets: [
+    //                 {
+    //                     label: 'Coupon Added',
+    //                     data: added,
+    //                     borderColor: '#4caf50',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //                 {
+    //                     label: 'Coupon Consumed',
+    //                     data: consumed,
+    //                     borderColor: '#f44336',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //                 {
+    //                     label: 'Coupon Balance',
+    //                     data: balance,
+    //                     borderColor: '#2196f3',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //             ],
+    //         },
+    //         options: {
+    //             responsive: true,
+    //             plugins: {
+    //                 title: {
+    //                     display: true,
+    //                 },
+    //                 legend: {
+    //                     position: 'top',
+    //                 },
+    //             },
+    //             scales: {
+    //                 y: {
+    //                     beginAtZero: true,
+    //                     ticks: {
+    //                         callback: function (value) {
+    //                             if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                             if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                             if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                             return value;
+    //                         }
+    //                     }
+    //                 }
+    //             },
+    //             onClick: (event, elements) => {
+    //                 if (elements.length > 0) {
+    //                     const datasetIndex = elements[0].datasetIndex;
+    //                     const index = elements[0].index;
+    //                     const month = chartInstance.current.data.labels[index];
+    //                     const seriesName = chartInstance.current.data.datasets[datasetIndex].label;
+    //                     const categoryMap = {
+    //                         'Coupon Added': '1',
+    //                         'Coupon Consumed': '2',
+    //                         'Coupon Balance': '3',
+    //                     };
+    //                     const category = categoryMap[seriesName];
+    //                     fetchDetails(category, month, seriesName);
+    //                 }
+    //             },
+    //         },
+    //     });
+    // };
+
     const updateChart = (labels, added, consumed, balance) => {
         const ctx = chartRef.current.getContext('2d');
         if (chartInstance.current) {
@@ -172,6 +248,14 @@ const DashboardCoupons = () => {
                     legend: {
                         position: 'top',
                     },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const value = context.raw;
+                                return `${context.dataset.label}: ₹${value.toLocaleString('en-IN')}`;
+                            }
+                        }
+                    }
                 },
                 scales: {
                     y: {
@@ -242,7 +326,7 @@ const DashboardCoupons = () => {
             const { statusCode, description } = result.statusDescription;
 
             if (statusCode === 200) {
-                setTotalCouponsSummaryData(result.data || {});
+                // setTotalCouponsBalanceSummaryData(result.data || {});
             } else {
                 toast.error(description || 'Failed to fetch coupons summary.');
             }
@@ -289,15 +373,15 @@ const DashboardCoupons = () => {
                     <div className="d-flex justify-content-around text-center">
                         <div>
                             <h6>Coupon Added</h6>
-                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponAdded || 0).toLocaleString('en-IN')}</p>
+                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponAdded || 0).toLocaleString('en-IN')}</p>
                         </div>
                         <div>
                             <h6>Consumed</h6>
-                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toLocaleString('en-IN')}</p>
+                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponConsumed || 0).toLocaleString('en-IN')}</p>
                         </div>
                         <div>
                             <h6>Balance</h6>
-                            <p className="mb-0">₹{parseFloat(totalCouponsSummaryData.couponBalance || 0).toLocaleString('en-IN')}</p>
+                            <p className="mb-0">{parseFloat(totalCouponsSummaryData.couponBalance || 0).toLocaleString('en-IN')}</p>
                         </div>
                     </div>
                 </div>

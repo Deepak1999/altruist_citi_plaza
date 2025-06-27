@@ -62,7 +62,7 @@ const DashboardBankBalance = () => {
                         formatted.push({ value: latest.atpl, name: 'Atpl' });
                     }
                     if (latest.rsHospitality !== null) {
-                        formatted.push({ value: latest.rsHospitality, name: 'RS Hospitality' });
+                        formatted.push({ value: latest.rsHospitality, name: 'RS Hosp.' });
                     }
                     if (latest.netBalance !== null) {
                         formatted.push({ value: latest.netBalance, name: 'Net Balance' });
@@ -151,7 +151,7 @@ const DashboardBankBalance = () => {
         <div className="col-lg-6">
             <div className="card position-relative">
                 <div className="card-body">
-                    <h5 className="card-title mb-0">Bank Balance</h5>
+                    <h5 className="card-title">Bank Balance -INR</h5>
                     <div
                         ref={doughnutRef}
                         style={{ width: '100%', height: '300px', marginTop: '15px' }}
@@ -161,40 +161,40 @@ const DashboardBankBalance = () => {
                         <div>
                             {/* <h6>Total</h6> */}
                             <p className="mb-0">
-                                ₹{latestBalances.bankBalance != null
-                                    ? Number(latestBalances.bankBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                {latestBalances.bankBalance != null
+                                    ? Number(latestBalances.bankBalance).toLocaleString('en-IN',)
                                     : "---"}
                             </p>
                         </div>
                         <div>
                             {/* <h6>Mobisoft</h6> */}
                             <p className="mb-0">
-                                ₹{latestBalances.mobisoft != null
-                                    ? Number(latestBalances.mobisoft).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                {latestBalances.mobisoft != null
+                                    ? Number(latestBalances.mobisoft).toLocaleString('en-IN',)
                                     : "---"}
                             </p>
                         </div>
                         <div>
                             {/* <h6>ATPL</h6> */}
                             <p className="mb-0">
-                                ₹{latestBalances.atpl != null
-                                    ? Number(latestBalances.atpl).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                {latestBalances.atpl != null
+                                    ? Number(latestBalances.atpl).toLocaleString('en-IN',)
                                     : "---"}
                             </p>
                         </div>
                         <div>
                             {/* <h6>RS Hospitality</h6> */}
                             <p className="mb-0">
-                                ₹{latestBalances.rsHospitality != null
-                                    ? Number(latestBalances.rsHospitality).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                {latestBalances.rsHospitality != null
+                                    ? Number(latestBalances.rsHospitality).toLocaleString('en-IN',)
                                     : "---"}
                             </p>
                         </div>
                         <div>
                             {/* <h6>Net</h6> */}
                             <p className="mb-0">
-                                ₹{latestBalances.netBalance != null
-                                    ? Number(latestBalances.netBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                {latestBalances.netBalance != null
+                                    ? Number(latestBalances.netBalance).toLocaleString('en-IN',)
                                     : "---"}
                             </p>
                         </div>
