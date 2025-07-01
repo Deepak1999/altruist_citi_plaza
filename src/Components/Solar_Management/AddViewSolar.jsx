@@ -322,23 +322,49 @@ const AddViewSolar = () => {
 
     ], []);
 
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     page,
+    //     nextPage,
+    //     previousPage,
+    //     canNextPage,
+    //     canPreviousPage,
+    //     prepareRow,
+    //     pageOptions,
+    //     state: { pageIndex },
+    // } = useTable(
+    //     { columns, data: solarTableData, initialState: { pageIndex: 0, pageSize: 5 } },
+    //     usePagination
+    // );
+
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
+        prepareRow,
         page,
+        pageOptions,
+        canPreviousPage,
+        canNextPage,
         nextPage,
         previousPage,
-        canNextPage,
-        canPreviousPage,
-        prepareRow,
-        pageOptions,
-        state: { pageIndex },
+        state: { pageIndex, pageSize },
+        setPageSize,
     } = useTable(
-        { columns, data: solarTableData, initialState: { pageIndex: 0, pageSize: 5 } },
+        {
+            columns,
+            data: solarTableData,
+            initialState: { pageIndex: 0, pageSize: 7 },
+        },
         usePagination
     );
 
+    const handleRowClick = (row) => {
+        setSelectedRowData(row.original);
+        setShowModal(true);
+    };
     const handleDownloadExcel = () => {
         if (!solarTableData.length) {
             toast.warn('No data to download');
@@ -498,6 +524,20 @@ const AddViewSolar = () => {
                                     >
                                         <span className="ms-2">Download</span>
                                     </i>
+                                </div>
+                                <div className="d-flex align-items-center mb-3">
+                                    <h6 className="mb-0 me-2">Show rows:</h6>
+                                    <select
+                                        className="form-select w-auto"
+                                        value={pageSize}
+                                        onChange={(e) => setPageSize(Number(e.target.value))}
+                                    >
+                                        {[10, 30, 50, 100].map((size) => (
+                                            <option key={size} value={size}>
+                                                {size}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="table-responsive mb-3">

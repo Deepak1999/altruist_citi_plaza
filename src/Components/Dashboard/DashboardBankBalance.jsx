@@ -269,7 +269,7 @@ const DashboardBankBalance = () => {
                         formatted.push({ value: latest.atpl, name: 'ATPL' });
                     }
                     if (latest.rsHospitality !== null) {
-                        formatted.push({ value: latest.rsHospitality, name: 'RS Hospitality' });
+                        formatted.push({ value: latest.rsHospitality, name: 'RS Hosp.' });
                     }
                     if (latest.netBalance !== null) {
                         formatted.push({ value: latest.netBalance, name: 'Net Balance' });
@@ -326,25 +326,25 @@ const DashboardBankBalance = () => {
                 {
                     name: 'Bank Allocation',
                     type: 'pie',
-                    radius: '50%',
+                    radius: '70%',
                     data: chartData,
                     label: {
                         show: true,
                         formatter: params => {
                             const value = Math.round(params.value).toLocaleString('en-IN');
                             // Use rich text tags to separate styles
-                            return `{name|${params.name}}\n{value|₹${value}}`;
+                            return `{name|${params.name}}\n\n{value|₹${value}}`;
                         },
                         rich: {
                             name: {
                                 fontWeight: 'normal',
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: '#000',
                                 align: 'center',
                             },
                             value: {
                                 fontWeight: 'bold',
-                                fontSize: 12,
+                                fontSize: 13,
                                 color: '#000',
                                 align: 'center',
                             },

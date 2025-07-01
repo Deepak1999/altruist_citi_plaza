@@ -350,7 +350,7 @@ const DashboardElectricitySummary = () => {
                             ></i>
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map((range) => (
+                                    {['YoY', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map((range) => (
                                         <button
                                             key={range}
                                             className="dropdown-item"

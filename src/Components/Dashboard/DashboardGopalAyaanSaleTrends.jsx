@@ -21,83 +21,6 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchGopalAyaanCinemaData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/dashboard/sale-log-summary?period=${period}`, {
-    //             headers: { userId },
-    //         });
-
-    //         const result = await response.json();
-    //         const gopalAyaanDetails = result.dashboardSalesLogDetails || {};
-    //         const months = Object.keys(gopalAyaanDetails).sort();
-
-    //         setTotalGopalAyaanSummaryData(result.totalData.total || {});
-    //         const gopalAmount = [], ayaanAmount = [], gopalAtplShare = [], ayaanAtplShare = [];
-
-    //         months.forEach((month) => {
-    //             const d = gopalAyaanDetails[month];
-    //             gopalAmount.push(+d.gopalAmount);
-    //             ayaanAmount.push(+d.ayaanAmount);
-    //             gopalAtplShare.push(+d.gopalAtplShare);
-    //             ayaanAtplShare.push(+d.ayaanAtplShare);
-    //         });
-
-    //         const chart = chartInstanceRef.current;
-    //         chart.setOption({
-    //             // title: { text: 'Sales Trend & Share', left: 'center' },
-    //             tooltip: { trigger: 'axis' },
-    //             legend: {
-    //                 data: ['Gopal Sale', 'Ayaan Sale', 'Gopal Share', 'Ayaan Share'],
-    //                 top: 25,
-    //             },
-    //             xAxis: { type: 'category', data: months },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     },
-    //                 },
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Gopal Sale',
-    //                     type: 'line',
-    //                     data: gopalAmount,
-    //                     itemStyle: { color: '#9c64f3' },
-    //                 },
-    //                 {
-    //                     name: 'Ayaan Sale',
-    //                     type: 'line',
-    //                     data: ayaanAmount,
-    //                     itemStyle: { color: '#4caf50' },
-    //                 },
-    //                 {
-    //                     name: 'Gopal Share',
-    //                     type: 'line',
-    //                     data: gopalAtplShare,
-    //                     itemStyle: { color: '#f44336' },
-    //                 },
-    //                 {
-    //                     name: 'Ayaan Share',
-    //                     type: 'line',
-    //                     data: ayaanAtplShare,
-    //                     itemStyle: { color: '#ff9800' },
-    //                 },
-    //             ],
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching Gopal & Ayaan data:', error);
-    //     }
-    // };
-
-
     const fetchGopalAyaanCinemaData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -186,7 +109,6 @@ const DashboardGopalAyaanSaleTrends = () => {
         }
     };
 
-
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -208,7 +130,6 @@ const DashboardGopalAyaanSaleTrends = () => {
             const json = await response.json();
             const data = json.data || {};
 
-            // Case: Gopal or Ayaan Atpl Share (simple key:value map)
             if (category === 3 || category === 4) {
                 const rows = Object.entries(data).map(([timestamp, amount]) => ({
                     timestamp,
@@ -352,7 +273,7 @@ const DashboardGopalAyaanSaleTrends = () => {
                             ></i>
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map((range) => (
+                                    {['YoY', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map((range) => (
                                         <button
                                             key={range}
                                             className="dropdown-item"
@@ -376,7 +297,6 @@ const DashboardGopalAyaanSaleTrends = () => {
                             <h6>Gopal Sale</h6>
                             <strong><p className="mb-0">
                                 ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
-
                             </p></strong>
                         </div>
                         <div>

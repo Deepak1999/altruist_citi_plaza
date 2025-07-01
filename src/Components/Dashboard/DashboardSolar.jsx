@@ -198,7 +198,7 @@ const DashboardSolar = () => {
                                 onClick={() => setShowDropdown(!showDropdown)} />
                             {showDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map(label => (
+                                    {['YoY', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map(label => (
                                         <button key={label} className="dropdown-item" onClick={() => updateChart(label)}>
                                             {label}
                                         </button>

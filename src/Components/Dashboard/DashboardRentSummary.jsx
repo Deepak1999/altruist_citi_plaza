@@ -252,7 +252,7 @@ const DashboardRentSummary = () => {
                                 onClick={() => setShowRentDropdown(!showRentDropdown)} />
                             {showRentDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', '3Month', '6Month', '9Month', '12Month'].map(r => (
+                                    {['YoY', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map(r => (
                                         <button key={r} className="dropdown-item" onClick={() => updateRentChart(r)}>
                                             {r}
                                         </button>
