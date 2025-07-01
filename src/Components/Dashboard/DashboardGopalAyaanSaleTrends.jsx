@@ -8,7 +8,7 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('6Month');
     const lineChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
-    const [filterType, setFilterType] = useState('6Month');
+    const [filterType, setFilterType] = useState('Current Month');
     const [totalGopalAyaanSummaryData, setTotalGopalAyaanSummaryData] = useState({
         gopalAmount: 0,
         ayaanAmount: 0,
@@ -179,7 +179,7 @@ const DashboardGopalAyaanSaleTrends = () => {
         setGopalAyaanCinemaFilter(rangeLabel);
         setShowDropdown(false);
         setFilterType(rangeLabel);
-        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'Current Month': 11, 'Prev Month': 13, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[rangeLabel]) fetchGopalAyaanCinemaData(map[rangeLabel]);
     };
 

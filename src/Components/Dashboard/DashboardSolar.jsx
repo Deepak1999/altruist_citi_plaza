@@ -9,7 +9,7 @@ const DashboardSolar = () => {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState('6Month');
-    const [filterType, setFilterType] = useState('6Month');
+    const [filterType, setFilterType] = useState('Current Month');
     const [totalSolarSummaryData, setTotalSolarSummaryData] = useState({
         plant1Produce: 0,
         plant2Produce: 0
@@ -124,7 +124,7 @@ const DashboardSolar = () => {
         setSelectedPeriod(range);
         setFilterType(range);
         setShowDropdown(false);
-        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'Current Month': 11, 'Prev Month': 13, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[range]) fetchSolarData(map[range]);
     };
 

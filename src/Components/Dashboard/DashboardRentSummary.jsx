@@ -160,7 +160,7 @@ const DashboardRentSummary = () => {
         setRentFilter(range);
         setFilterType(range);
         setShowRentDropdown(false);
-        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'Current Month': 11, 'Prev Month': 13, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[range]) fetchRentData(map[range]);
     };
 

@@ -21,91 +21,6 @@ const DashboardElectricitySummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchElectricityData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`,
-    //             {
-    //                 headers: { userId },
-    //             }
-    //         );
-
-    //         const result = await response.json();
-    //         const details = result.dashboardElectricitySummaryDetails || {};
-    //         const months = Object.keys(details).sort();
-    //         setTotalElectricitySummaryData(result.totalData.total || {});
-    //         const totalBilledAmount = [];
-    //         const totalPaidAmount = [];
-    //         const postPaidAmount = [];
-    //         const prePaidAmount = [];
-
-    //         months.forEach((month) => {
-    //             const d = details[month];
-    //             totalBilledAmount.push(+d.totalBilledAmount);
-    //             totalPaidAmount.push(+d.totalPaidAmount);
-    //             postPaidAmount.push(+d.postPaidAmount);
-    //             prePaidAmount.push(+d.prePaidAmount);
-    //         });
-
-    //         const chart = chartInstanceRef.current;
-    //         chart.setOption({
-    //             // title: { text: 'Electricity Summary', left: 'center' },
-    //             tooltip: { trigger: 'axis' },
-    //             legend: {
-    //                 data: [
-    //                     'Postpaid Billing',
-    //                     // 'Paid Amount',
-    //                     'Postpaid Collection',
-    //                     'Prepaid Collection',
-    //                 ],
-    //                 top: 25,
-    //             },
-    //             xAxis: { type: 'category', data: months },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Postpaid Billing',
-    //                     type: 'bar',
-    //                     data: totalBilledAmount,
-    //                     itemStyle: { color: '#de0b8b' },
-    //                 },
-    //                 // {
-    //                 //     name: 'Paid Amount',
-    //                 //     type: 'bar',
-    //                 //     data: totalPaidAmount,
-    //                 //     itemStyle: { color: '#4caf50' },
-    //                 // },
-    //                 {
-    //                     name: 'Postpaid Collection',
-    //                     type: 'bar',
-    //                     data: postPaidAmount,
-    //                     itemStyle: { color: '#0baade' },
-    //                 },
-    //                 {
-    //                     name: 'Prepaid Collection',
-    //                     type: 'bar',
-    //                     data: prePaidAmount,
-    //                     itemStyle: { color: '#ff9800' },
-    //                 },
-    //             ],
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching electricity data:', error);
-    //     }
-    // };
-
     const fetchElectricityData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -256,7 +171,7 @@ const DashboardElectricitySummary = () => {
         setElectricityFilter(rangeLabel);
         setShowDropdown(false);
         setFilterType(rangeLabel);
-        const map = { 'YoY': -1, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'Current Month': 11, 'Prev Month': 13, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[rangeLabel]) fetchElectricityData(map[rangeLabel]);
     };
 

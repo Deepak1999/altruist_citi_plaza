@@ -10,6 +10,8 @@
     "chart.js": "^4.4.9",
     "echarts": "^5.4.3",
     "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.7.0",
     "react-dom": "^18.2.0",
