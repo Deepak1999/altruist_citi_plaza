@@ -187,7 +187,12 @@ const DashboardSolar = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title mb-0">Solar Plant Production Summary {filterType && `- ${filterType}`}</h5>
+                        <h5 className="card-title mb-0">Solar Plant Production Summary</h5>
+                        <strong>
+                            <span style={{ marginLeft: '90px' }}>
+                                {filterType && `${filterType}`}
+                            </span>
+                        </strong>
                         <div style={{ position: 'relative' }}>
                             <i className="fa-solid fa-filter" style={{ cursor: 'pointer' }}
                                 onClick={() => setShowDropdown(!showDropdown)} />

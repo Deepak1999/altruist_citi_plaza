@@ -336,7 +336,12 @@ const DashboardElectricitySummary = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title">Electricity Summary {filterType && `- ${filterType}`}</h5>
+                        <h5 className="card-title">Electricity Summary</h5>
+                        <strong>
+                            <span style={{ marginLeft: '140px' }}>
+                                {filterType && `${filterType}`}
+                            </span>
+                        </strong>
                         <div style={{ position: 'relative' }}>
                             <i
                                 className="fa-solid fa-filter"

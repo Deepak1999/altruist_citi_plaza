@@ -360,7 +360,13 @@ const DashboardCoupons = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title">Coupon Balance Summary {filterType && `- ${filterType}`}</h5>
+                        <h5 className="card-title">Coupon Balance Summary</h5>
+                        <strong>
+                            <span style={{ marginLeft: '100px' }}>
+                                {filterType && `${filterType}`}
+                            </span>
+                        </strong>
+
                         <div style={{ position: 'relative' }}>
                             <i
                                 className="fa-solid fa-filter"

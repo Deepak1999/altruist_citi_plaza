@@ -21,78 +21,6 @@ const DashboardRentSummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchRentData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const resp = await fetch(`${ApiBaseUrl}/dashboard/rent-summary?period=${period}`, {
-    //             headers: { userId }
-    //         });
-    //         const json = await resp.json();
-    //         const rentDetails = json.dashboardRentSummaryDetails || {};
-
-    //         setTotalRentSummaryData(json.totalData.total || {});
-
-    //         const months = Object.keys(rentDetails).sort();
-    //         const totalRent = [], rentPaid = [], rentPending = [];
-
-    //         months.forEach(month => {
-    //             const d = rentDetails[month];
-    //             totalRent.push(+d.totalRentAmount);
-    //             rentPaid.push(+d.rentPaid);
-    //             rentPending.push(+d.rentPending);
-    //         });
-
-    //         const chart = rentChartInstanceRef.current;
-    //         chart.setOption({
-    //             // title: { text: 'Rent Summary', left: 'center' },
-    //             tooltip: { trigger: 'axis' },
-    //             legend: {
-    //                 data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
-    //                 top: 25
-    //             },
-    //             xAxis: {
-    //                 type: 'category',
-    //                 data: months
-    //             },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Total Rent',
-    //                     type: 'bar',
-    //                     data: totalRent,
-    //                     itemStyle: { color: '#4caf50' }
-    //                 },
-    //                 {
-    //                     name: 'Rent Collected',
-    //                     type: 'bar',
-    //                     data: rentPaid,
-    //                     itemStyle: { color: '#0baade' }
-    //                 },
-    //                 {
-    //                     name: 'Rent Pending',
-    //                     type: 'bar',
-    //                     data: rentPending,
-    //                     itemStyle: { color: '#ff9800' }
-    //                 }
-    //             ]
-    //         });
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
-
     const fetchRentData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -150,19 +78,19 @@ const DashboardRentSummary = () => {
                 series: [
                     {
                         name: 'Total Rent',
-                        type: 'bar',
+                        type: 'line',
                         data: totalRent,
                         itemStyle: { color: '#4caf50' }
                     },
                     {
                         name: 'Rent Collected',
-                        type: 'bar',
+                        type: 'line',
                         data: rentPaid,
                         itemStyle: { color: '#0baade' }
                     },
                     {
                         name: 'Rent Pending',
-                        type: 'bar',
+                        type: 'line',
                         data: rentPending,
                         itemStyle: { color: '#ff9800' }
                     }
@@ -312,7 +240,12 @@ const DashboardRentSummary = () => {
                 <div className="card-body">
                     {/* Header + filter */}
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="card-title mb-0">Rent Summary {filterType && `- ${filterType}`}</h5>
+                        <h5 className="card-title mb-0">Rent Summary</h5>
+                        <strong>
+                            <span style={{ marginLeft: '220px' }}>
+                                {filterType && `${filterType}`}
+                            </span>
+                        </strong>
                         <div style={{ position: 'relative' }}>
                             <i className="fa-solid fa-filter"
                                 style={{ cursor: 'pointer' }}
