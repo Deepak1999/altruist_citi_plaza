@@ -240,10 +240,15 @@ import DashboardSolar from './DashboardSolar';
 import { toast } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
-const Dashboard = () => {
+const Dashboard = ({ bankBalance, netBalance }) => {
     const contentRef = useRef(null);
-    const [openingBalance, setopeningBalance] = useState("0");
-    const [closingBalance, setclosingBalance] = useState("0");
+    // const [openingBalance, setopeningBalance] = useState("0");
+    // const [closingBalance, setclosingBalance] = useState("0");
+    const [chartData, setChartData] = useState([]);
+    const [netBalances, setNetBalances] = useState({
+        bankBalance: 0,
+        netBalance: 0,
+    });
 
     const today = new Date();
     today.setDate(today.getDate() - 1);
@@ -273,8 +278,8 @@ const Dashboard = () => {
                 const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    setopeningBalance(parseFloat(data.dashboardCurrentBalance));
-                    setclosingBalance(parseFloat(data.dashboardClosingBalance));
+                    // setopeningBalance(parseFloat(data.dashboardCurrentBalance));
+                    // setclosingBalance(parseFloat(data.dashboardClosingBalance));
                 } else {
                     toast.error(description || 'Failed to fetch balance data');
                 }
@@ -286,8 +291,68 @@ const Dashboard = () => {
         }
     };
 
+    const handleGetBankBalanceData = async () => {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            toast.error('Missing userId in localStorage');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${ApiBaseUrl}/bank-summary/all`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    userId: userId,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { statusCode, statusMessage } = data.statusDescription;
+
+                if (statusCode === 200) {
+                    const summary = data.dailyBankSummary || [];
+
+                    if (!summary.length) {
+                        toast.info('No data available');
+                        return;
+                    }
+
+                    const sorted = summary.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    const latest = sorted[0];
+
+                    const formatted = [];
+
+                    if (latest.bankBalance !== null) {
+                        formatted.push({ value: latest.bankBalance, name: 'Bank Bal.' });
+                    }
+                    if (latest.netBalance !== null) {
+                        formatted.push({ value: latest.netBalance, name: 'Net Bal.' });
+                    }
+
+                    setChartData(formatted);
+
+                    setNetBalances({
+                        bankBalance: latest.bankBalance,
+                        netBalance: latest.netBalance,
+                    });
+                } else {
+                    toast.error(statusMessage || 'Failed to fetch data');
+                }
+            } else {
+                toast.error('Failed to fetch data with status: ' + response.status);
+            }
+        } catch (error) {
+            toast.error('Error fetching data: ' + error.message);
+        }
+    };
+
     useEffect(() => {
-        handleGetOpeningClosingBalance();
+        // handleGetOpeningClosingBalance();
+        handleGetBankBalanceData();
     }, []);
 
     const handleDownloadPDF = async () => {
@@ -324,7 +389,7 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'blue' }}>
-                                    Current Balance: ₹{Number(openingBalance).toLocaleString('en-IN')}
+                                    Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>
@@ -333,7 +398,7 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green' }}>
-                                    Yesterday's Closing Balance: ₹{Number(closingBalance).toLocaleString('en-IN')}
+                                    Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>

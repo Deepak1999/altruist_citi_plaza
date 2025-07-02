@@ -227,7 +227,7 @@ const BankEntry = () => {
         }
 
         const formattedData = bankBalanceTableData.map(row => {
-            const date = new Date(row.productionDate);
+            const date = new Date(row.entryDate);
 
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -240,13 +240,14 @@ const BankEntry = () => {
 
             return {
                 'Date & Time': formattedDateTime,
-                'Bank Balance': row.plantName,
-                'Mobisoft Balance': row.unitProduced,
-                'Atpl Balance': row.unitProduce,
-                'R S Hospitality Balance': row.unitProduc,
-                'Net Balance': row.unitProdu,
-                'Opening Balance': row.unitProd,
-                'Closing Balance': row.unitPro
+                'Bank Balance': row.bankBalance ?? 'N/A',
+                'Mobisoft Balance': row.mobisoft ?? 'N/A',
+                'Atpl Balance': row.atpl ?? 'N/A',
+                'R S Hospitality Balance': row.rsHospitality ?? 'N/A',
+                'Net Balance': row.netBalance ?? 'N/A',
+                // Uncomment if you want these too:
+                // 'Opening Balance': row.openingbalance ?? 'N/A',
+                // 'Closing Balance': row.closingbalance ?? 'N/A',
             };
         });
 

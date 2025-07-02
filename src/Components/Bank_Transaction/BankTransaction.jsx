@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, usePagination } from 'react-table';
 import { toast, ToastContainer } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const BankTransaction = () => {
 
@@ -48,10 +50,10 @@ const BankTransaction = () => {
 
                     if (transactions.length > 0) {
                         const firstTransaction = transactions[0];
-                        const lastTransaction = transactions[transactions.length - 1];
+                        // const lastTransaction = transactions[transactions.length - 1];
 
-                        setOpeningBalance(firstTransaction.openingBalance || 0);
-                        setClosingBal(lastTransaction.closingBalance || 0);
+                        // setOpeningBalance(firstTransaction.openingBalance || 0);
+                        setClosingBal(firstTransaction.closingBalance || 0);
                     } else {
                         setOpeningBalance(0);
                         setClosingBal(0);
@@ -117,13 +119,13 @@ const BankTransaction = () => {
         { Header: 'Closing Balance', accessor: 'closingBalance' },
     ], []);
 
-    const balanceColumns = useMemo(() => [
-        { Header: 'Bank Balance', accessor: 'bankBalance' },
-        { Header: 'Mobisoft', accessor: 'mobisoft' },
-        { Header: 'ATPL', accessor: 'atpl' },
-        { Header: 'R S Hospitality', accessor: 'rshospitality' },
-        { Header: 'Net Balance', accessor: 'netBalance' },
-    ], []);
+    // const balanceColumns = useMemo(() => [
+    //     { Header: 'Bank Balance', accessor: 'bankBalance' },
+    //     { Header: 'Mobisoft', accessor: 'mobisoft' },
+    //     { Header: 'ATPL', accessor: 'atpl' },
+    //     { Header: 'R S Hospitality', accessor: 'rshospitality' },
+    //     { Header: 'Net Balance', accessor: 'netBalance' },
+    // ], []);
 
     const balanceData = useMemo(() => [
         {
@@ -187,22 +189,22 @@ const BankTransaction = () => {
     //     setShowModal(true);
     // };
 
-    const {
-        getTableProps: getBalanceTableProps,
-        getTableBodyProps: getBalanceBodyProps,
-        headerGroups: balanceHeaderGroups,
-        page: balancePage,
-        nextPage: nextBalancePage,
-        previousPage: prevBalancePage,
-        canNextPage: canNextBalancePage,
-        canPreviousPage: canPrevBalancePage,
-        prepareRow: prepareBalanceRow,
-        pageOptions: balancePageOptions,
-        state: { pageIndex: balancePageIndex },
-    } = useTable(
-        { columns: balanceColumns, data: balanceData, initialState: { pageIndex: 0, pageSize: 5 } },
-        usePagination
-    );
+    // const {
+    //     getTableProps: getBalanceTableProps,
+    //     getTableBodyProps: getBalanceBodyProps,
+    //     headerGroups: balanceHeaderGroups,
+    //     page: balancePage,
+    //     nextPage: nextBalancePage,
+    //     previousPage: prevBalancePage,
+    //     canNextPage: canNextBalancePage,
+    //     canPreviousPage: canPrevBalancePage,
+    //     prepareRow: prepareBalanceRow,
+    //     pageOptions: balancePageOptions,
+    //     state: { pageIndex: balancePageIndex },
+    // } = useTable(
+    //     { columns: balanceColumns, data: balanceData, initialState: { pageIndex: 0, pageSize: 5 } },
+    //     usePagination
+    // );
 
     const formatDateTime = () => {
         const now = new Date();
@@ -289,6 +291,35 @@ const BankTransaction = () => {
         setClosingBalance('');
     }
 
+    const handleDownloadExcel = () => {
+        if (!transactionData.length) {
+            toast.warn('No data to download');
+            return;
+        }
+
+        const formattedData = transactionData.map(row => ({
+            'Date': new Date(row.transactionDate).toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+            }),
+            'Narration': row.note?.length > 50 ? `${row.note.slice(0, 50)}...` : row.note || '',
+            'Amount Received (Debit)': row.debitAmount || 0,
+            'Receipt Amount (Credit)': row.creditAmount || 0,
+            'Reference No. (Txn. ID)': row.transactionId || '',
+            'Closing Balance': row.closingBalance || 0,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Transaction Details');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        saveAs(data, 'TransactionDetails.xlsx');
+    };
+
     return (
         <main id="main" className="main">
             <section className="section dashboard">
@@ -371,8 +402,12 @@ const BankTransaction = () => {
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h5 className="card-title mb-0">View Bank Transaction Details</h5>
-                                    <i className="fa-solid fa-circle-down" style={{ cursor: 'pointer' }}>
-                                        <span className="ms-2">Download</span>
+                                    <i
+                                        className="fa-solid fa-circle-down"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={handleDownloadExcel}
+                                    >
+                                        <span className="ms-2">download</span>
                                     </i>
                                 </div>
                                 <div className="d-flex align-items-center mb-3">
