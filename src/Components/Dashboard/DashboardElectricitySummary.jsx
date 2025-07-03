@@ -147,11 +147,26 @@ const DashboardElectricitySummary = () => {
             }
 
             const firstItem = data[Object.keys(data)[0]];
-            const columns = Object.keys(firstItem).map((key) => ({
-                key,
-                label: key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()),
-            }));
+            // const columns = Object.keys(firstItem).map((key) => ({
+            //     key,
+            //     label: key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()),
+            // }));
+            const columns = Object.keys(firstItem).map((key) => {
+                const formattedLabel = key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase());
 
+                let label = formattedLabel;
+
+                if (formattedLabel === 'Postpaid Amount') {
+                    label = 'Postpaid Collection';
+                } else if (formattedLabel === 'Total Paid Amount') {
+                    label = 'Prepaid Collection';
+                }
+
+                return {
+                    key,
+                    label,
+                };
+            });
 
             const rows = Object.entries(data).map(([id, item]) => ({
                 id,

@@ -108,8 +108,12 @@ const DashboardCoupons = () => {
             }
 
             const data = result.data || {};
+            const nameMap = {
+                1: 'Gopal Sweets',
+                2: 'Pro Saloon'
+            };
             const rows = Object.entries(data).map(([id, value]) => ({
-                id,
+                id: nameMap[id] || id,
                 value
             }));
 

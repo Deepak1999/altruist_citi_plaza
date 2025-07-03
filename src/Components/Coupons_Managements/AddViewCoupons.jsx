@@ -113,7 +113,7 @@ const AddViewCoupons = () => {
 
     const [totalCouponBalanceData, setTotalCouponBalanceData] = useState({
         couponBalance: 0,
-        lastDayCouponBalance: 0
+        couponAdded: 0
     });
 
     const staticLesseeDetails = [
@@ -257,7 +257,7 @@ const AddViewCoupons = () => {
                 const { statusCode, description } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    const summary = data.data;
+                    const summary = data.totalData;
 
                     if (summary) {
                         setTotalCouponBalanceData(summary);
@@ -471,10 +471,14 @@ const AddViewCoupons = () => {
                                     <h5 className="card-title mb-0">Add Coupon Transaction</h5>
                                     <div className="d-flex gap-4">
                                         <div>
-                                            <strong className="text-success">Current Balance:</strong> {totalCouponBalanceData.couponBalance}
+                                            <strong className="text-primary">
+                                                Current Balance: ₹{totalCouponBalanceData.couponBalance.toLocaleString('en-IN')}
+                                            </strong>
                                         </div>
                                         <div>
-                                            <strong className="text-primary">Closing Balance:</strong> {totalCouponBalanceData.lastDayCouponBalance}
+                                            <strong
+                                                className="text-secondary">Added Balance: ₹{totalCouponBalanceData.couponAdded.toLocaleString('en-IN')}
+                                            </strong>
                                         </div>
                                     </div>
                                 </div>

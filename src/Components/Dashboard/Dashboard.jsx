@@ -414,7 +414,7 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
+                                <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
                                     Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
@@ -423,7 +423,7 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: '#C76E00', height: '30px' }}>
+                                <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
                                     Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
