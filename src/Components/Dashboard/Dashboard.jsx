@@ -355,27 +355,53 @@ const Dashboard = ({ bankBalance, netBalance }) => {
         handleGetBankBalanceData();
     }, []);
 
+    // const handleDownloadPDF = async () => {
+    //     const input = contentRef.current;
+    //     const canvas = await html2canvas(input, { scale: 2 });
+    //     const imgData = canvas.toDataURL('image/png');
+
+    //     const pdf = new jsPDF('p', 'mm', 'a4');
+    //     const pdfWidth = pdf.internal.pageSize.getWidth();
+    //     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    //     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    //     pdf.save('dashboard.pdf');
+
+    //     handleDownloadImage();
+    // };
+
+    // const handleDownloadImage = async () => {
+    //     const input = contentRef.current;
+    //     const canvas = await html2canvas(input, { scale: 2 });
+    //     const image = canvas.toDataURL('image/png');
+
+    //     const link = document.createElement('a');
+    //     link.href = image;
+    //     link.download = 'dashboard.png';
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // };
+
     const handleDownloadPDF = async () => {
         const input = contentRef.current;
-        const canvas = await html2canvas(input, { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
-
+        const canvas = await html2canvas(input, { scale: 1.5 });
+        const imgData = canvas.toDataURL('image/jpeg', 0.8);
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
         pdf.save('dashboard.pdf');
+
+        handleDownloadImageFromCanvas(canvas);
     };
 
-    const handleDownloadImage = async () => {
-        const input = contentRef.current;
-        const canvas = await html2canvas(input, { scale: 2 });
-        const image = canvas.toDataURL('image/png');
-
+    const handleDownloadImageFromCanvas = (canvas) => {
+        const image = canvas.toDataURL('image/jpeg', 0.8);
         const link = document.createElement('a');
         link.href = image;
-        link.download = 'dashboard.png';
+        link.download = 'dashboard.jpg';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -388,7 +414,7 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue' }}>
+                                <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
                                     Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
@@ -397,7 +423,7 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'green' }}>
+                                <h6 className="card-title" style={{ color: '#C76E00', height: '30px' }}>
                                     Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
@@ -411,11 +437,8 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <DashboardSolar />
                 </div>
                 <div className="d-flex justify-content-end mb-3">
-                    <button className="btn btn-sm btn-danger me-3" onClick={handleDownloadPDF}>
-                        Download PDF
-                    </button>
-                    <button className="btn btn-sm btn-primary" onClick={handleDownloadImage}>
-                        Download Image
+                    <button className="btn btn-sm btn-success me-3" onClick={handleDownloadPDF}>
+                        Generate Report & Send Email
                     </button>
                 </div>
             </section>

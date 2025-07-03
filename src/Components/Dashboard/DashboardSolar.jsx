@@ -67,8 +67,8 @@ const DashboardSolar = () => {
                     }
                 },
                 series: [
-                    { name: 'Plant 1', type: 'bar', data: plant1Data, itemStyle: { color: '#4caf50' } },
-                    { name: 'Plant 2', type: 'bar', data: plant2Data, itemStyle: { color: '#2196f3' } }
+                    { name: 'Plant 1', type: 'line', data: plant1Data, itemStyle: { color: '#4caf50' } },
+                    { name: 'Plant 2', type: 'line', data: plant2Data, itemStyle: { color: '#2196f3' } }
                 ]
             });
         } catch (error) {
@@ -208,7 +208,7 @@ const DashboardSolar = () => {
                         </div>
                     </div>
 
-                    <div ref={chartRef} style={{ width: '100%', height: '300px', marginTop: '15px' }} />
+                    <div ref={chartRef} style={{ width: '100%', height: '275px', marginTop: '15px' }} />
 
                     <div className="d-flex justify-content-around text-center">
                         <div>

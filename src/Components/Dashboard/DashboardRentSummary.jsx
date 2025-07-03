@@ -263,7 +263,7 @@ const DashboardRentSummary = () => {
                     </div>
 
                     {/* Chart */}
-                    <div ref={rentChartRef} style={{ width: '100%', height: '280px', marginTop: '15px' }} />
+                    <div ref={rentChartRef} style={{ width: '100%', height: '330px', marginTop: '15px' }} />
 
                     {/* Summary Totals (you can update these based on API if desired) */}
                     <div className="d-flex justify-content-around text-center mt-3">
