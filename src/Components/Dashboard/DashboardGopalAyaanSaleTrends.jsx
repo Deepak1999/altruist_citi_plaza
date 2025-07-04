@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 const DashboardGopalAyaanSaleTrends = () => {
     const [showDropdown, setShowDropdown] = useState(false);
-    const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('6Month');
+    const [gopalAyaanCinemaFilter, setGopalAyaanCinemaFilter] = useState('Current Month');
     const lineChartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const [filterType, setFilterType] = useState('Current Month');
@@ -201,7 +201,7 @@ const DashboardGopalAyaanSaleTrends = () => {
             fetchDetails(category, month, series);
         });
 
-        fetchGopalAyaanCinemaData(6);
+        fetchGopalAyaanCinemaData('0');
         window.addEventListener('resize', chart.resize);
         return () => {
             chart.dispose();

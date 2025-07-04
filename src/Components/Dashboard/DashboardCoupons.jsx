@@ -28,8 +28,8 @@ const DashboardCoupons = () => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPeriod, setSelectedPeriod] = useState('6Month');
-    const [filterType, setFilterType] = useState('6Month');
+    const [selectedPeriod, setSelectedPeriod] = useState('6 Months');
+    const [filterType, setFilterType] = useState('6 Months');
     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
         couponAdded: 0,
         couponConsumed: 0,
@@ -46,10 +46,10 @@ const DashboardCoupons = () => {
         'MoM': -3,
         'Current Month': '0',
         'Prev Month': -2,
-        '3Month': 3,
-        '6Month': 6,
-        '9Month': 9,
-        '12Month': 12,
+        '3 Months': 3,
+        '6 Months': 6,
+        '9 Months': 9,
+        '12 Months': 12,
     };
 
     const fetchCouponData = async (period) => {

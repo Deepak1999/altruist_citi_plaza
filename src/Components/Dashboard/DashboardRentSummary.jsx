@@ -8,8 +8,8 @@ const DashboardRentSummary = () => {
     const rentChartInstanceRef = useRef(null);
 
     const [showRentDropdown, setShowRentDropdown] = useState(false);
-    const [rentFilter, setRentFilter] = useState('6Month');
-    const [filterType, setFilterType] = useState('6Month');
+    const [rentFilter, setRentFilter] = useState('6 Months');
+    const [filterType, setFilterType] = useState('6 Months');
     const [totalRentSummaryData, setTotalRentSummaryData] = useState({
         totalRentAmount: 0,
         rentPaid: 0,
@@ -160,7 +160,7 @@ const DashboardRentSummary = () => {
         setRentFilter(range);
         setFilterType(range);
         setShowRentDropdown(false);
-        const map = { 'YoY': -1, 'MoM': -3, 'Current Month': '0', 'Prev Month': -2, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'MoM': -3, 'Current Month': '0', 'Prev Month': -2, '3 Months': 3, '6 Months': 6, '9 Months': 9, '12 Months': 12 };
         if (map[range]) fetchRentData(map[range]);
     };
 
@@ -252,7 +252,7 @@ const DashboardRentSummary = () => {
                                 onClick={() => setShowRentDropdown(!showRentDropdown)} />
                             {showRentDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', 'MoM', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map(r => (
+                                    {['YoY', 'MoM', 'Current Month', 'Prev Month', '3 Months', '6 Months', '9 Months', '12 Months'].map(r => (
                                         <button key={r} className="dropdown-item" onClick={() => updateRentChart(r)}>
                                             {r}
                                         </button>

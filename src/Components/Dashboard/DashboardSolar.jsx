@@ -8,7 +8,7 @@ const DashboardSolar = () => {
     const chartInstanceRef = useRef(null);
 
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPeriod, setSelectedPeriod] = useState('6Month');
+    const [selectedPeriod, setSelectedPeriod] = useState('Current Month');
     const [filterType, setFilterType] = useState('Current Month');
     const [totalSolarSummaryData, setTotalSolarSummaryData] = useState({
         plant1Produce: 0,
@@ -140,7 +140,7 @@ const DashboardSolar = () => {
         });
 
         window.addEventListener('resize', chart.resize);
-        fetchSolarData(6);
+        fetchSolarData('0');
 
         return () => {
             chart.dispose();
