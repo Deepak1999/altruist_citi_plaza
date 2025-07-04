@@ -43,8 +43,9 @@ const DashboardCoupons = () => {
 
     const periodMap = {
         'YoY': -1,
-        'Current Month': 11,
-        'Prev Month': 13,
+        'MoM': -3,
+        'Current Month': '0',
+        'Prev Month': -2,
         '3Month': 3,
         '6Month': 6,
         '9Month': 9,

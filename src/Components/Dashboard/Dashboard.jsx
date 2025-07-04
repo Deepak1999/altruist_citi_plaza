@@ -415,7 +415,8 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
-                                    Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')}
+                                    {/* Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')} */}
+                                    Bank Balance: ₹{Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>
@@ -424,7 +425,8 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
-                                    Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')}
+                                    {/* Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')} */}
+                                    Net Balance: ₹{Math.floor(netBalances.netBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>

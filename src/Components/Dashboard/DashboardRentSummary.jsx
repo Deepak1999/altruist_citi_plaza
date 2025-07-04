@@ -160,7 +160,7 @@ const DashboardRentSummary = () => {
         setRentFilter(range);
         setFilterType(range);
         setShowRentDropdown(false);
-        const map = { 'YoY': -1, 'Current Month': 11, 'Prev Month': 13, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
+        const map = { 'YoY': -1, 'MoM': -3, 'Current Month': '0', 'Prev Month': -2, '3Month': 3, '6Month': 6, '9Month': 9, '12Month': 12 };
         if (map[range]) fetchRentData(map[range]);
     };
 
@@ -252,7 +252,7 @@ const DashboardRentSummary = () => {
                                 onClick={() => setShowRentDropdown(!showRentDropdown)} />
                             {showRentDropdown && (
                                 <div className="dropdown-menu show" style={{ position: 'absolute', right: 0 }}>
-                                    {['YoY', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map(r => (
+                                    {['YoY', 'MoM', 'Current Month', 'Prev Month', '3Month', '6Month', '9Month', '12Month'].map(r => (
                                         <button key={r} className="dropdown-item" onClick={() => updateRentChart(r)}>
                                             {r}
                                         </button>
