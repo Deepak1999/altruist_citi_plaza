@@ -21,6 +21,94 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
+    // const fetchGopalAyaanCinemaData = async (period) => {
+    //     const userId = localStorage.getItem('userId');
+    //     if (!userId) return;
+
+    //     try {
+    //         const response = await fetch(`${ApiBaseUrl}/dashboard/sale-log-summary?period=${period}`, {
+    //             headers: { userId },
+    //         });
+
+    //         const result = await response.json();
+    //         const gopalAyaanDetails = result.dashboardSalesLogDetails || {};
+    //         const months = Object.keys(gopalAyaanDetails).sort();
+
+    //         setTotalGopalAyaanSummaryData(result.totalData.total || {});
+
+    //         const gopalAmount = [], ayaanAmount = [], gopalAtplShare = [], ayaanAtplShare = [];
+
+    //         months.forEach((month) => {
+    //             const d = gopalAyaanDetails[month];
+    //             gopalAmount.push(+d.gopalAmount);
+    //             ayaanAmount.push(+d.ayaanAmount);
+    //             gopalAtplShare.push(+d.gopalAtplShare);
+    //             ayaanAtplShare.push(+d.ayaanAtplShare);
+    //         });
+
+    //         const chart = chartInstanceRef.current;
+    //         chart.setOption({
+    //             tooltip: {
+    //                 trigger: 'axis',
+    //                 formatter: function (params) {
+    //                     let tooltipText = '';
+    //                     params.forEach(function (item) {
+    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
+    //                     });
+    //                     return tooltipText;
+    //                 }
+    //             },
+    //             legend: {
+    //                 data: ['Gopal Sale', 'Ayaan Sale', 'Gopal Share', 'Ayaan Share'],
+    //                 top: 25,
+    //             },
+    //             xAxis: {
+    //                 type: 'category',
+    //                 data: months,
+    //             },
+    //             yAxis: {
+    //                 type: 'value',
+    //                 axisLabel: {
+    //                     formatter: function (value) {
+    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                         return value;
+    //                     }
+    //                 }
+    //             },
+    //             series: [
+    //                 {
+    //                     name: 'Gopal Sale',
+    //                     type: 'line',
+    //                     data: gopalAmount,
+    //                     itemStyle: { color: '#9c64f3' },
+    //                 },
+    //                 {
+    //                     name: 'Ayaan Sale',
+    //                     type: 'line',
+    //                     data: ayaanAmount,
+    //                     itemStyle: { color: '#4caf50' },
+    //                 },
+    //                 {
+    //                     name: 'Gopal Share',
+    //                     type: 'line',
+    //                     data: gopalAtplShare,
+    //                     itemStyle: { color: '#f44336' },
+    //                 },
+    //                 {
+    //                     name: 'Ayaan Share',
+    //                     type: 'line',
+    //                     data: ayaanAtplShare,
+    //                     itemStyle: { color: '#ff9800' },
+    //                 },
+    //             ]
+    //         });
+    //     } catch (error) {
+    //         console.error('Error fetching Gopal & Ayaan data:', error);
+    //     }
+    // };
+
     const fetchGopalAyaanCinemaData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -51,10 +139,17 @@ const DashboardGopalAyaanSaleTrends = () => {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params) {
-                        let tooltipText = '';
+                        if (!params.length) return '';
+
+                        const rawDate = params[0].axisValue;
+                        const formattedDate = customFormatDate(rawDate);
+
+                        let tooltipText = `<strong>${formattedDate}</strong><br/>`;
+
                         params.forEach(function (item) {
                             tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
                         });
+
                         return tooltipText;
                     }
                 },
@@ -70,9 +165,12 @@ const DashboardGopalAyaanSaleTrends = () => {
                     type: 'value',
                     axisLabel: {
                         formatter: function (value) {
-                            if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-                            if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-                            if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+                            if (value >= 1_00_00_000 || value <= -1_00_00_000)
+                                return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+                            if (value >= 1_00_000 || value <= -1_00_000)
+                                return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+                            if (value >= 1000 || value <= -1000)
+                                return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
                             return value;
                         }
                     }
@@ -108,6 +206,39 @@ const DashboardGopalAyaanSaleTrends = () => {
             console.error('Error fetching Gopal & Ayaan data:', error);
         }
     };
+
+    function customFormatDate(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
+
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // If it's the 1st day of any month (e.g., '2025-01-01'), treat it as monthly label
+        if (day === 1) {
+            return `${monthNames[monthIndex]}`;
+        }
+
+        // Otherwise, show full formatted date with suffix
+        const suffix = getDaySuffix(day);
+        return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
@@ -296,25 +427,25 @@ const DashboardGopalAyaanSaleTrends = () => {
                         <div>
                             <h6>Gopal Sale</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
+                                ₹{Math.round(totalGopalAyaanSummaryData.gopalAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                         <div>
                             <h6>Gopal Atpl Share</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalGopalAyaanSummaryData.gopalAtplShare || 0).toLocaleString('en-IN')}
+                                ₹{Math.round(totalGopalAyaanSummaryData.gopalAtplShare || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                         <div>
                             <h6>Ayaan Sale</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAmount || 0).toLocaleString('en-IN')}
+                                ₹{Math.round(totalGopalAyaanSummaryData.ayaanAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                         <div>
                             <h6>Ayaan Atpl Share</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toLocaleString('en-IN')}
+                                ₹{Math.round(totalGopalAyaanSummaryData.ayaanAtplShare || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                     </div>

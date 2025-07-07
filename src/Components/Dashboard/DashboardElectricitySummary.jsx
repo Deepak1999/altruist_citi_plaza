@@ -21,6 +21,102 @@ const DashboardElectricitySummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
+    // const fetchElectricityData = async (period) => {
+    //     const userId = localStorage.getItem('userId');
+    //     if (!userId) return;
+
+    //     try {
+    //         const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`, {
+    //             headers: { userId },
+    //         });
+
+    //         const result = await response.json();
+    //         const details = result.dashboardElectricitySummaryDetails || {};
+    //         const months = Object.keys(details).sort();
+
+    //         setTotalElectricitySummaryData(result.totalData.total || {});
+
+    //         const totalBilledAmount = [];
+    //         const totalPaidAmount = [];
+    //         const postPaidAmount = [];
+    //         const prePaidAmount = [];
+
+    //         months.forEach((month) => {
+    //             const d = details[month];
+    //             totalBilledAmount.push(+d.totalBilledAmount);
+    //             totalPaidAmount.push(+d.totalPaidAmount);
+    //             postPaidAmount.push(+d.postPaidAmount);
+    //             prePaidAmount.push(+d.prePaidAmount);
+    //         });
+
+    //         const chart = chartInstanceRef.current;
+    //         chart.setOption({
+    //             tooltip: {
+    //                 trigger: 'axis',
+    //                 formatter: function (params) {
+    //                     let tooltipText = '';
+    //                     params.forEach(function (item) {
+    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
+    //                     });
+    //                     return tooltipText;
+    //                 }
+    //             },
+    //             legend: {
+    //                 data: [
+    //                     'Postpaid Billing',
+    //                     // 'Paid Amount',
+    //                     'Postpaid Collection',
+    //                     'Prepaid Collection',
+    //                 ],
+    //                 top: 25,
+    //             },
+    //             xAxis: {
+    //                 type: 'category',
+    //                 data: months,
+    //             },
+    //             yAxis: {
+    //                 type: 'value',
+    //                 axisLabel: {
+    //                     formatter: function (value) {
+    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                         return value;
+    //                     }
+    //                 }
+    //             },
+    //             series: [
+    //                 {
+    //                     name: 'Postpaid Billing',
+    //                     type: 'bar',
+    //                     data: totalBilledAmount,
+    //                     itemStyle: { color: '#de0b8b' },
+    //                 },
+    //                 // {
+    //                 //     name: 'Paid Amount',
+    //                 //     type: 'bar',
+    //                 //     data: totalPaidAmount,
+    //                 //     itemStyle: { color: '#4caf50' },
+    //                 // },
+    //                 {
+    //                     name: 'Postpaid Collection',
+    //                     type: 'bar',
+    //                     data: postPaidAmount,
+    //                     itemStyle: { color: '#0baade' },
+    //                 },
+    //                 {
+    //                     name: 'Prepaid Collection',
+    //                     type: 'bar',
+    //                     data: prePaidAmount,
+    //                     itemStyle: { color: '#ff9800' },
+    //                 },
+    //             ],
+    //         });
+    //     } catch (error) {
+    //         console.error('Error fetching electricity data:', error);
+    //     }
+    // };
+
     const fetchElectricityData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -54,7 +150,12 @@ const DashboardElectricitySummary = () => {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params) {
-                        let tooltipText = '';
+                        if (!params.length) return '';
+
+                        const rawDate = params[0].axisValue;
+                        const formattedDate = customFormatDate(rawDate);
+
+                        let tooltipText = `<strong>${formattedDate}</strong><br/>`;
                         params.forEach(function (item) {
                             tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
                         });
@@ -116,6 +217,37 @@ const DashboardElectricitySummary = () => {
             console.error('Error fetching electricity data:', error);
         }
     };
+
+    function customFormatDate(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
+
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        if (day === 1) {
+            return `${monthNames[monthIndex]}`;
+        }
+
+        const suffix = getDaySuffix(day);
+        return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');

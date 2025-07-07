@@ -225,7 +225,7 @@ const AddRent = () => {
                                             </select>
                                         </div>
 
-                                        {/* <div className="col-md-3">
+                                        <div className="col-md-3">
                                             <label className="form-label">Monthly Rent Amount</label>
                                             <select
                                                 className="form-select"
@@ -243,9 +243,9 @@ const AddRent = () => {
                                                     ))
                                                 )}
                                             </select>
-                                        </div> */}
+                                        </div>
 
-                                        <div className="col-md-3">
+                                        {/* <div className="col-md-3">
                                             <label className="form-label">Monthly Rent Amount</label>
                                             <input
                                                 type="number"
@@ -256,7 +256,7 @@ const AddRent = () => {
                                                 min="0"
                                                 required
                                             />
-                                        </div>
+                                        </div> */}
 
                                         <div className="col-md-3">
                                             <label className="form-label">Month & Year</label>

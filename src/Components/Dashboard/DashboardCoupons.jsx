@@ -28,8 +28,8 @@ const DashboardCoupons = () => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPeriod, setSelectedPeriod] = useState('6 Months');
-    const [filterType, setFilterType] = useState('6 Months');
+    const [selectedPeriod, setSelectedPeriod] = useState('3 Months');
+    const [filterType, setFilterType] = useState('3 Months');
     const [totalCouponsSummaryData, setTotalCouponsSummaryData] = useState({
         couponAdded: 0,
         couponConsumed: 0,
@@ -43,9 +43,9 @@ const DashboardCoupons = () => {
 
     const periodMap = {
         'YoY': -1,
-        'MoM': -3,
-        'Current Month': '0',
-        'Prev Month': -2,
+        // 'MoM': -3,
+        // 'Current Month': '0',
+        // 'Prev Month': -2,
         '3 Months': 3,
         '6 Months': 6,
         '9 Months': 9,
@@ -136,6 +136,106 @@ const DashboardCoupons = () => {
         }
     };
 
+    // const updateChart = (labels, added, consumed, balance) => {
+    //     const ctx = chartRef.current.getContext('2d');
+    //     if (chartInstance.current) {
+    //         chartInstance.current.destroy();
+    //     }
+
+    //     chartInstance.current = new Chart(ctx, {
+    //         type: 'line',
+    //         data: {
+    //             labels,
+    //             datasets: [
+    //                 {
+    //                     label: 'Coupon Added',
+    //                     data: added,
+    //                     borderColor: '#4caf50',
+    //                     backgroundColor: '#4caf50',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //                 {
+    //                     label: 'Coupon Consumed',
+    //                     data: consumed,
+    //                     borderColor: '#f44336',
+    //                     backgroundColor: '#f44336',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //                 {
+    //                     label: 'Coupon Balance',
+    //                     data: balance,
+    //                     borderColor: '#2196f3',
+    //                     backgroundColor: '#2196f3',
+    //                     fill: false,
+    //                     tension: 0.3,
+    //                 },
+    //             ],
+    //         },
+    //         options: {
+    //             responsive: true,
+    //             plugins: {
+    //                 title: {
+    //                     display: true,
+    //                 },
+    //                 // legend: {
+    //                 //     position: 'top',
+    //                 // },
+    //                 legend: {
+    //                     position: 'top',
+    //                     labels: {
+    //                         usePointStyle: true,
+    //                         pointStyle: 'rectRounded',
+    //                         boxWidth: 12,
+    //                         boxHeight: 12,
+    //                         padding: 8,
+    //                         font: {
+    //                             size: 11,
+    //                         },
+    //                     },
+    //                 },
+    //                 tooltip: {
+    //                     callbacks: {
+    //                         label: function (context) {
+    //                             const value = context.raw;
+    //                             return `${context.dataset.label}: ₹${value.toLocaleString('en-IN')}`;
+    //                         }
+    //                     }
+    //                 }
+    //             },
+    //             scales: {
+    //                 y: {
+    //                     beginAtZero: true,
+    //                     ticks: {
+    //                         callback: function (value) {
+    //                             if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                             if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                             if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                             return value;
+    //                         }
+    //                     }
+    //                 }
+    //             },
+    //             onClick: (event, elements) => {
+    //                 if (elements.length > 0) {
+    //                     const datasetIndex = elements[0].datasetIndex;
+    //                     const index = elements[0].index;
+    //                     const month = chartInstance.current.data.labels[index];
+    //                     const seriesName = chartInstance.current.data.datasets[datasetIndex].label;
+    //                     const categoryMap = {
+    //                         'Coupon Added': '1',
+    //                         'Coupon Consumed': '2',
+    //                         'Coupon Balance': '3',
+    //                     };
+    //                     const category = categoryMap[seriesName];
+    //                     fetchDetails(category, month, seriesName);
+    //                 }
+    //             },
+    //         },
+    //     });
+    // };
+
     const updateChart = (labels, added, consumed, balance) => {
         const ctx = chartRef.current.getContext('2d');
         if (chartInstance.current) {
@@ -179,9 +279,6 @@ const DashboardCoupons = () => {
                     title: {
                         display: true,
                     },
-                    // legend: {
-                    //     position: 'top',
-                    // },
                     legend: {
                         position: 'top',
                         labels: {
@@ -197,6 +294,10 @@ const DashboardCoupons = () => {
                     },
                     tooltip: {
                         callbacks: {
+                            title: function (context) {
+                                const rawLabel = context[0].label;
+                                return customFormatDate(rawLabel);
+                            },
                             label: function (context) {
                                 const value = context.raw;
                                 return `${context.dataset.label}: ₹${value.toLocaleString('en-IN')}`;
@@ -235,6 +336,37 @@ const DashboardCoupons = () => {
             },
         });
     };
+
+    function customFormatDate(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
+
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        if (day === 1) {
+            return `${monthNames[monthIndex]}`;
+        }
+
+        const suffix = getDaySuffix(day);
+        return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
     const handlePeriodChange = (label) => {
         setSelectedPeriod(label);

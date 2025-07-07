@@ -21,6 +21,95 @@ const DashboardRentSummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
+    // const fetchRentData = async (period) => {
+    //     const userId = localStorage.getItem('userId');
+    //     if (!userId) return;
+
+    //     try {
+    //         const resp = await fetch(`${ApiBaseUrl}/dashboard/rent-summary?period=${period}`, {
+    //             headers: { userId }
+    //         });
+    //         const json = await resp.json();
+    //         const rentDetails = json.dashboardRentSummaryDetails || {};
+
+    //         setTotalRentSummaryData(json.totalData.total || {});
+
+    //         const months = Object.keys(rentDetails).sort();
+    //         const totalRent = [], rentPaid = [], rentPending = [];
+
+    //         months.forEach(month => {
+    //             const d = rentDetails[month];
+    //             totalRent.push(+d.totalRentAmount);
+    //             rentPaid.push(+d.rentPaid);
+    //             rentPending.push(+d.rentPending);
+    //         });
+
+    //         const chart = rentChartInstanceRef.current;
+    //         chart.setOption({
+    //             tooltip: {
+    //                 trigger: 'axis',
+    //                 formatter: function (params) {
+    //                     let tooltipText = '';
+    //                     params.forEach(function (item) {
+    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
+    //                     });
+    //                     return tooltipText;
+    //                 }
+    //             },
+    //             legend: {
+    //                 data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
+    //                 top: 25
+    //             },
+    //             xAxis: {
+    //                 type: 'category',
+    //                 data: months
+    //             },
+    //             yAxis: {
+    //                 type: 'value',
+    //                 axisLabel: {
+    //                     formatter: function (value) {
+    //                         const absValue = Math.abs(value);
+    //                         let formatted = '';
+    //                         if (absValue >= 1_00_00_000) {
+    //                             formatted = (absValue / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+    //                         } else if (absValue >= 1_00_000) {
+    //                             formatted = (absValue / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+    //                         } else if (absValue >= 1000) {
+    //                             formatted = (absValue / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    //                         } else {
+    //                             formatted = absValue.toString();
+    //                         }
+
+    //                         return value < 0 ? `-${formatted}` : formatted;
+    //                     }
+    //                 }
+    //             },
+    //             series: [
+    //                 {
+    //                     name: 'Total Rent',
+    //                     type: 'line',
+    //                     data: totalRent,
+    //                     itemStyle: { color: '#4caf50' }
+    //                 },
+    //                 {
+    //                     name: 'Rent Collected',
+    //                     type: 'line',
+    //                     data: rentPaid,
+    //                     itemStyle: { color: '#0baade' }
+    //                 },
+    //                 {
+    //                     name: 'Rent Pending',
+    //                     type: 'line',
+    //                     data: rentPending,
+    //                     itemStyle: { color: '#ff9800' }
+    //                 }
+    //             ]
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
+
     const fetchRentData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -49,7 +138,12 @@ const DashboardRentSummary = () => {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params) {
-                        let tooltipText = '';
+                        if (!params.length) return '';
+
+                        const rawDate = params[0].axisValue;
+                        const formattedDate = customFormatDate(rawDate);
+
+                        let tooltipText = `<strong>${formattedDate}</strong><br/>`;
                         params.forEach(function (item) {
                             tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
                         });
@@ -68,10 +162,19 @@ const DashboardRentSummary = () => {
                     type: 'value',
                     axisLabel: {
                         formatter: function (value) {
-                            if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-                            if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-                            if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-                            return value;
+                            const absValue = Math.abs(value);
+                            let formatted = '';
+                            if (absValue >= 1_00_00_000) {
+                                formatted = (absValue / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
+                            } else if (absValue >= 1_00_000) {
+                                formatted = (absValue / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
+                            } else if (absValue >= 1000) {
+                                formatted = (absValue / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+                            } else {
+                                formatted = absValue.toString();
+                            }
+
+                            return value < 0 ? `-${formatted}` : formatted;
                         }
                     }
                 },
@@ -101,6 +204,36 @@ const DashboardRentSummary = () => {
         }
     };
 
+    function customFormatDate(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
+
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        if (day === 1) {
+            return `${monthNames[monthIndex]}`;
+        }
+
+        const suffix = getDaySuffix(day);
+        return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
     // Fetch details for modal
     const fetchDetails = async (category, yearMonth, seriesName) => {

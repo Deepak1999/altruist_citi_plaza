@@ -1,137 +1,96 @@
-// import React, { useEffect, useState } from 'react';
-// import { toast } from 'react-toastify';
-// import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
-// import DashboardBankBalance from './DashboardBankBalance';
-// import DashboardRentSummary from './DashboardRentSummary';
-// import DashboardElectricitySummary from './DashboardElectricitySummary';
-// import DashboardGopalAyaanSaleTrends from './DashboardGopalAyaanSaleTrends';
-// import DashboardCoupons from './DashboardCoupons';
-// import DashboardSolar from './DashboardSolar';
-
-// const Dashboard = () => {
-
-//     const [openingBalance, setopeningBalance] = useState("0");
-//     const [closingBalance, setclosingBalance] = useState("0");
-
-//     const today = new Date();
-//     today.setDate(today.getDate() - 1);
-//     const ClosingdateTime = today.toLocaleDateString('en-CA');
-//     const OpeningdateTime = new Date().toLocaleDateString('en-CA');
-
-//     const handleGetOpeningClosingBalance = async () => {
-//         const userId = localStorage.getItem('userId');
-
-//         if (!userId) {
-//             toast.error('Missing necessary data in localStorage');
-//             return;
-//         }
-
-//         try {
-//             const response = await fetch(`${ApiBaseUrl}/dashboard/opening-closing-balance`, {
-//                 method: 'GET',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     userId: userId,
-//                 },
-//             });
-
-//             const data = await response.json();
-
-//             if (response.ok) {
-//                 const { statusCode, description } = data.statusDescription;
-
-//                 if (statusCode === 200) {
-//                     setopeningBalance(parseFloat(data.dashboardCurrentBalance));
-//                     setclosingBalance(parseFloat(data.dashboardClosingBalance));
-//                 } else {
-//                     toast.error(description || 'Failed to fetch balance data');
-//                 }
-//             } else {
-//                 toast.error('Failed to fetch data. Status: ' + response.status);
-//             }
-//         } catch (error) {
-//             toast.error('Error fetching balance data: ' + error.message);
-//         }
-//     };
-
-//     useEffect(() => {
-//         handleGetOpeningClosingBalance();
-//     }, []);
-
-//     return (
-//         <main id="main" className="main">
-//             <section className="section dashboard">
-//                 <div className="row">
-//                     <div className="col-lg-6">
-//                         <div className="card">
-//                             <div className="card-body">
-//                                 <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
-//                                     Current Balance : ₹{Number(openingBalance).toLocaleString('en-IN')}
-//                                 </h6>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="col-lg-6">
-//                         <div className="card">
-//                             <div className="card-body">
-//                                 <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
-//                                     {/* Date: {ClosingdateTime} */}
-//                                     Yesterday's
-//                                     Closing Balance : ₹{Number(closingBalance).toLocaleString('en-IN')}
-//                                     {/* <br /> Closing Balance : ₹{closingBalance} */}
-//                                 </h6>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <DashboardBankBalance />
-//                     <DashboardRentSummary />
-//                     <DashboardElectricitySummary />
-//                     <DashboardGopalAyaanSaleTrends />
-//                     <DashboardCoupons />
-//                     <DashboardSolar />
-//                 </div>
-//             </section>
-//         </main >
-//     );
-// };
-
-// export default Dashboard;
-
-
-
-// import React, { useEffect, useState, useRef } from 'react';
-// import { toast } from 'react-toastify';
 // import html2canvas from 'html2canvas';
 // import jsPDF from 'jspdf';
-
-// import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
+// import React, { useRef, useEffect, useState } from 'react';
 // import DashboardBankBalance from './DashboardBankBalance';
 // import DashboardRentSummary from './DashboardRentSummary';
 // import DashboardElectricitySummary from './DashboardElectricitySummary';
 // import DashboardGopalAyaanSaleTrends from './DashboardGopalAyaanSaleTrends';
 // import DashboardCoupons from './DashboardCoupons';
 // import DashboardSolar from './DashboardSolar';
+// import { toast, ToastContainer } from 'react-toastify';
+// import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
 // const Dashboard = () => {
-//     const [openingBalance, setopeningBalance] = useState("0");
-//     const [closingBalance, setclosingBalance] = useState("0");
+//     const contentRef = useRef(null);
+//     const [chartData, setChartData] = useState([]);
+//     const [netBalances, setNetBalances] = useState({
+//         bankBalance: 0,
+//         netBalance: 0,
+//         payable: 0,
+//         receivable: 0,
+//     });
 
-//     const contentRef = useRef(null); // <-- this is our content-only wrapper
+//     // const handleGetBankBalanceData = async () => {
+//     //     const userId = localStorage.getItem('userId');
 
-//     const today = new Date();
-//     today.setDate(today.getDate() - 1);
-//     const ClosingdateTime = today.toLocaleDateString('en-CA');
+//     //     if (!userId) {
+//     //         toast.error('Missing userId in localStorage');
+//     //         return;
+//     //     }
 
-//     const handleGetOpeningClosingBalance = async () => {
+//     //     try {
+//     //         const response = await fetch(`${ApiBaseUrl}/bank-summary/all`, {
+//     //             method: 'GET',
+//     //             headers: {
+//     //                 'Content-Type': 'application/json',
+//     //                 userId: userId,
+//     //             },
+//     //         });
+
+//     //         const data = await response.json();
+
+//     //         if (response.ok) {
+//     //             const { statusCode, statusMessage } = data.statusDescription;
+
+//     //             if (statusCode === 200) {
+//     //                 const summary = data.dailyBankSummary || [];
+
+//     //                 if (!summary.length) {
+//     //                     toast.info('No data available');
+//     //                     return;
+//     //                 }
+
+//     //                 const sorted = summary.sort(
+//     //                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+//     //                 );
+//     //                 const latest = sorted[0];
+
+//     //                 const formatted = [];
+
+//     //                 if (latest.bankBalance !== null) {
+//     //                     formatted.push({ value: latest.bankBalance, name: 'Bank Bal.' });
+//     //                 }
+//     //                 if (latest.netBalance !== null) {
+//     //                     formatted.push({ value: latest.netBalance, name: 'Net Bal.' });
+//     //                 }
+
+//     //                 setChartData(formatted);
+
+//     //                 setNetBalances({
+//     //                     bankBalance: latest.bankBalance,
+//     //                     netBalance: latest.netBalance,
+//     //                 });
+//     //             } else {
+//     //                 toast.error(statusMessage || 'Failed to fetch data');
+//     //             }
+//     //         } else {
+//     //             toast.error('Failed to fetch data with status: ' + response.status);
+//     //         }
+//     //     } catch (error) {
+//     //         toast.error('Error fetching data: ' + error.message);
+//     //     }
+//     // };
+
+//     const handleGetBankBalanceData = async () => {
 //         const userId = localStorage.getItem('userId');
 
 //         if (!userId) {
-//             toast.error('Missing necessary data in localStorage');
+//             toast.error('Missing userId in localStorage');
 //             return;
 //         }
 
 //         try {
-//             const response = await fetch(`${ApiBaseUrl}/dashboard/opening-closing-balance`, {
+//             const response = await fetch(`${ApiBaseUrl}/bank-summary/all`, {
 //                 method: 'GET',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -142,90 +101,210 @@
 //             const data = await response.json();
 
 //             if (response.ok) {
-//                 const { statusCode, description } = data.statusDescription;
+//                 const { statusCode, statusMessage } = data.statusDescription;
 
 //                 if (statusCode === 200) {
-//                     setopeningBalance(parseFloat(data.dashboardCurrentBalance));
-//                     setclosingBalance(parseFloat(data.dashboardClosingBalance));
-//                 } else {
-//                     toast.error(description || 'Failed to fetch balance data');
-//                 }
+//                     const summary = data.dailyBankSummary || [];
+
+//                     if (!summary.length) {
+//                         toast.info('No data available');
+//                         return;
+//                     }
+
+//                     const sorted = summary.sort(
+//                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+//                     );
+//                     const latest = sorted[0];
+
+//                     const formatted = [];
+
+//                     if (latest.bankBalance !== null) {
+//                         formatted.push({ value: latest.bankBalance, name: 'Bank Bal.' });
+//                     }
+//                     if (latest.netBalance !== null) {
+//                         formatted.push({ value: latest.netBalance, name: 'Net Bal.' });
+//                     }
+
+//                     // 👉 Calculate payable and receivable from specific banks
+//                     const banks = latest.bankSummary || [];
+
+//                     let payable = 0;
+//                     let receivable = 0;
+
+//                     banks.forEach((bank) => {
+//                         const bankName = bank.bankName?.toLowerCase();
+//                         const balance = parseFloat(bank.balance);
+
+//                         if (['mobisoft', 'atpl', 'rs hosp.'].includes(bankName)){
+//                             if (balance < 0) {
+//                                 payable += balance;
+//                             } else {
+//                                 receivable += balance;
+//                             }
+//                     }
+//                     });
+
+//                 setChartData(formatted);
+
+//                 setNetBalances({
+//                     bankBalance: latest.bankBalance,
+//                     netBalance: latest.netBalance,
+//                     payable: Math.abs(payable), // Optional: show as positive
+//                     receivable: receivable,
+//                 });
 //             } else {
-//                 toast.error('Failed to fetch data. Status: ' + response.status);
+//                 toast.error(statusMessage || 'Failed to fetch data');
 //             }
-//         } catch (error) {
-//             toast.error('Error fetching balance data: ' + error.message);
+//         } else {
+//             toast.error('Failed to fetch data with status: ' + response.status);
 //         }
-//     };
+//     } catch (error) {
+//         toast.error('Error fetching data: ' + error.message);
+//     }
+// };
 
-//     useEffect(() => {
-//         handleGetOpeningClosingBalance();
-//     }, []);
 
-//     const handleDownloadPDF = async () => {
-//         const input = contentRef.current;
+// useEffect(() => {
+//     handleGetBankBalanceData();
+// }, []);
 
-//         const canvas = await html2canvas(input, {
-//             scale: 2,
-//         });
+// const handleDownloadPdfImageAndSentEmail = async () => {
+//     const input = contentRef.current;
 
-//         const imgData = canvas.toDataURL('image/png');
+//     const now = new Date();
+//     const dateTimeString = now.toLocaleString('en-IN', {
+//         year: 'numeric',
+//         month: '2-digit',
+//         day: '2-digit',
+//         hour: '2-digit',
+//         minute: '2-digit',
+//         second: '2-digit',
+//     });
+
+//     const timestampEl = document.getElementById('report-timestamp');
+//     if (timestampEl) {
+//         timestampEl.innerText = `Generated on: ${dateTimeString}`;
+//     }
+
+//     try {
+//         const canvas = await html2canvas(input, { scale: 1.5 });
+
+//         if (timestampEl) {
+//             timestampEl.innerText = '';
+//         }
+
+//         const imageBlob = await new Promise((resolve) =>
+//             canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.8)
+//         );
+
+//         const imgData = canvas.toDataURL('image/jpeg', 0.8);
 //         const pdf = new jsPDF('p', 'mm', 'a4');
-
 //         const pdfWidth = pdf.internal.pageSize.getWidth();
 //         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+//         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
-//         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-//         pdf.save('dashboard.pdf');
-//     };
+//         const pdfBlob = pdf.output('blob');
 
-//     return (
-//         <main id="main" className="main">
+//         const formData = new FormData();
+//         formData.append('pdf', pdfBlob, 'dashboard.pdf');
+//         formData.append('image', imageBlob, 'dashboard.jpg');
 
-//             {/* Download PDF Button */}
+//         const response = await fetch(`${ApiBaseUrl}/mail/send-files-email`, {
+//             method: 'POST',
+//             body: formData,
+//         });
+
+//         const result = await response.json();
+
+//         if (response.ok && result.statusDescription.statusCode === 200) {
+//             const description = result.statusDescription.description || 'Success';
+//             const recipients = result.data?.join(', ') || 'No recipients';
+//             toast.success(`${description}. Sent to: ${recipients}`);
+//         } else {
+//             toast.error(result.statusDescription.description || `Failed to send email. Status: ${response.status}`);
+//         }
+//     } catch (error) {
+//         if (timestampEl) {
+//             timestampEl.innerText = '';
+//         }
+//         toast.error('Error sending email: ' + error.message);
+//     }
+// };
+
+// return (
+//     <main id="main" className="main">
+//         <section className="section dashboard" ref={contentRef}>
+//             <div
+//                 id="report-timestamp"
+//                 style={{
+//                     textAlign: 'right',
+//                     marginBottom: '10px',
+//                     fontSize: '12px',
+//                     color: '#555',
+//                 }}
+//             ></div>
+
+//             <div className="row">
+//                 <div className="col-lg-3">
+//                     <div className="card">
+//                         <div className="card-body">
+//                             <h6 className="card-title" style={{ color: 'green', height: '50px' }}>
+//                                 Bank Balance:<br />₹
+//                                 {Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}
+//                             </h6>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div className="col-lg-3">
+//                     <div className="card">
+//                         <div className="card-body">
+//                             <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+//                                 Payable:<br />₹{netBalances.payable}
+//                             </h6>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div className="col-lg-3">
+//                     <div className="card">
+//                         <div className="card-body">
+//                             <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+//                                 Receivable:<br />₹{netBalances.receivable}
+//                             </h6>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div className="col-lg-3">
+//                     <div className="card">
+//                         <div className="card-body">
+//                             <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+//                                 Final Net Balance:<br />₹
+//                                 {Math.floor(netBalances.netBalance).toLocaleString('en-IN')}
+//                             </h6>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <DashboardBankBalance />
+//                 <DashboardRentSummary />
+//                 <DashboardElectricitySummary />
+//                 <DashboardGopalAyaanSaleTrends />
+//                 <DashboardCoupons />
+//                 <DashboardSolar />
+//             </div>
 //             <div className="d-flex justify-content-end mb-3">
-//                 <button className="btn btn-sm btn-danger" onClick={handleDownloadPDF}>
-//                     Download Dashboard as PDF
+//                 <button
+//                     className="btn btn-sm btn-success me-3"
+//                     onClick={handleDownloadPdfImageAndSentEmail}
+//                 >
+//                     Generate Report & Send Email
 //                 </button>
 //             </div>
-
-//             {/* Dashboard content only */}
-//             <section className="section dashboard" ref={contentRef}>
-//                 <div className="row">
-//                     <div className="col-lg-6">
-//                         <div className="card">
-//                             <div className="card-body">
-//                                 <h6 className="card-title" style={{ color: 'blue' }}>
-//                                     Current Balance : ₹{Number(openingBalance).toLocaleString('en-IN')}
-//                                 </h6>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="col-lg-6">
-//                         <div className="card">
-//                             <div className="card-body">
-//                                 <h6 className="card-title" style={{ color: 'green' }}>
-//                                     Yesterday's Closing Balance : ₹{Number(closingBalance).toLocaleString('en-IN')}
-//                                 </h6>
-//                             </div>
-//                         </div>
-//                     </div>
-
-//                     {/* Dashboard components */}
-//                     <DashboardBankBalance />
-//                     <DashboardRentSummary />
-//                     <DashboardElectricitySummary />
-//                     <DashboardGopalAyaanSaleTrends />
-//                     <DashboardCoupons />
-//                     <DashboardSolar />
-//                 </div>
-//             </section>
-//         </main>
-//     );
+//         </section>
+//         <ToastContainer />
+//     </main>
+// );
 // };
 
 // export default Dashboard;
-
 
 
 import html2canvas from 'html2canvas';
@@ -237,59 +316,16 @@ import DashboardElectricitySummary from './DashboardElectricitySummary';
 import DashboardGopalAyaanSaleTrends from './DashboardGopalAyaanSaleTrends';
 import DashboardCoupons from './DashboardCoupons';
 import DashboardSolar from './DashboardSolar';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 
-const Dashboard = ({ bankBalance, netBalance }) => {
+const Dashboard = () => {
     const contentRef = useRef(null);
-    // const [openingBalance, setopeningBalance] = useState("0");
-    // const [closingBalance, setclosingBalance] = useState("0");
     const [chartData, setChartData] = useState([]);
     const [netBalances, setNetBalances] = useState({
         bankBalance: 0,
         netBalance: 0,
     });
-
-    const today = new Date();
-    today.setDate(today.getDate() - 1);
-    const ClosingdateTime = today.toLocaleDateString('en-CA');
-    const OpeningdateTime = new Date().toLocaleDateString('en-CA');
-
-    const handleGetOpeningClosingBalance = async () => {
-        const userId = localStorage.getItem('userId');
-
-        if (!userId) {
-            toast.error('Missing necessary data in localStorage');
-            return;
-        }
-
-        try {
-            const response = await fetch(`${ApiBaseUrl}/dashboard/opening-closing-balance`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    userId: userId,
-                },
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                const { statusCode, description } = data.statusDescription;
-
-                if (statusCode === 200) {
-                    // setopeningBalance(parseFloat(data.dashboardCurrentBalance));
-                    // setclosingBalance(parseFloat(data.dashboardClosingBalance));
-                } else {
-                    toast.error(description || 'Failed to fetch balance data');
-                }
-            } else {
-                toast.error('Failed to fetch data. Status: ' + response.status);
-            }
-        } catch (error) {
-            toast.error('Error fetching balance data: ' + error.message);
-        }
-    };
 
     const handleGetBankBalanceData = async () => {
         const userId = localStorage.getItem('userId');
@@ -321,7 +357,9 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                         return;
                     }
 
-                    const sorted = summary.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    const sorted = summary.sort(
+                        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    );
                     const latest = sorted[0];
 
                     const formatted = [];
@@ -351,86 +389,126 @@ const Dashboard = ({ bankBalance, netBalance }) => {
     };
 
     useEffect(() => {
-        // handleGetOpeningClosingBalance();
         handleGetBankBalanceData();
     }, []);
 
-    // const handleDownloadPDF = async () => {
-    //     const input = contentRef.current;
-    //     const canvas = await html2canvas(input, { scale: 2 });
-    //     const imgData = canvas.toDataURL('image/png');
-
-    //     const pdf = new jsPDF('p', 'mm', 'a4');
-    //     const pdfWidth = pdf.internal.pageSize.getWidth();
-    //     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    //     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    //     pdf.save('dashboard.pdf');
-
-    //     handleDownloadImage();
-    // };
-
-    // const handleDownloadImage = async () => {
-    //     const input = contentRef.current;
-    //     const canvas = await html2canvas(input, { scale: 2 });
-    //     const image = canvas.toDataURL('image/png');
-
-    //     const link = document.createElement('a');
-    //     link.href = image;
-    //     link.download = 'dashboard.png';
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    // };
-
-    const handleDownloadPDF = async () => {
+    const handleDownloadPdfImageAndSentEmail = async () => {
         const input = contentRef.current;
-        const canvas = await html2canvas(input, { scale: 1.5 });
-        const imgData = canvas.toDataURL('image/jpeg', 0.8);
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('dashboard.pdf');
+        const now = new Date();
+        const dateTimeString = now.toLocaleString('en-IN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
 
-        handleDownloadImageFromCanvas(canvas);
-    };
+        const timestampEl = document.getElementById('report-timestamp');
+        if (timestampEl) {
+            timestampEl.innerText = `Generated on: ${dateTimeString}`;
+        }
 
-    const handleDownloadImageFromCanvas = (canvas) => {
-        const image = canvas.toDataURL('image/jpeg', 0.8);
-        const link = document.createElement('a');
-        link.href = image;
-        link.download = 'dashboard.jpg';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const canvas = await html2canvas(input, { scale: 1.5 });
+
+            if (timestampEl) {
+                timestampEl.innerText = '';
+            }
+
+            const imageBlob = await new Promise((resolve) =>
+                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.8)
+            );
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.8);
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+            const pdfBlob = pdf.output('blob');
+
+            const formData = new FormData();
+            formData.append('pdf', pdfBlob, 'dashboard.pdf');
+            formData.append('image', imageBlob, 'dashboard.jpg');
+
+            const response = await fetch(`${ApiBaseUrl}/mail/send-files-email`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.statusDescription.statusCode === 200) {
+                const description = result.statusDescription.description || 'Success';
+                const recipients = result.data?.join(', ') || 'No recipients';
+                toast.success(`${description}. Sent to: ${recipients}`);
+            } else {
+                toast.error(result.statusDescription.description || `Failed to send email. Status: ${response.status}`);
+            }
+        } catch (error) {
+            if (timestampEl) {
+                timestampEl.innerText = '';
+            }
+            toast.error('Error sending email: ' + error.message);
+        }
     };
 
     return (
         <main id="main" className="main">
             <section className="section dashboard" ref={contentRef}>
+                <div
+                    id="report-timestamp"
+                    style={{
+                        textAlign: 'right',
+                        marginBottom: '10px',
+                        fontSize: '12px',
+                        color: '#555',
+                    }}
+                ></div>
+                <p>{netBalances.payable}</p>
+                <p>{netBalances.receivable}</p>
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-3">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'green', height: '30px' }}>
-                                    {/* Bank Balance: ₹{Number(netBalances.bankBalance).toLocaleString('en-IN')} */}
-                                    Bank Balance: ₹{Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}
+                                <h6 className="card-title" style={{ color: 'green', height: '50px' }}>
+                                    Bank Balance:<br />₹
+                                    {Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}
                                 </h6>
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-3">
                         <div className="card">
                             <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue', height: '30px' }}>
-                                    {/* Net Balance: ₹{Number(netBalances.netBalance).toLocaleString('en-IN')} */}
-                                    Net Balance: ₹{Math.floor(netBalances.netBalance).toLocaleString('en-IN')}
+                                <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+                                    Payable:<br />₹{0}
                                 </h6>
                             </div>
                         </div>
                     </div>
+                    <div className="col-lg-3">
+                        <div className="card">
+                            <div className="card-body">
+                                <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+                                    Receivable:<br />₹{0}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3">
+                        <div className="card">
+                            <div className="card-body">
+                                <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
+                                    Final Net Balance:<br />₹
+                                    {Math.floor(netBalances.netBalance).toLocaleString('en-IN')}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+
                     <DashboardBankBalance />
                     <DashboardRentSummary />
                     <DashboardElectricitySummary />
@@ -438,12 +516,17 @@ const Dashboard = ({ bankBalance, netBalance }) => {
                     <DashboardCoupons />
                     <DashboardSolar />
                 </div>
+
                 <div className="d-flex justify-content-end mb-3">
-                    <button className="btn btn-sm btn-success me-3" onClick={handleDownloadPDF}>
+                    <button
+                        className="btn btn-sm btn-success me-3"
+                        onClick={handleDownloadPdfImageAndSentEmail}
+                    >
                         Generate Report & Send Email
                     </button>
                 </div>
             </section>
+            <ToastContainer />
         </main>
     );
 };
