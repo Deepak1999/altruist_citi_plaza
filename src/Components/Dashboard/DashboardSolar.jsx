@@ -20,62 +20,6 @@ const DashboardSolar = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchSolarData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/dashboard/solar-logs-summary?period=${period}`, {
-    //             headers: { userId }
-    //         });
-
-    //         const result = await response.json();
-    //         const rawData = result.data || {};
-
-    //         const months = Object.keys(rawData).sort();
-    //         const plant1Data = [], plant2Data = [];
-
-    //         setTotalSolarSummaryData(result.totalData || []);
-
-    //         months.forEach(month => {
-    //             const data = rawData[month];
-    //             plant1Data.push(data.plant1Produce || 0);
-    //             plant2Data.push(data.plant2Produce || 0);
-    //         });
-
-    //         const chart = chartInstanceRef.current;
-    //         chart.setOption({
-    //             tooltip: {
-    //                 trigger: 'axis',
-    //                 formatter: function (params) {
-    //                     return params.map(item => {
-    //                         return `${item.marker} ${item.seriesName}: ₹${item.data.toLocaleString('en-IN')}`;
-    //                     }).join('<br/>');
-    //                 }
-    //             },
-    //             legend: { data: ['Plant 1', 'Plant 2'], top: 25 },
-    //             xAxis: { type: 'category', data: months },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 { name: 'Plant 1', type: 'line', data: plant1Data, itemStyle: { color: '#4caf50' } },
-    //                 { name: 'Plant 2', type: 'line', data: plant2Data, itemStyle: { color: '#2196f3' } }
-    //             ]
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching solar data:', error);
-    //     }
-    // };
-
     const fetchSolarData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -152,12 +96,10 @@ const DashboardSolar = () => {
             "July", "August", "September", "October", "November", "December"
         ];
 
-        // If it's the 1st day of the month, show just the month
         if (day === 1) {
             return `${monthNames[monthIndex]}`;
         }
 
-        // Else, show full date
         const suffix = getDaySuffix(day);
         return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
     }

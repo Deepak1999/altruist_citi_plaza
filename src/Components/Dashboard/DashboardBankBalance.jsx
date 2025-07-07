@@ -53,23 +53,23 @@ const DashboardBankBalance = () => {
                 const { statusCode, statusMessage } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    const summary = data.dailyBankSummary || [];
+                    const summary = data.dailyBankSummary;
 
-                    if (!summary.length) {
+                    if (!summary || typeof summary !== 'object') {
                         toast.info('No data available');
                         return;
                     }
 
-                    const latest = summary.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-                    setlastUpdatetDate(latest.createdAt);
+                    setlastUpdatetDate(summary.createdAt);
 
                     const points = [];
 
-                    if (latest.bankBalance !== null) points.push({ label: 'Bank Bal.', y: latest.bankBalance });
-                    if (latest.mobisoft !== null) points.push({ label: 'Mobisoft', y: latest.mobisoft });
-                    if (latest.atpl !== null) points.push({ label: 'ATPL', y: latest.atpl });
-                    if (latest.rsHospitality !== null) points.push({ label: 'RS Hosp.', y: latest.rsHospitality });
-                    if (latest.netBalance !== null) points.push({ label: 'Net Bal.', y: latest.netBalance, isCumulativeSum: true, color: "#2196F3" });
+                    if (summary.bankBalance !== null) points.push({ label: 'Bank Bal.', y: summary.bankBalance });
+                    if (summary.mobisoft !== null) points.push({ label: 'Mobisoft', y: summary.mobisoft });
+                    if (summary.atpl !== null) points.push({ label: 'ATPL', y: summary.atpl });
+                    if (summary.rsHospitality !== null) points.push({ label: 'RS Hosp.', y: summary.rsHospitality });
+                    if (summary.netBalance !== null)
+                        points.push({ label: 'Net Bal.', y: summary.netBalance, isCumulativeSum: true, color: "#2196F3" });
 
                     setChartData(points);
                 } else {
