@@ -21,101 +21,7 @@ const DashboardElectricitySummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchElectricityData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/dashboard/electricity-summary?period=${period}`, {
-    //             headers: { userId },
-    //         });
-
-    //         const result = await response.json();
-    //         const details = result.dashboardElectricitySummaryDetails || {};
-    //         const months = Object.keys(details).sort();
-
-    //         setTotalElectricitySummaryData(result.totalData.total || {});
-
-    //         const totalBilledAmount = [];
-    //         const totalPaidAmount = [];
-    //         const postPaidAmount = [];
-    //         const prePaidAmount = [];
-
-    //         months.forEach((month) => {
-    //             const d = details[month];
-    //             totalBilledAmount.push(+d.totalBilledAmount);
-    //             totalPaidAmount.push(+d.totalPaidAmount);
-    //             postPaidAmount.push(+d.postPaidAmount);
-    //             prePaidAmount.push(+d.prePaidAmount);
-    //         });
-
-    //         const chart = chartInstanceRef.current;
-    //         chart.setOption({
-    //             tooltip: {
-    //                 trigger: 'axis',
-    //                 formatter: function (params) {
-    //                     let tooltipText = '';
-    //                     params.forEach(function (item) {
-    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
-    //                     });
-    //                     return tooltipText;
-    //                 }
-    //             },
-    //             legend: {
-    //                 data: [
-    //                     'Postpaid Billing',
-    //                     // 'Paid Amount',
-    //                     'Postpaid Collection',
-    //                     'Prepaid Collection',
-    //                 ],
-    //                 top: 25,
-    //             },
-    //             xAxis: {
-    //                 type: 'category',
-    //                 data: months,
-    //             },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Postpaid Billing',
-    //                     type: 'bar',
-    //                     data: totalBilledAmount,
-    //                     itemStyle: { color: '#de0b8b' },
-    //                 },
-    //                 // {
-    //                 //     name: 'Paid Amount',
-    //                 //     type: 'bar',
-    //                 //     data: totalPaidAmount,
-    //                 //     itemStyle: { color: '#4caf50' },
-    //                 // },
-    //                 {
-    //                     name: 'Postpaid Collection',
-    //                     type: 'bar',
-    //                     data: postPaidAmount,
-    //                     itemStyle: { color: '#0baade' },
-    //                 },
-    //                 {
-    //                     name: 'Prepaid Collection',
-    //                     type: 'bar',
-    //                     data: prePaidAmount,
-    //                     itemStyle: { color: '#ff9800' },
-    //                 },
-    //             ],
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching electricity data:', error);
-    //     }
-    // };
+    const totalPostPaidDeficit = totalElectricitySummaryData.totalBilledAmount - totalElectricitySummaryData.postPaidAmount;
 
     const fetchElectricityData = async (period) => {
         const userId = localStorage.getItem('userId');
@@ -137,13 +43,29 @@ const DashboardElectricitySummary = () => {
             const postPaidAmount = [];
             const prePaidAmount = [];
 
+            // months.forEach((month) => {
+            //     const d = details[month];
+            //     totalBilledAmount.push(+d.totalBilledAmount);
+            //     totalPaidAmount.push(+d.totalPaidAmount);
+            //     postPaidAmount.push(+d.postPaidAmount);
+            //     prePaidAmount.push(+d.prePaidAmount);
+            // });
+            const postPaidDeficit = [];
+
             months.forEach((month) => {
                 const d = details[month];
-                totalBilledAmount.push(+d.totalBilledAmount);
+                const billed = +d.totalBilledAmount;
+                const postpaid = +d.postPaidAmount;
+                const prepaid = +d.prePaidAmount;
+
+                totalBilledAmount.push(billed);
                 totalPaidAmount.push(+d.totalPaidAmount);
-                postPaidAmount.push(+d.postPaidAmount);
-                prePaidAmount.push(+d.prePaidAmount);
+                postPaidAmount.push(postpaid);
+                prePaidAmount.push(prepaid);
+                postPaidDeficit.push(billed - postpaid);
             });
+
+            const totalPostPaidDeficit = postPaidDeficit.reduce((sum, val) => sum + val, 0);
 
             const chart = chartInstanceRef.current;
             chart.setOption({
@@ -166,8 +88,9 @@ const DashboardElectricitySummary = () => {
                     data: [
                         'Postpaid Billing',
                         // 'Paid Amount',
-                        'Postpaid Collection',
-                        'Prepaid Collection',
+                        'Postpaid Coll.',
+                        'Postpaid Deficit',
+                        'Prepaid Coll.',
                     ],
                     top: 25,
                 },
@@ -200,13 +123,19 @@ const DashboardElectricitySummary = () => {
                     //     itemStyle: { color: '#4caf50' },
                     // },
                     {
-                        name: 'Postpaid Collection',
+                        name: 'Postpaid Coll.',
                         type: 'bar',
                         data: postPaidAmount,
                         itemStyle: { color: '#0baade' },
                     },
                     {
-                        name: 'Prepaid Collection',
+                        name: 'Postpaid Deficit',
+                        type: 'bar',
+                        data: postPaidDeficit,
+                        itemStyle: { color: '#b20909' },
+                    },
+                    {
+                        name: 'Prepaid Coll.',
                         type: 'bar',
                         data: prePaidAmount,
                         itemStyle: { color: '#ff9800' },
@@ -249,6 +178,12 @@ const DashboardElectricitySummary = () => {
         }
     }
 
+    const formatYearMonth = (yearMonth) => {
+        const [year, month] = yearMonth.split('-');
+        const date = new Date(`${year}-${month}-01`);
+        return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    };
+
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -277,7 +212,7 @@ const DashboardElectricitySummary = () => {
             }
 
             if (Object.keys(data).length === 0) {
-                setModalTitle(`${seriesName} • ${yearMonth}`);
+                // setModalTitle(`${seriesName} • ${yearMonth}`);
                 setModalColumns([]);
                 setModalRows([]);
                 setModalVisible(true);
@@ -311,7 +246,7 @@ const DashboardElectricitySummary = () => {
                 ...item,
             }));
 
-            setModalTitle(`${seriesName} • ${yearMonth}`);
+            setModalTitle(`${seriesName} • ${formatYearMonth(yearMonth)}`);
             setModalColumns(columns);
             setModalRows(rows);
             setModalVisible(true);
@@ -339,8 +274,8 @@ const DashboardElectricitySummary = () => {
             let category;
             if (series === 'Postpaid Billing') category = 1;
             // else if (series === 'Paid Amount') category = 2;
-            else if (series === 'Postpaid Collection') category = 3;
-            else if (series === 'Prepaid Collection') category = 4;
+            else if (series === 'Postpaid Coll.') category = 3;
+            else if (series === 'Prepaid Coll.') category = 4;
             else return;
 
             fetchDetails(category, month, series);
@@ -445,23 +380,23 @@ const DashboardElectricitySummary = () => {
                             </p></strong>
                         </div>
                         <div>
-                            <h6>Postpaid Collection</h6>
+                            <h6>Postpaid Coll.</h6>
                             <strong><p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.postPaidAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                         <div>
-                            <h6>Prepaid Collection</h6>
+                            <h6>Prepaid Coll.</h6>
                             <strong><p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
-                        {/* <div>
-                            <h6>Total Collection</h6>
-                            <p className="mb-0">
-                                {parseFloat(totalElectricitySummaryData.totalPaidAmount || 0).toLocaleString('en-IN')}
-                            </p>
-                        </div> */}
+                        <div>
+                            <h6>Deficit Amt.</h6>
+                            <strong><p className="mb-0">
+                                ₹{parseFloat(totalPostPaidDeficit || 0).toLocaleString('en-IN')}
+                            </p></strong>
+                        </div>
                     </div>
                 </div>
             </div>

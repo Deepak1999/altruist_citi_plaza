@@ -21,94 +21,6 @@ const DashboardGopalAyaanSaleTrends = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchGopalAyaanCinemaData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const response = await fetch(`${ApiBaseUrl}/dashboard/sale-log-summary?period=${period}`, {
-    //             headers: { userId },
-    //         });
-
-    //         const result = await response.json();
-    //         const gopalAyaanDetails = result.dashboardSalesLogDetails || {};
-    //         const months = Object.keys(gopalAyaanDetails).sort();
-
-    //         setTotalGopalAyaanSummaryData(result.totalData.total || {});
-
-    //         const gopalAmount = [], ayaanAmount = [], gopalAtplShare = [], ayaanAtplShare = [];
-
-    //         months.forEach((month) => {
-    //             const d = gopalAyaanDetails[month];
-    //             gopalAmount.push(+d.gopalAmount);
-    //             ayaanAmount.push(+d.ayaanAmount);
-    //             gopalAtplShare.push(+d.gopalAtplShare);
-    //             ayaanAtplShare.push(+d.ayaanAtplShare);
-    //         });
-
-    //         const chart = chartInstanceRef.current;
-    //         chart.setOption({
-    //             tooltip: {
-    //                 trigger: 'axis',
-    //                 formatter: function (params) {
-    //                     let tooltipText = '';
-    //                     params.forEach(function (item) {
-    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
-    //                     });
-    //                     return tooltipText;
-    //                 }
-    //             },
-    //             legend: {
-    //                 data: ['Gopal Sale', 'Ayaan Sale', 'Gopal Share', 'Ayaan Share'],
-    //                 top: 25,
-    //             },
-    //             xAxis: {
-    //                 type: 'category',
-    //                 data: months,
-    //             },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         return value;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Gopal Sale',
-    //                     type: 'line',
-    //                     data: gopalAmount,
-    //                     itemStyle: { color: '#9c64f3' },
-    //                 },
-    //                 {
-    //                     name: 'Ayaan Sale',
-    //                     type: 'line',
-    //                     data: ayaanAmount,
-    //                     itemStyle: { color: '#4caf50' },
-    //                 },
-    //                 {
-    //                     name: 'Gopal Share',
-    //                     type: 'line',
-    //                     data: gopalAtplShare,
-    //                     itemStyle: { color: '#f44336' },
-    //                 },
-    //                 {
-    //                     name: 'Ayaan Share',
-    //                     type: 'line',
-    //                     data: ayaanAtplShare,
-    //                     itemStyle: { color: '#ff9800' },
-    //                 },
-    //             ]
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching Gopal & Ayaan data:', error);
-    //     }
-    // };
-
     const fetchGopalAyaanCinemaData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -240,6 +152,12 @@ const DashboardGopalAyaanSaleTrends = () => {
         }
     }
 
+    const formatYearMonth = (yearMonth) => {
+        const [year, month] = yearMonth.split('-');
+        const date = new Date(`${year}-${month}-01`);
+        return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    };
+
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -267,7 +185,7 @@ const DashboardGopalAyaanSaleTrends = () => {
                     amount,
                 }));
 
-                setModalTitle(`${seriesName} • ${yearMonth}`);
+                // setModalTitle(`${seriesName} • ${yearMonth}`);
                 setModalColumns([
                     { key: 'timestamp', label: 'Timestamp' },
                     { key: 'amount', label: 'Amount' },
@@ -297,7 +215,7 @@ const DashboardGopalAyaanSaleTrends = () => {
                 }, {}),
             }));
 
-            setModalTitle(`${seriesName} • ${yearMonth}`);
+            setModalTitle(`${seriesName} • ${formatYearMonth(yearMonth)}`);
             setModalColumns(columns);
             setModalRows(rows);
             setModalVisible(true);

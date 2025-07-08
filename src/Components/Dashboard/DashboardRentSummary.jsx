@@ -235,6 +235,12 @@ const DashboardRentSummary = () => {
         }
     }
 
+    const formatYearMonth = (yearMonth) => {
+        const [year, month] = yearMonth.split('-');
+        const date = new Date(`${year}-${month}-01`);
+        return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    };
+
     // Fetch details for modal
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
@@ -263,7 +269,7 @@ const DashboardRentSummary = () => {
             const data = json.data || {};
 
             if (Object.keys(data).length === 0) {
-                setModalTitle(`${seriesName} • ${yearMonth}`);
+                // setModalTitle(`${seriesName} • ${yearMonth}`);
                 setModalColumns([]);
                 setModalRows([]);
                 setModalVisible(true);
@@ -280,7 +286,7 @@ const DashboardRentSummary = () => {
                 ...item
             }));
 
-            setModalTitle(`${seriesName} • ${yearMonth}`);
+            setModalTitle(`${seriesName} • ${formatYearMonth(yearMonth)}`);
             setModalColumns(cols);
             setModalRows(rows);
             setModalVisible(true);

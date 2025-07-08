@@ -124,7 +124,7 @@ const DashboardCoupons = () => {
                 3: 'Coupon Balance',
             };
 
-            setModalTitle(`${modalLabels[category]} • ${yearMonth}`);
+            setModalTitle(`${modalLabels[category]} • ${formatYearMonth(yearMonth)}`);
             setModalColumns([
                 { key: 'id', label: 'ID' },
                 { key: 'value', label: modalLabels[category] },
@@ -135,106 +135,6 @@ const DashboardCoupons = () => {
             toast.error('Error fetching detailed data: ' + error.message);
         }
     };
-
-    // const updateChart = (labels, added, consumed, balance) => {
-    //     const ctx = chartRef.current.getContext('2d');
-    //     if (chartInstance.current) {
-    //         chartInstance.current.destroy();
-    //     }
-
-    //     chartInstance.current = new Chart(ctx, {
-    //         type: 'line',
-    //         data: {
-    //             labels,
-    //             datasets: [
-    //                 {
-    //                     label: 'Coupon Added',
-    //                     data: added,
-    //                     borderColor: '#4caf50',
-    //                     backgroundColor: '#4caf50',
-    //                     fill: false,
-    //                     tension: 0.3,
-    //                 },
-    //                 {
-    //                     label: 'Coupon Consumed',
-    //                     data: consumed,
-    //                     borderColor: '#f44336',
-    //                     backgroundColor: '#f44336',
-    //                     fill: false,
-    //                     tension: 0.3,
-    //                 },
-    //                 {
-    //                     label: 'Coupon Balance',
-    //                     data: balance,
-    //                     borderColor: '#2196f3',
-    //                     backgroundColor: '#2196f3',
-    //                     fill: false,
-    //                     tension: 0.3,
-    //                 },
-    //             ],
-    //         },
-    //         options: {
-    //             responsive: true,
-    //             plugins: {
-    //                 title: {
-    //                     display: true,
-    //                 },
-    //                 // legend: {
-    //                 //     position: 'top',
-    //                 // },
-    //                 legend: {
-    //                     position: 'top',
-    //                     labels: {
-    //                         usePointStyle: true,
-    //                         pointStyle: 'rectRounded',
-    //                         boxWidth: 12,
-    //                         boxHeight: 12,
-    //                         padding: 8,
-    //                         font: {
-    //                             size: 11,
-    //                         },
-    //                     },
-    //                 },
-    //                 tooltip: {
-    //                     callbacks: {
-    //                         label: function (context) {
-    //                             const value = context.raw;
-    //                             return `${context.dataset.label}: ₹${value.toLocaleString('en-IN')}`;
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             scales: {
-    //                 y: {
-    //                     beginAtZero: true,
-    //                     ticks: {
-    //                         callback: function (value) {
-    //                             if (value >= 1_00_00_000) return (value / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                             if (value >= 1_00_000) return (value / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                             if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                             return value;
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             onClick: (event, elements) => {
-    //                 if (elements.length > 0) {
-    //                     const datasetIndex = elements[0].datasetIndex;
-    //                     const index = elements[0].index;
-    //                     const month = chartInstance.current.data.labels[index];
-    //                     const seriesName = chartInstance.current.data.datasets[datasetIndex].label;
-    //                     const categoryMap = {
-    //                         'Coupon Added': '1',
-    //                         'Coupon Consumed': '2',
-    //                         'Coupon Balance': '3',
-    //                     };
-    //                     const category = categoryMap[seriesName];
-    //                     fetchDetails(category, month, seriesName);
-    //                 }
-    //             },
-    //         },
-    //     });
-    // };
 
     const updateChart = (labels, added, consumed, balance) => {
         const ctx = chartRef.current.getContext('2d');
@@ -367,6 +267,12 @@ const DashboardCoupons = () => {
             default: return 'th';
         }
     }
+
+    const formatYearMonth = (yearMonth) => {
+        const [year, month] = yearMonth.split('-');
+        const date = new Date(`${year}-${month}-01`);
+        return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    };
 
     const handlePeriodChange = (label) => {
         setSelectedPeriod(label);

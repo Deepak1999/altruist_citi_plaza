@@ -114,6 +114,12 @@ const DashboardSolar = () => {
         }
     }
 
+    const formatYearMonth = (yearMonth) => {
+        const [year, month] = yearMonth.split('-');
+        const date = new Date(`${year}-${month}-01`);
+        return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    };
+
     const fetchDetails = async (category, yearMonth, label) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -146,7 +152,7 @@ const DashboardSolar = () => {
                 value
             }));
 
-            setModalTitle(`${label} • ${yearMonth}`);
+            setModalTitle(`${label} • ${formatYearMonth(yearMonth)}`);
             setModalColumns([
                 { key: 'timestamp', label: 'Timestamp' },
                 { key: 'value', label: 'Value' }
