@@ -149,8 +149,8 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'green', height: '50px' }}>
-                                    Bank Balance:<br />₹
-                                    {Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}
+                                    Bank Balance:<br />
+                                    <strong>₹{Math.floor(netBalances.bankBalance).toLocaleString('en-IN')}</strong>
                                 </h6>
                             </div>
                         </div>
@@ -159,7 +159,16 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: '#e30e0e', height: '50px' }}>
-                                    Payable:<br />₹{netBalances.payable}
+                                    Payable:<br /><strong>₹{Math.floor(netBalances.payable).toLocaleString('en-IN')}</strong>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3">
+                        <div className="card">
+                            <div className="card-body">
+                                <h6 className="card-title" style={{ color: 'green', height: '50px' }}>
+                                    Receivable:<br /><strong>₹{Math.floor(netBalances.receivable).toLocaleString('en-IN')}</strong>
                                 </h6>
                             </div>
                         </div>
@@ -168,17 +177,8 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
-                                    Receivable:<br />₹{netBalances.receivable}
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3">
-                        <div className="card">
-                            <div className="card-body">
-                                <h6 className="card-title" style={{ color: 'blue', height: '50px' }}>
-                                    Final Net Balance:<br />₹
-                                    {Math.floor(netBalances.netBalance).toLocaleString('en-IN')}
+                                    Net Balance:<br />
+                                    <strong>₹{Math.floor(netBalances.netBalance).toLocaleString('en-IN')}</strong>
                                 </h6>
                             </div>
                         </div>
