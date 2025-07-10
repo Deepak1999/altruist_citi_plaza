@@ -170,11 +170,41 @@ const ViewMonthlyCons = () => {
         },
         { Header: 'Units', accessor: 'unit' },
         { Header: 'Solar Units', accessor: 'solarUnit' },
-        { Header: 'DSR Bill', accessor: 'dsrBill' },
-        { Header: 'Postpaid', accessor: 'postpaidBill' },
-        { Header: 'Collection Details(A)', accessor: 'collectionAmountPostpaid' },
-        { Header: 'Prepaid(B)', accessor: 'collectionAmountPrepaid' },
-        { Header: 'Grand Total(A+B)', accessor: 'totalAmount' },
+        // { Header: 'DSR Bill', accessor: 'dsrBill' },
+        // { Header: 'Postpaid', accessor: 'postpaidBill' },
+        // { Header: 'Collection Details(A)', accessor: 'collectionAmountPostpaid' },
+        // { Header: 'Prepaid(B)', accessor: 'collectionAmountPrepaid' },
+        // { Header: 'Grand Total(A+B)', accessor: 'totalAmount' },
+        {
+            Header: 'DSR Bill',
+            accessor: 'dsrBill',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Postpaid',
+            accessor: 'postpaidBill',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Collection Details(A)',
+            accessor: 'collectionAmountPostpaid',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value ?? 0),
+        },
+        {
+            Header: 'Prepaid(B)',
+            accessor: 'collectionAmountPrepaid',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Grand Total(A+B)',
+            accessor: 'totalAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value ?? 0),
+        },
         {
             Header: 'Remarks',
             accessor: 'remarks',

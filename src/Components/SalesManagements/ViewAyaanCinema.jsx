@@ -174,13 +174,55 @@ const ViewAyaanCinema = () => {
             Cell: ({ value }) => value ? value.split(' ')[0] : '',
         },
         { Header: 'Box Off. Admits', accessor: 'boxOfficeAdmits' },
-        { Header: 'Net Box Off. Sales ', accessor: 'netBoxOfficeSales' },
-        { Header: 'Gross Box Off. Sales', accessor: 'grossBoxOfficeSales' },
-        { Header: 'Net Concs. Sales', accessor: 'netConcessionsSales' },
-        { Header: 'Gross Concs. Sales', accessor: 'grossConcessionsSales' },
-        { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
-        { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
-        { Header: 'Total(A+B)', accessor: 'totalDsrShare' },
+        // { Header: 'Net Box Off. Sales ', accessor: 'netBoxOfficeSales' },
+        // { Header: 'Gross Box Off. Sales', accessor: 'grossBoxOfficeSales' },
+        // { Header: 'Net Concs. Sales', accessor: 'netConcessionsSales' },
+        // { Header: 'Gross Concs. Sales', accessor: 'grossConcessionsSales' },
+        // { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
+        // { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
+        // { Header: 'Total(A+B)', accessor: 'totalDsrShare' },
+        {
+            Header: 'Net Box Off. Sales',
+            accessor: 'netBoxOfficeSales',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Gross Box Off. Sales',
+            accessor: 'grossBoxOfficeSales',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Net Concs. Sales',
+            accessor: 'netConcessionsSales',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Gross Concs. Sales',
+            accessor: 'grossConcessionsSales',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'DSR Net Box Off. Sales(A)',
+            accessor: 'dsrShareNetBoxOffice',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value ?? 0),
+        },
+        {
+            Header: 'DSR net Concs.(B)',
+            accessor: 'dsrShareNetConcessions',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value ?? 0),
+        },
+        {
+            Header: 'Total(A+B)',
+            accessor: 'totalDsrShare',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
         {
             Header: 'Remarks',
             accessor: 'remarks',

@@ -290,9 +290,27 @@ const AddViewCoupons = () => {
                 </span>
             )
         },
-        { Header: 'Added', accessor: 'couponsAdded' },
-        { Header: 'Consumed', accessor: 'couponsConsumed' },
-        { Header: 'Balance', accessor: 'couponsBalance' },
+        // { Header: 'Added', accessor: 'couponsAdded' },
+        // { Header: 'Consumed', accessor: 'couponsConsumed' },
+        // { Header: 'Balance', accessor: 'couponsBalance' },
+        {
+            Header: 'Added',
+            accessor: 'couponsAdded',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN').format(value ?? 0),
+        },
+        {
+            Header: 'Consumed',
+            accessor: 'couponsConsumed',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN').format(value ?? 0),
+        },
+        {
+            Header: 'Balance',
+            accessor: 'couponsBalance',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN').format(value ?? 0),
+        },
         { Header: 'Consumed By', accessor: 'consumedBy' },
         {
             Header: 'Date',

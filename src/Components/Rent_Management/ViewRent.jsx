@@ -115,7 +115,12 @@ const ViewRent = () => {
                 </span>
             )
         },
-        { Header: 'Rent Amount', accessor: 'rentAmount' },
+        {
+            Header: 'Rent Amount',
+            accessor: 'rentAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
         {
             Header: 'Month & Year',
             accessor: 'monthYear',
@@ -125,8 +130,18 @@ const ViewRent = () => {
             }
         },
         { Header: 'Mode', accessor: 'paymentMode' },
-        { Header: 'Amount Received', accessor: 'rentPaidAmount' },
-        { Header: 'Pending Amount', accessor: 'rentPendingAmount' },
+        {
+            Header: 'Amount Received',
+            accessor: 'rentPaidAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Pending Amount',
+            accessor: 'rentPendingAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
         {
             Header: 'Remarks',
             accessor: 'remarks',
@@ -272,99 +287,6 @@ const ViewRent = () => {
     };
 
     return (
-        // <main id="main" className="main">
-        //     <section className="section dashboard">
-        //         <div className="row">
-        //             <div className="col-lg-12">
-        //                 <div className="card">
-        //                     <div className="card-body">
-        //                         <div className="d-flex justify-content-between align-items-center mb-3">
-        //                             <h5 className="card-title mb-0">Rent Details</h5>
-        //                             <i
-        //                                 className="fa-solid fa-circle-down"
-        //                                 style={{ cursor: 'pointer' }}
-        //                                 onClick={handleDownloadExcel}
-        //                             >
-        //                                 <span className="ms-2">download</span>
-        //                             </i>
-        //                         </div>
-        //                         <h5 className="card-title mb-0">this is filter</h5>
-
-        //                         <div className="table-responsive mb-3">
-        //                             <table {...getTableProps()} className="table table-striped m-0">
-        //                                 <thead>
-        //                                     {headerGroups.map(headerGroup => {
-        //                                         const { key, ...groupProps } = headerGroup.getHeaderGroupProps();
-        //                                         return (
-        //                                             <tr key={key} {...groupProps}>
-        //                                                 {headerGroup.headers.map(column => {
-        //                                                     const { key, ...colProps } = column.getHeaderProps();
-        //                                                     return (
-        //                                                         <th key={key} {...colProps}>
-        //                                                             {column.render('Header')}
-        //                                                         </th>
-        //                                                     );
-        //                                                 })}
-        //                                             </tr>
-        //                                         );
-        //                                     })}
-        //                                 </thead>
-
-        //                                 <tbody {...getTableBodyProps()}>
-        //                                     {page.map(row => {
-        //                                         prepareRow(row);
-        //                                         const { key, ...rowProps } = row.getRowProps();
-        //                                         return (
-        //                                             <tr key={key} {...rowProps}>
-        //                                                 {row.cells.map(cell => {
-        //                                                     const { key, ...cellProps } = cell.getCellProps();
-        //                                                     return (
-        //                                                         <td key={key} {...cellProps}>
-        //                                                             {cell.render('Cell')}
-        //                                                         </td>
-        //                                                     );
-        //                                                 })}
-        //                                             </tr>
-        //                                         );
-        //                                     })}
-        //                                 </tbody>
-        //                             </table>
-        //                         </div>
-
-        //                         <div className="d-flex justify-content-between align-items-center mt-3">
-        //                             <span>
-        //                                 Page <strong>{pageIndex + 1} of {pageOptions.length}</strong>
-        //                             </span>
-        //                             <div>
-        //                                 <button
-        //                                     className="btn btn-sm btn-primary me-2"
-        //                                     onClick={() => previousPage()}
-        //                                     disabled={!canPreviousPage}
-        //                                 >
-        //                                     Previous
-        //                                 </button>
-        //                                 <button
-        //                                     className="btn btn-sm btn-primary"
-        //                                     onClick={() => nextPage()}
-        //                                     disabled={!canNextPage}
-        //                                 >
-        //                                     Next
-        //                                 </button>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </section>
-        //     <EditModal
-        //         show={showModal}
-        //         onClose={handleCloseModal}
-        //         onSave={handleSaveModal}
-        //         data={selectedRowData}
-        //     />
-        //     <ToastContainer />
-        // </main>
         <main id="main" className="main">
             <section className="section dashboard">
                 <div className="row">

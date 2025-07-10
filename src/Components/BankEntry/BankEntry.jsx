@@ -46,8 +46,20 @@ const BankEntry = () => {
             if (response.ok) {
                 const { statusCode, statusMessage } = data.statusDescription;
 
+                // if (statusCode === 200) {
+                //     setBankBalanceTableData(data.dailyBankSummary || []);
+                // } else {
+                //     toast.error(statusMessage || 'failed to fetch data');
+                // }
+                // if (statusCode === 200) {
+                //     // console.log('Received dailyBankSummary:', data.dailyBankSummary);
+                //     setBankBalanceTableData(Array.isArray(data.dailyBankSummary) ? data.dailyBankSummary : []);
+                // } else {
+                //     toast.error(statusMessage || 'failed to fetch data');
+                // }
                 if (statusCode === 200) {
-                    setBankBalanceTableData(data.dailyBankSummary || []);
+                    const summary = data.dailyBankSummary;
+                    setBankBalanceTableData(summary ? [summary] : []);  // Wrap object in array
                 } else {
                     toast.error(statusMessage || 'failed to fetch data');
                 }
@@ -59,14 +71,6 @@ const BankEntry = () => {
         }
     };
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData(prevState => ({
-    //         ...prevState,
-    //         [name]: value
-    //     }));
-    // };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         const updatedFormData = {
@@ -74,13 +78,11 @@ const BankEntry = () => {
             [name]: value
         };
 
-        // Parse numeric values or fallback to 0
         const bank = parseFloat(name === 'bankBalance' ? value : updatedFormData.bankBalance) || 0;
         const mobi = parseFloat(name === 'mobisoft' ? value : updatedFormData.mobisoft) || 0;
         const atpl = parseFloat(name === 'atpl' ? value : updatedFormData.atpl) || 0;
         const rs = parseFloat(name === 'rsHospitality' ? value : updatedFormData.rsHospitality) || 0;
 
-        // Recalculate net balance
         updatedFormData.netBalance = (bank + mobi + atpl + rs).toFixed(2);
 
         setFormData(updatedFormData);
@@ -143,42 +145,71 @@ const BankEntry = () => {
             Header: 'Date & Time',
             accessor: 'entryDate',
         },
+        // {
+        //     Header: 'Bank Balance',
+        //     accessor: 'bankBalance',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
+        // {
+        //     Header: 'Mobisoft Balance',
+        //     accessor: 'mobisoft',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
+        // {
+        //     Header: 'Atpl Balance',
+        //     accessor: 'atpl',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
+        // {
+        //     Header: 'R S Hospitality Balance',
+        //     accessor: 'rsHospitality',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
+        // {
+        //     Header: 'Net Balance',
+        //     accessor: 'netBalance',
+        //     Cell: ({ value }) => value != null ? value : 'N/A'
+        // },
         {
             Header: 'Bank Balance',
             accessor: 'bankBalance',
-            Cell: ({ value }) => value != null ? value : 'N/A'
+            Cell: ({ value }) =>
+                value != null
+                    ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value)
+                    : 'N/A'
         },
         {
             Header: 'Mobisoft Balance',
             accessor: 'mobisoft',
-            Cell: ({ value }) => value != null ? value : 'N/A'
+            Cell: ({ value }) =>
+                value != null
+                    ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value)
+                    : 'N/A'
         },
         {
             Header: 'Atpl Balance',
             accessor: 'atpl',
-            Cell: ({ value }) => value != null ? value : 'N/A'
+            Cell: ({ value }) =>
+                value != null
+                    ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value)
+                    : 'N/A'
         },
         {
             Header: 'R S Hospitality Balance',
             accessor: 'rsHospitality',
-            Cell: ({ value }) => value != null ? value : 'N/A'
+            Cell: ({ value }) =>
+                value != null
+                    ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value)
+                    : 'N/A'
         },
         {
             Header: 'Net Balance',
             accessor: 'netBalance',
-            Cell: ({ value }) => value != null ? value : 'N/A'
+            Cell: ({ value }) =>
+                value != null
+                    ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value)
+                    : 'N/A'
         },
-        // {
-        //     Header: 'Opening Balance',
-        //     accessor: 'openingbalance',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-        // {
-        //     Header: 'Closing Balance',
-        //     accessor: 'closingbalance',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-
     ], []);
 
     // const {
@@ -245,9 +276,6 @@ const BankEntry = () => {
                 'Atpl Balance': row.atpl ?? 'N/A',
                 'R S Hospitality Balance': row.rsHospitality ?? 'N/A',
                 'Net Balance': row.netBalance ?? 'N/A',
-                // Uncomment if you want these too:
-                // 'Opening Balance': row.openingbalance ?? 'N/A',
-                // 'Closing Balance': row.closingbalance ?? 'N/A',
             };
         });
 

@@ -113,10 +113,31 @@ const BankTransaction = () => {
     const transactionColumns = useMemo(() => [
         { Header: 'Date', accessor: 'transactionDate' },
         { Header: 'Narration', accessor: 'note' },
-        { Header: 'Amount Received (Debit)', accessor: 'debitAmount' },
-        { Header: 'Receipt Amount (Credit)', accessor: 'creditAmount' },
+        {
+            Header: 'Amount Received (Debit)',
+            accessor: 'debitAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', {
+                    maximumFractionDigits: 2,
+                }).format(value ?? 0),
+        },
+        {
+            Header: 'Receipt Amount (Credit)',
+            accessor: 'creditAmount',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', {
+                    maximumFractionDigits: 2,
+                }).format(value ?? 0),
+        },
         { Header: 'Reference No.(Txn. ID)', accessor: 'transactionId' },
-        { Header: 'Closing Balance', accessor: 'closingBalance' },
+        {
+            Header: 'Closing Balance',
+            accessor: 'closingBalance',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', {
+                    maximumFractionDigits: 0,
+                }).format(value ?? 0),
+        },
     ], []);
 
     // const balanceColumns = useMemo(() => [

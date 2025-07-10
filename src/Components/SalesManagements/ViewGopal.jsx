@@ -164,9 +164,27 @@ const ViewGopal = () => {
             accessor: 'saleDate',
         },
         { Header: 'Cashier Name', accessor: 'cashierName' },
-        { Header: 'Cash Sale', accessor: 'cashSale' },
-        { Header: 'Card Sale/Online Order', accessor: 'cardOnlineSale' },
-        { Header: 'Sub Total(B)', accessor: 'subTotal' },
+        // { Header: 'Cash Sale', accessor: 'cashSale' },
+        // { Header: 'Card Sale/Online Order', accessor: 'cardOnlineSale' },
+        // { Header: 'Sub Total(B)', accessor: 'subTotal' },
+        {
+            Header: 'Cash Sale',
+            accessor: 'cashSale',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Card Sale/Online Order',
+            accessor: 'cardOnlineSale',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
+        {
+            Header: 'Sub Total(B)',
+            accessor: 'subTotal',
+            Cell: ({ value }) =>
+                new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(value ?? 0),
+        },
         {
             Header: 'Remarks',
             accessor: row => row.remarks ? row.remarks : 'N/A'
