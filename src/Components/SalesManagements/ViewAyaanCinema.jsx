@@ -122,7 +122,6 @@ const EditModal = ({ show, onClose, onSave, data }) => {
     );
 };
 
-
 const ViewAyaanCinema = () => {
 
     const [boxOfficeConcessionSales, setboxOfficeConcessionSales] = useState([]);
@@ -174,13 +173,6 @@ const ViewAyaanCinema = () => {
             Cell: ({ value }) => value ? value.split(' ')[0] : '',
         },
         { Header: 'Box Off. Admits', accessor: 'boxOfficeAdmits' },
-        // { Header: 'Net Box Off. Sales ', accessor: 'netBoxOfficeSales' },
-        // { Header: 'Gross Box Off. Sales', accessor: 'grossBoxOfficeSales' },
-        // { Header: 'Net Concs. Sales', accessor: 'netConcessionsSales' },
-        // { Header: 'Gross Concs. Sales', accessor: 'grossConcessionsSales' },
-        // { Header: 'DSR Net Box Off. Sales(A)', accessor: 'dsrShareNetBoxOffice' },
-        // { Header: 'DSR net Concs.(B)', accessor: 'dsrShareNetConcessions' },
-        // { Header: 'Total(A+B)', accessor: 'totalDsrShare' },
         {
             Header: 'Net Box Off. Sales',
             accessor: 'netBoxOfficeSales',
@@ -250,23 +242,6 @@ const ViewAyaanCinema = () => {
         }
 
     ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: boxOfficeConcessionSales, initialState: { pageIndex: 0, pageSize: 7 } },
-    //     usePagination
-    // );
 
     const {
         getTableProps,

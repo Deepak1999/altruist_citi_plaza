@@ -59,15 +59,6 @@ const EditModal = ({ show, onClose, onSave, data }) => {
                                 onChange={(e) => setCardSale(e.target.value)}
                             />
                         </div>
-                        {/* <div className="mb-3">
-                            <label className="form-label">Sub Total (B)</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={subTotal}
-                                onChange={(e) => setSubTotal(e.target.value)}
-                            />
-                        </div> */}
                         <div className="mb-3">
                             <label className="form-label">Sub Total (B)</label>
                             <input
@@ -164,9 +155,6 @@ const ViewGopal = () => {
             accessor: 'saleDate',
         },
         { Header: 'Cashier Name', accessor: 'cashierName' },
-        // { Header: 'Cash Sale', accessor: 'cashSale' },
-        // { Header: 'Card Sale/Online Order', accessor: 'cardOnlineSale' },
-        // { Header: 'Sub Total(B)', accessor: 'subTotal' },
         {
             Header: 'Cash Sale',
             accessor: 'cashSale',
@@ -199,23 +187,6 @@ const ViewGopal = () => {
         }
 
     ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: gopalSaleLogs, initialState: { pageIndex: 0, pageSize: 7 } },
-    //     usePagination
-    // );
 
     const {
         getTableProps,

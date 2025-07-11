@@ -21,95 +21,6 @@ const DashboardRentSummary = () => {
     const [modalColumns, setModalColumns] = useState([]);
     const [modalRows, setModalRows] = useState([]);
 
-    // const fetchRentData = async (period) => {
-    //     const userId = localStorage.getItem('userId');
-    //     if (!userId) return;
-
-    //     try {
-    //         const resp = await fetch(`${ApiBaseUrl}/dashboard/rent-summary?period=${period}`, {
-    //             headers: { userId }
-    //         });
-    //         const json = await resp.json();
-    //         const rentDetails = json.dashboardRentSummaryDetails || {};
-
-    //         setTotalRentSummaryData(json.totalData.total || {});
-
-    //         const months = Object.keys(rentDetails).sort();
-    //         const totalRent = [], rentPaid = [], rentPending = [];
-
-    //         months.forEach(month => {
-    //             const d = rentDetails[month];
-    //             totalRent.push(+d.totalRentAmount);
-    //             rentPaid.push(+d.rentPaid);
-    //             rentPending.push(+d.rentPending);
-    //         });
-
-    //         const chart = rentChartInstanceRef.current;
-    //         chart.setOption({
-    //             tooltip: {
-    //                 trigger: 'axis',
-    //                 formatter: function (params) {
-    //                     let tooltipText = '';
-    //                     params.forEach(function (item) {
-    //                         tooltipText += `${item.marker} ${item.seriesName}: ₹${item.value.toLocaleString('en-IN')}<br/>`;
-    //                     });
-    //                     return tooltipText;
-    //                 }
-    //             },
-    //             legend: {
-    //                 data: ['Total Rent', 'Rent Collected', 'Rent Pending'],
-    //                 top: 25
-    //             },
-    //             xAxis: {
-    //                 type: 'category',
-    //                 data: months
-    //             },
-    //             yAxis: {
-    //                 type: 'value',
-    //                 axisLabel: {
-    //                     formatter: function (value) {
-    //                         const absValue = Math.abs(value);
-    //                         let formatted = '';
-    //                         if (absValue >= 1_00_00_000) {
-    //                             formatted = (absValue / 1_00_00_000).toFixed(1).replace(/\.0$/, '') + 'Cr';
-    //                         } else if (absValue >= 1_00_000) {
-    //                             formatted = (absValue / 1_00_000).toFixed(1).replace(/\.0$/, '') + 'L';
-    //                         } else if (absValue >= 1000) {
-    //                             formatted = (absValue / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    //                         } else {
-    //                             formatted = absValue.toString();
-    //                         }
-
-    //                         return value < 0 ? `-${formatted}` : formatted;
-    //                     }
-    //                 }
-    //             },
-    //             series: [
-    //                 {
-    //                     name: 'Total Rent',
-    //                     type: 'line',
-    //                     data: totalRent,
-    //                     itemStyle: { color: '#4caf50' }
-    //                 },
-    //                 {
-    //                     name: 'Rent Collected',
-    //                     type: 'line',
-    //                     data: rentPaid,
-    //                     itemStyle: { color: '#0baade' }
-    //                 },
-    //                 {
-    //                     name: 'Rent Pending',
-    //                     type: 'line',
-    //                     data: rentPending,
-    //                     itemStyle: { color: '#ff9800' }
-    //                 }
-    //             ]
-    //         });
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
-
     const fetchRentData = async (period) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -241,7 +152,6 @@ const DashboardRentSummary = () => {
         return date.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
     };
 
-    // Fetch details for modal
     const fetchDetails = async (category, yearMonth, seriesName) => {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -401,10 +311,8 @@ const DashboardRentSummary = () => {
                         </div>
                     </div>
 
-                    {/* Chart */}
                     <div ref={rentChartRef} style={{ width: '100%', height: '330px', marginTop: '15px' }} />
 
-                    {/* Summary Totals (you can update these based on API if desired) */}
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
                             <h6>Billed Rent</h6>
@@ -428,7 +336,6 @@ const DashboardRentSummary = () => {
                 </div>
             </div>
 
-            {/* Modal */}
             {modalVisible && (
                 <div className="modal show d-block" tabIndex="-1"
                     style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>

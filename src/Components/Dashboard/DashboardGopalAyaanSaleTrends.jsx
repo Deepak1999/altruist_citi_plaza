@@ -132,12 +132,10 @@ const DashboardGopalAyaanSaleTrends = () => {
             "July", "August", "September", "October", "November", "December"
         ];
 
-        // If it's the 1st day of any month (e.g., '2025-01-01'), treat it as monthly label
         if (day === 1) {
             return `${monthNames[monthIndex]}`;
         }
 
-        // Otherwise, show full formatted date with suffix
         const suffix = getDaySuffix(day);
         return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
     }

@@ -5,6 +5,7 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const Name = localStorage.getItem('userName');
@@ -75,13 +76,6 @@ const Header = () => {
                 ></i>
             </div>
 
-            {/* <div className="search-bar">
-                <formm className="search-form d-flex align-items-center">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-                    <button type="submit" title="Search"><i className="bi bi-search"></i></button>
-                </formm>
-            </div> */}
-
             <nav className="header-nav ms-auto">
                 <ul className="d-flex align-items-center">
                     <li className="nav-item d-block d-lg-none">
@@ -122,7 +116,6 @@ const Header = () => {
                     </li>
                 </ul>
             </nav>
-
             <ToastContainer />
         </header>
     );

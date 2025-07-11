@@ -253,16 +253,6 @@ const AddMeterRecharge = () => {
                                                         ))}
                                                     </select>
                                                 </div>
-                                                {/* <div className="col-md-3">
-                                                    <label className="form-label">Remarks</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        name="remarks"
-                                                        value={formData.remarks}
-                                                        onChange={handleChange}
-                                                    />
-                                                </div> */}
 
                                                 {billType === '2' && (
                                                     <>
@@ -277,16 +267,6 @@ const AddMeterRecharge = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                        {/* <div className="col-md-3">
-                                                            <label className="form-label">Remarks</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                name="remarks"
-                                                                value={formData.remarks}
-                                                                onChange={handleChange}
-                                                            />
-                                                        </div> */}
                                                         <div className="col-md-3">
                                                             <label className="form-label">Remarks</label>
                                                             <input

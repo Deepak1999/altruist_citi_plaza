@@ -167,28 +167,6 @@ const Login = () => {
                                         )}
                                     </form>
 
-                                    {/* {showOtp && (
-                                        <>
-                                            <div className="col-12 mt-3">
-                                                <label htmlFor="otp" className="form-label">Enter OTP</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="otp"
-                                                    value={otp}
-                                                    onChange={(e) => setOtp(e.target.value)}
-                                                    placeholder="Enter OTP"
-                                                    inputMode="numeric"
-                                                    pattern="[0-9]*"
-                                                />
-                                            </div>
-                                            <div className="col-12 mt-3">
-                                                <button className="btn btn-success w-100" onClick={handleVerifyOtp}>
-                                                    Verify OTP
-                                                </button>
-                                            </div>
-                                        </>
-                                    )} */}
                                     {showOtp && (
                                         <>
                                             <div className="col-12 mt-3">
@@ -215,7 +193,6 @@ const Login = () => {
 
                                 </div>
                             </div>
-
                             <div className="credits">
                                 Designed by <a>Altruist Technologies Pvt. Ltd.</a>
                             </div>
@@ -223,7 +200,6 @@ const Login = () => {
                     </div>
                 </div>
             </section>
-
             <ToastContainer />
         </div>
     );

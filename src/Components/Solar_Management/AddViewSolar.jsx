@@ -71,7 +71,6 @@ const EditModal = ({ show, onClose, onSave, data }) => {
     );
 };
 
-
 const AddViewSolar = () => {
 
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
@@ -123,7 +122,6 @@ const AddViewSolar = () => {
             toast.error('Error during fetching lessee details: ' + error.message);
         }
     };
-
 
     const handleGetSolarData = async () => {
 
@@ -322,23 +320,6 @@ const AddViewSolar = () => {
 
     ], []);
 
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: solarTableData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
-
     const {
         getTableProps,
         getTableBodyProps,
@@ -511,8 +492,6 @@ const AddViewSolar = () => {
                             </div>
                         </div>
 
-
-                        {/* view table code  */}
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -604,9 +583,6 @@ const AddViewSolar = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* view table code end */}
-
                     </div>
                 </div>
             </section>

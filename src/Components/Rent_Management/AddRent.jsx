@@ -4,6 +4,7 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { useNavigate } from 'react-router-dom';
 
 const AddRent = () => {
+
     const [paymentMode, setPaymentMode] = useState([]);
     const [lesseeDetails, setLesseeDetails] = useState([]);
     const [selectedLesseeId, setSelectedLesseeId] = useState('');
@@ -244,19 +245,6 @@ const AddRent = () => {
                                                 )}
                                             </select>
                                         </div>
-
-                                        {/* <div className="col-md-3">
-                                            <label className="form-label">Monthly Rent Amount</label>
-                                            <input
-                                                type="number"
-                                                className="form-control"
-                                                value={selectedRentAmount}
-                                                onChange={handleRentAmountChange}
-                                                placeholder={rentAmounts.length > 0 ? `₹${rentAmounts[0].toLocaleString()}` : "Enter Rent Amount"}
-                                                min="0"
-                                                required
-                                            />
-                                        </div> */}
 
                                         <div className="col-md-3">
                                             <label className="form-label">Month & Year</label>

@@ -59,7 +59,7 @@ const BankEntry = () => {
                 // }
                 if (statusCode === 200) {
                     const summary = data.dailyBankSummary;
-                    setBankBalanceTableData(summary ? [summary] : []);  // Wrap object in array
+                    setBankBalanceTableData(summary ? [summary] : []);
                 } else {
                     toast.error(statusMessage || 'failed to fetch data');
                 }
@@ -145,31 +145,6 @@ const BankEntry = () => {
             Header: 'Date & Time',
             accessor: 'entryDate',
         },
-        // {
-        //     Header: 'Bank Balance',
-        //     accessor: 'bankBalance',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-        // {
-        //     Header: 'Mobisoft Balance',
-        //     accessor: 'mobisoft',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-        // {
-        //     Header: 'Atpl Balance',
-        //     accessor: 'atpl',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-        // {
-        //     Header: 'R S Hospitality Balance',
-        //     accessor: 'rsHospitality',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
-        // {
-        //     Header: 'Net Balance',
-        //     accessor: 'netBalance',
-        //     Cell: ({ value }) => value != null ? value : 'N/A'
-        // },
         {
             Header: 'Bank Balance',
             accessor: 'bankBalance',
@@ -211,23 +186,6 @@ const BankEntry = () => {
                     : 'N/A'
         },
     ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: bankBalanceTableData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
 
     const {
         getTableProps,

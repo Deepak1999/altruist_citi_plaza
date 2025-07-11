@@ -68,7 +68,6 @@ const EditModal = ({ show, onClose, onSave, data }) => {
     );
 };
 
-
 const ViewMeterRecharge = () => {
 
     const [electricityTableData, SetEelectricityTableData] = useState([]);
@@ -163,23 +162,6 @@ const ViewMeterRecharge = () => {
 
     ], []);
 
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: electricityTableData, initialState: { pageIndex: 0, pageSize: 7 } },
-    //     usePagination
-    // );
-
     const {
         getTableProps,
         getTableBodyProps,
@@ -231,7 +213,6 @@ const ViewMeterRecharge = () => {
 
         saveAs(data, 'MeterRechargeDetails.xlsx');
     };
-
 
     const [showModal, setShowModal] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState(null);
@@ -287,7 +268,6 @@ const ViewMeterRecharge = () => {
             toast.error('API error: ' + error.message);
         }
     };
-
 
     return (
         <main id="main" className="main">

@@ -290,9 +290,6 @@ const AddViewCoupons = () => {
                 </span>
             )
         },
-        // { Header: 'Added', accessor: 'couponsAdded' },
-        // { Header: 'Consumed', accessor: 'couponsConsumed' },
-        // { Header: 'Balance', accessor: 'couponsBalance' },
         {
             Header: 'Added',
             accessor: 'couponsAdded',
@@ -336,33 +333,7 @@ const AddViewCoupons = () => {
                 </span>
             )
         },
-        // {
-        //     Header: 'Action',
-        //     Cell: ({ row }) => (
-        //         <button className="btn btn-sm btn-outline-primary" onClick={() => handleOpenModal(row.original)}>
-        //             <i className="fa-solid fa-pen-to-square"></i>
-        //         </button>
-        //     )
-        // }
-
     ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: couponsTableData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
 
     const {
         getTableProps,

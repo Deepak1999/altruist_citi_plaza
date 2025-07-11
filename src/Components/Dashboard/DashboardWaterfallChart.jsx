@@ -4,6 +4,7 @@ import CanvasJSReact from '@canvasjs/react-charts';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const DashboardWaterfallChart = ({ dataPoints }) => {
+    
     const formatIndianNumber = (value) => {
         if (typeof value !== "number") return "";
         const absValue = Math.abs(value);

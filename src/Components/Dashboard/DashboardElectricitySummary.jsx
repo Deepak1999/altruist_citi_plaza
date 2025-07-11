@@ -43,13 +43,6 @@ const DashboardElectricitySummary = () => {
             const postPaidAmount = [];
             const prePaidAmount = [];
 
-            // months.forEach((month) => {
-            //     const d = details[month];
-            //     totalBilledAmount.push(+d.totalBilledAmount);
-            //     totalPaidAmount.push(+d.totalPaidAmount);
-            //     postPaidAmount.push(+d.postPaidAmount);
-            //     prePaidAmount.push(+d.prePaidAmount);
-            // });
             const postPaidDeficit = [];
 
             months.forEach((month) => {

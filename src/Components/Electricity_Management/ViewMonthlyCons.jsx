@@ -114,7 +114,6 @@ const EditModal = ({ show, onClose, onSave, data }) => {
     );
 };
 
-
 const ViewMonthlyCons = () => {
 
     const [monthlyConsData, setMonthlyConsData] = useState([]);
@@ -170,11 +169,6 @@ const ViewMonthlyCons = () => {
         },
         { Header: 'Units', accessor: 'unit' },
         { Header: 'Solar Units', accessor: 'solarUnit' },
-        // { Header: 'DSR Bill', accessor: 'dsrBill' },
-        // { Header: 'Postpaid', accessor: 'postpaidBill' },
-        // { Header: 'Collection Details(A)', accessor: 'collectionAmountPostpaid' },
-        // { Header: 'Prepaid(B)', accessor: 'collectionAmountPrepaid' },
-        // { Header: 'Grand Total(A+B)', accessor: 'totalAmount' },
         {
             Header: 'DSR Bill',
             accessor: 'dsrBill',
@@ -232,23 +226,6 @@ const ViewMonthlyCons = () => {
         }
 
     ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: monthlyConsData, initialState: { pageIndex: 0, pageSize: 7 } },
-    //     usePagination
-    // );
 
     const {
         getTableProps,

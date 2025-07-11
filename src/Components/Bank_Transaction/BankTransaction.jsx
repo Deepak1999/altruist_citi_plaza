@@ -50,9 +50,6 @@ const BankTransaction = () => {
 
                     if (transactions.length > 0) {
                         const firstTransaction = transactions[0];
-                        // const lastTransaction = transactions[transactions.length - 1];
-
-                        // setOpeningBalance(firstTransaction.openingBalance || 0);
                         setClosingBal(firstTransaction.closingBalance || 0);
                     } else {
                         setOpeningBalance(0);
@@ -140,49 +137,6 @@ const BankTransaction = () => {
         },
     ], []);
 
-    // const balanceColumns = useMemo(() => [
-    //     { Header: 'Bank Balance', accessor: 'bankBalance' },
-    //     { Header: 'Mobisoft', accessor: 'mobisoft' },
-    //     { Header: 'ATPL', accessor: 'atpl' },
-    //     { Header: 'R S Hospitality', accessor: 'rshospitality' },
-    //     { Header: 'Net Balance', accessor: 'netBalance' },
-    // ], []);
-
-    const balanceData = useMemo(() => [
-        {
-            bankBalance: '₹12,000',
-            mobisoft: '₹3,000',
-            atpl: '₹4,000',
-            rshospitality: '₹5,000',
-            netBalance: '₹24,000',
-        },
-        {
-            bankBalance: '₹12,000',
-            mobisoft: '₹3,000',
-            atpl: '₹4,000',
-            rshospitality: '₹5,000',
-            netBalance: '₹24,000',
-        },
-
-    ], []);
-
-    // const {
-    //     getTableProps: getTxnTableProps,
-    //     getTableBodyProps: getTxnBodyProps,
-    //     headerGroups: txnHeaderGroups,
-    //     page: txnPage,
-    //     nextPage: nextTxnPage,
-    //     previousPage: prevTxnPage,
-    //     canNextPage: canNextTxnPage,
-    //     canPreviousPage: canPrevTxnPage,
-    //     prepareRow: prepareTxnRow,
-    //     pageOptions: txnPageOptions,
-    //     state: { pageIndex: txnPageIndex },
-    // } = useTable(
-    //     { columns: transactionColumns, data: transactionData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
-
     const {
         getTableProps: getTxnTableProps,
         getTableBodyProps: getTxnBodyProps,
@@ -204,28 +158,6 @@ const BankTransaction = () => {
         },
         usePagination
     );
-
-    // const handleRowClick = (row) => {
-    //     setSelectedRowData(row.original);
-    //     setShowModal(true);
-    // };
-
-    // const {
-    //     getTableProps: getBalanceTableProps,
-    //     getTableBodyProps: getBalanceBodyProps,
-    //     headerGroups: balanceHeaderGroups,
-    //     page: balancePage,
-    //     nextPage: nextBalancePage,
-    //     previousPage: prevBalancePage,
-    //     canNextPage: canNextBalancePage,
-    //     canPreviousPage: canPrevBalancePage,
-    //     prepareRow: prepareBalanceRow,
-    //     pageOptions: balancePageOptions,
-    //     state: { pageIndex: balancePageIndex },
-    // } = useTable(
-    //     { columns: balanceColumns, data: balanceData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
 
     const formatDateTime = () => {
         const now = new Date();
@@ -250,16 +182,6 @@ const BankTransaction = () => {
             return;
         }
 
-        // const payload = {
-        //     transaction: {
-        //         creditAmount: parseFloat(creditAmount) || 0,
-        //         debitAmount: parseFloat(debitAmount) || 0,
-        //         closingBalance: parseFloat(closingBalance) || 0,
-        //         note,
-        //         transactionDate: formatDateTime(),
-        //         transactionId
-        //     },
-        // };
         const transaction = {
             closingBalance: parseFloat(closingBalance) || 0,
             note,
@@ -518,79 +440,6 @@ const BankTransaction = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div className="card">
-                            <div className="card-body">
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title mb-0">View Bank Balance Details</h5>
-                                    <i className="fa-solid fa-circle-down" style={{ cursor: 'pointer' }}>
-                                        <span className="ms-2">Download</span>
-                                    </i>
-                                </div>
-
-                                <div className="table-responsive mb-3">
-                                    <table {...getBalanceTableProps()} className="table table-striped m-0">
-                                        <thead>
-                                            {balanceHeaderGroups.map(headerGroup => {
-                                                const { key, ...groupProps } = headerGroup.getHeaderGroupProps();
-                                                return (
-                                                    <tr key={key} {...groupProps}>
-                                                        {headerGroup.headers.map(column => {
-                                                            const { key, ...colProps } = column.getHeaderProps();
-                                                            return (
-                                                                <th key={key} {...colProps}>
-                                                                    {column.render('Header')}
-                                                                </th>
-                                                            );
-                                                        })}
-                                                    </tr>
-                                                );
-                                            })}
-                                        </thead>
-                                        <tbody {...getBalanceBodyProps()}>
-                                            {balancePage.map(row => {
-                                                prepareBalanceRow(row);
-                                                const { key, ...rowProps } = row.getRowProps();
-                                                return (
-                                                    <tr key={key} {...rowProps}>
-                                                        {row.cells.map(cell => {
-                                                            const { key, ...cellProps } = cell.getCellProps();
-                                                            return (
-                                                                <td key={key} {...cellProps}>
-                                                                    {cell.render('Cell')}
-                                                                </td>
-                                                            );
-                                                        })}
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div className="d-flex justify-content-between align-items-center mt-3">
-                                    <span>
-                                        Page <strong>{balancePageIndex + 1} of {balancePageOptions.length}</strong>
-                                    </span>
-                                    <div>
-                                        <button
-                                            className="btn btn-sm btn-primary me-2"
-                                            onClick={() => prevBalancePage()}
-                                            disabled={!canPrevBalancePage}
-                                        >
-                                            Previous
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-primary"
-                                            onClick={() => nextBalancePage()}
-                                            disabled={!canNextBalancePage}
-                                        >
-                                            Next
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
 
                     </div>
                 </div>

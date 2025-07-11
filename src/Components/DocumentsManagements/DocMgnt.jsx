@@ -153,24 +153,6 @@ const DocMgnt = () => {
         },
     ], []);
 
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: viewDocumentTableData, initialState: { pageIndex: 0, pageSize: 5 } },
-    //     usePagination
-    // );
-
     const {
         getTableProps,
         getTableBodyProps,
@@ -192,11 +174,6 @@ const DocMgnt = () => {
         },
         usePagination
     );
-
-    // const handleRowClick = (row) => {
-    //     setSelectedRowData(row.original);
-    //     setShowModal(true);
-    // };
 
     const handleReset = () => {
         setFileName('');

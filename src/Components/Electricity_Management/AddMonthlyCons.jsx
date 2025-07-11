@@ -4,6 +4,7 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { useNavigate } from 'react-router-dom';
 
 const AddMonthlyCons = () => {
+
     const [formData, setFormData] = useState({
         monthYear: '',
         unit: '',
@@ -17,14 +18,6 @@ const AddMonthlyCons = () => {
 
     const navigate = useNavigate();
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prev) => ({
-    //         ...prev,
-    //         [name]: value
-    //     }));
-    // };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         const updatedFormData = {
@@ -32,18 +25,15 @@ const AddMonthlyCons = () => {
             [name]: value
         };
 
-        // Parse values safely
         const postpaid = parseFloat(updatedFormData.collectionAmountPostpaid) || 0;
         const prepaid = parseFloat(updatedFormData.collectionAmountPrepaid) || 0;
 
-        // Automatically update totalAmount if either A or B changes
         if (name === 'collectionAmountPostpaid' || name === 'collectionAmountPrepaid') {
             updatedFormData.totalAmount = (postpaid + prepaid).toFixed(2);
         }
 
         setFormData(updatedFormData);
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();

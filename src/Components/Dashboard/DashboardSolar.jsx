@@ -4,6 +4,7 @@ import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { toast } from 'react-toastify';
 
 const DashboardSolar = () => {
+
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
 

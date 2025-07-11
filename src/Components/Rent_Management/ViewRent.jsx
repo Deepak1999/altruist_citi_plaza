@@ -162,22 +162,6 @@ const ViewRent = () => {
 
     ], []);
 
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     nextPage,
-    //     previousPage,
-    //     canNextPage,
-    //     canPreviousPage,
-    //     prepareRow,
-    //     pageOptions,
-    //     state: { pageIndex },
-    // } = useTable(
-    //     { columns, data: lesseeTableData, initialState: { pageIndex: 0, pageSize: 7 } },
-    //     usePagination
-    // );
     const {
         getTableProps,
         getTableBodyProps,
@@ -305,7 +289,6 @@ const ViewRent = () => {
                                     </i>
                                 </div>
 
-                                {/* Rows-per-page filter */}
                                 <div className="d-flex align-items-center mb-3">
                                     <h6 className="mb-0 me-2">Show rows:</h6>
                                     <select
@@ -321,7 +304,6 @@ const ViewRent = () => {
                                     </select>
                                 </div>
 
-                                {/* Table */}
                                 <div className="table-responsive mb-3">
                                     <table {...getTableProps()} className="table table-striped m-0">
                                         <thead>
@@ -356,7 +338,6 @@ const ViewRent = () => {
                                     </table>
                                 </div>
 
-                                {/* Pagination controls */}
                                 <div className="d-flex justify-content-between align-items-center mt-3">
                                     <span>
                                         Page <strong>{pageIndex + 1} of {pageOptions.length}</strong>
@@ -378,7 +359,6 @@ const ViewRent = () => {
                                         </button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
