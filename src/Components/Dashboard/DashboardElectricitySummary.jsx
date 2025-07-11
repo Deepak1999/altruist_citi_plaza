@@ -371,7 +371,7 @@ const DashboardElectricitySummary = () => {
 
                     <div className="d-flex justify-content-around text-center mt-3">
                         <div>
-                            <h6>Billing</h6>
+                            <h6>Postpaid Billing</h6>
                             <strong><p className="mb-0">
                                 ₹{parseFloat(totalElectricitySummaryData.totalBilledAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
@@ -383,15 +383,15 @@ const DashboardElectricitySummary = () => {
                             </p></strong>
                         </div>
                         <div>
-                            <h6>Prepaid Coll.</h6>
+                            <h6>Postpaid Deficit</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
+                                ₹{parseFloat(totalPostPaidDeficit || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                         <div>
-                            <h6>Deficit Amt.</h6>
+                            <h6>Prepaid Coll.</h6>
                             <strong><p className="mb-0">
-                                ₹{parseFloat(totalPostPaidDeficit || 0).toLocaleString('en-IN')}
+                                ₹{parseFloat(totalElectricitySummaryData.prePaidAmount || 0).toLocaleString('en-IN')}
                             </p></strong>
                         </div>
                     </div>
@@ -418,11 +418,24 @@ const DashboardElectricitySummary = () => {
                                                 ))}
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        {/* <tbody>
                                             {modalRows.map((row, i) => (
                                                 <tr key={i}>
                                                     {modalColumns.map((col) => (
                                                         <td key={col.key}>{row[col.key] || ''}</td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody> */}
+                                        <tbody>
+                                            {modalRows.map((row, i) => (
+                                                <tr key={i}>
+                                                    {modalColumns.map(col => (
+                                                        <td key={col.key}>
+                                                            {typeof row[col.key] === 'number'
+                                                                ? new Intl.NumberFormat('en-IN').format(row[col.key])
+                                                                : row[col.key]}
+                                                        </td>
                                                     ))}
                                                 </tr>
                                             ))}

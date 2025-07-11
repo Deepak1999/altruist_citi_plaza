@@ -402,11 +402,24 @@ const DashboardCoupons = () => {
                                                 ))}
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        {/* <tbody>
                                             {modalRows.map((row, i) => (
                                                 <tr key={i}>
                                                     {modalColumns.map((col) => (
                                                         <td key={col.key}>{row[col.key]}</td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody> */}
+                                        <tbody>
+                                            {modalRows.map((row, i) => (
+                                                <tr key={i}>
+                                                    {modalColumns.map(col => (
+                                                        <td key={col.key}>
+                                                            {typeof row[col.key] === 'number'
+                                                                ? new Intl.NumberFormat('en-IN').format(row[col.key])
+                                                                : row[col.key]}
+                                                        </td>
                                                     ))}
                                                 </tr>
                                             ))}
