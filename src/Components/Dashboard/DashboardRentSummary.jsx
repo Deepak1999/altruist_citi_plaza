@@ -93,19 +93,22 @@ const DashboardRentSummary = () => {
                     {
                         name: 'Total Rent',
                         type: 'line',
-                        data: totalRent,
+                        // data: totalRent,
+                        data: totalRent.map(val => Math.round(val)),
                         itemStyle: { color: '#4caf50' }
                     },
                     {
                         name: 'Rent Collected',
                         type: 'line',
-                        data: rentPaid,
+                        // data: rentPaid,
+                        data: rentPaid.map(val => Math.round(val)),
                         itemStyle: { color: '#0baade' }
                     },
                     {
                         name: 'Rent Pending',
                         type: 'line',
-                        data: rentPending,
+                        // data: rentPending,
+                        data: rentPending.map(val => Math.round(val)),
                         itemStyle: { color: '#ff9800' }
                     }
                 ]

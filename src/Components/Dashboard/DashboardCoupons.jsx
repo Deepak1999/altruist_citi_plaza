@@ -149,7 +149,8 @@ const DashboardCoupons = () => {
                 datasets: [
                     {
                         label: 'Coupon Added',
-                        data: added,
+                        // data: added,
+                        data: added.map(val => Math.round(val)),
                         borderColor: '#4caf50',
                         backgroundColor: '#4caf50',
                         fill: false,
@@ -157,7 +158,8 @@ const DashboardCoupons = () => {
                     },
                     {
                         label: 'Coupon Consumed',
-                        data: consumed,
+                        // data: consumed,
+                        data: consumed.map(val => Math.round(val)),
                         borderColor: '#f44336',
                         backgroundColor: '#f44336',
                         fill: false,
@@ -165,7 +167,8 @@ const DashboardCoupons = () => {
                     },
                     {
                         label: 'Coupon Balance',
-                        data: balance,
+                        // data: balance,
+                        data: balance.map(val => Math.round(val)),
                         borderColor: '#2196f3',
                         backgroundColor: '#2196f3',
                         fill: false,

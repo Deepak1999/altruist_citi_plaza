@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import ApiBaseUrl from '../Api_base_Url/ApiBaseUrl';
 import { toast } from 'react-toastify';
+import { data } from 'react-router-dom';
 
 const DashboardGopalAyaanSaleTrends = () => {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -91,25 +92,29 @@ const DashboardGopalAyaanSaleTrends = () => {
                     {
                         name: 'Gopal Sale',
                         type: 'line',
-                        data: gopalAmount,
+                        // data: gopalAmount,
+                        data: gopalAmount.map(val => Math.round(val)),
                         itemStyle: { color: '#9c64f3' },
                     },
                     {
                         name: 'Ayaan Sale',
                         type: 'line',
-                        data: ayaanAmount,
+                        // data: ayaanAmount,
+                        data: ayaanAmount.map(val => Math.round(val)),
                         itemStyle: { color: '#4caf50' },
                     },
                     {
                         name: 'Gopal Share',
                         type: 'line',
-                        data: gopalAtplShare,
+                        // data: gopalAtplShare,
+                        data: gopalAtplShare.map(val => Math.round(val)),
                         itemStyle: { color: '#f44336' },
                     },
                     {
                         name: 'Ayaan Share',
                         type: 'line',
-                        data: ayaanAtplShare,
+                        // data: ayaanAtplShare,
+                        data: ayaanAtplShare.map(val => Math.round(val)),
                         itemStyle: { color: '#ff9800' },
                     },
                 ]

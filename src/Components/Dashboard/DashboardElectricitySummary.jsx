@@ -106,7 +106,8 @@ const DashboardElectricitySummary = () => {
                     {
                         name: 'Postpaid Billing',
                         type: 'bar',
-                        data: totalBilledAmount,
+                        // data: totalBilledAmount,
+                        data: totalBilledAmount.map(val => Math.round(val)),
                         itemStyle: { color: '#de0b8b' },
                     },
                     // {
@@ -118,19 +119,22 @@ const DashboardElectricitySummary = () => {
                     {
                         name: 'Postpaid Coll.',
                         type: 'bar',
-                        data: postPaidAmount,
+                        // data: postPaidAmount,
+                        data: postPaidAmount.map(val => Math.round(val)),
                         itemStyle: { color: '#0baade' },
                     },
                     {
                         name: 'Postpaid Deficit',
                         type: 'bar',
-                        data: postPaidDeficit,
+                        // data: postPaidDeficit,
+                        data: postPaidDeficit.map(val => Math.round(val)),
                         itemStyle: { color: '#b20909' },
                     },
                     {
                         name: 'Prepaid Coll.',
                         type: 'bar',
-                        data: prePaidAmount,
+                        // data: prePaidAmount,
+                        data: prePaidAmount.map(val => Math.round(val)),
                         itemStyle: { color: '#ff9800' },
                     },
                 ],
