@@ -108,6 +108,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
 const ViewGopal = () => {
 
     const [gopalSaleLogs, setgopalSaleLogs] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleGetGopalData = async () => {
 
@@ -188,6 +189,38 @@ const ViewGopal = () => {
 
     ], []);
 
+    const filteredData = useMemo(() => {
+        if (!searchQuery) return gopalSaleLogs;
+
+        return gopalSaleLogs.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        );
+    }, [gopalSaleLogs, searchQuery]);
+
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     prepareRow,
+    //     page,
+    //     pageOptions,
+    //     canPreviousPage,
+    //     canNextPage,
+    //     nextPage,
+    //     previousPage,
+    //     state: { pageIndex, pageSize },
+    //     setPageSize,
+    // } = useTable(
+    //     {
+    //         columns,
+    //         data: gopalSaleLogs,
+    //         initialState: { pageIndex: 0, pageSize: 7 },
+    //     },
+    //     usePagination
+    // );
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -204,12 +237,11 @@ const ViewGopal = () => {
     } = useTable(
         {
             columns,
-            data: gopalSaleLogs,
+            data: filteredData,
             initialState: { pageIndex: 0, pageSize: 7 },
         },
         usePagination
     );
-
     const handleRowClick = (row) => {
         setSelectedRowData(row.original);
         setShowModal(true);
@@ -327,6 +359,13 @@ const ViewGopal = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    <input
+                                        type="text"
+                                        className="form-control w-auto ms-3"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
 
                                 <div className="table-responsive mb-3">

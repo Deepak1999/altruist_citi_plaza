@@ -19,7 +19,7 @@ const BankTransaction = () => {
     const [creditAmount, setCreditAmount] = useState('');
     const [transactionId, setTransactionId] = useState('');
     const [closingBalance, setClosingBalance] = useState('');
-
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleGetBankTransactionData = async () => {
         const userId = localStorage.getItem('userId');
@@ -137,6 +137,38 @@ const BankTransaction = () => {
         },
     ], []);
 
+    const filteredTransactionData = useMemo(() => {
+        if (!searchQuery) return transactionData;
+
+        return transactionData.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        );
+    }, [transactionData, searchQuery]);
+
+    // const {
+    //     getTableProps: getTxnTableProps,
+    //     getTableBodyProps: getTxnBodyProps,
+    //     headerGroups: txnHeaderGroups,
+    //     prepareRow: prepareTxnRow,
+    //     page: txnPage,
+    //     pageOptions: txnPageOptions,
+    //     canPreviousPage: canPrevTxnPage,
+    //     canNextPage: canNextTxnPage,
+    //     nextPage: nextTxnPage,
+    //     previousPage: prevTxnPage,
+    //     state: { pageIndex: txnPageIndex, pageSize },
+    //     setPageSize,
+    // } = useTable(
+    //     {
+    //         columns: transactionColumns,
+    //         data: transactionData,
+    //         initialState: { pageIndex: 0, pageSize: 7 },
+    //     },
+    //     usePagination
+    // );
+
     const {
         getTableProps: getTxnTableProps,
         getTableBodyProps: getTxnBodyProps,
@@ -153,7 +185,7 @@ const BankTransaction = () => {
     } = useTable(
         {
             columns: transactionColumns,
-            data: transactionData,
+            data: filteredTransactionData,
             initialState: { pageIndex: 0, pageSize: 7 },
         },
         usePagination
@@ -366,6 +398,13 @@ const BankTransaction = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    <input
+                                        type="text"
+                                        className="form-control w-auto ms-3"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h6 className="card-title mb-0">

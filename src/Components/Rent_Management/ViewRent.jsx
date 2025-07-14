@@ -64,6 +64,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
 const ViewRent = () => {
 
     const [lesseeTableData, setLesseeTableData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleGetMonthlyData = async () => {
 
@@ -162,6 +163,38 @@ const ViewRent = () => {
 
     ], []);
 
+    const filteredData = useMemo(() => {
+        if (!searchQuery) return lesseeTableData;
+
+        return lesseeTableData.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        );
+    }, [lesseeTableData, searchQuery]);
+
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     prepareRow,
+    //     page,
+    //     pageOptions,
+    //     canPreviousPage,
+    //     canNextPage,
+    //     nextPage,
+    //     previousPage,
+    //     state: { pageIndex, pageSize },
+    //     setPageSize,
+    // } = useTable(
+    //     {
+    //         columns,
+    //         data: lesseeTableData,
+    //         initialState: { pageIndex: 0, pageSize: 7 },
+    //     },
+    //     usePagination
+    // );
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -178,7 +211,7 @@ const ViewRent = () => {
     } = useTable(
         {
             columns,
-            data: lesseeTableData,
+            data: filteredData,
             initialState: { pageIndex: 0, pageSize: 7 },
         },
         usePagination
@@ -302,6 +335,13 @@ const ViewRent = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    <input
+                                        type="text"
+                                        className="form-control w-auto ms-3"
+                                        placeholder="Search..."
+                                        value={searchQuery} 
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
 
                                 <div className="table-responsive mb-3">

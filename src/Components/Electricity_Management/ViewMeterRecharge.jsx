@@ -71,6 +71,7 @@ const EditModal = ({ show, onClose, onSave, data }) => {
 const ViewMeterRecharge = () => {
 
     const [electricityTableData, SetEelectricityTableData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleGetMonthlyData = async () => {
 
@@ -162,6 +163,37 @@ const ViewMeterRecharge = () => {
 
     ], []);
 
+    const filteredData = useMemo(() => {
+        if (!searchQuery) return electricityTableData;
+
+        return electricityTableData.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        );
+    }, [electricityTableData, searchQuery]);
+
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     prepareRow,
+    //     page,
+    //     pageOptions,
+    //     canPreviousPage,
+    //     canNextPage,
+    //     nextPage,
+    //     previousPage,
+    //     state: { pageIndex, pageSize },
+    //     setPageSize,
+    // } = useTable(
+    //     {
+    //         columns,
+    //         data: electricityTableData,
+    //         initialState: { pageIndex: 0, pageSize: 7 },
+    //     },
+    //     usePagination
+    // );
     const {
         getTableProps,
         getTableBodyProps,
@@ -178,7 +210,7 @@ const ViewMeterRecharge = () => {
     } = useTable(
         {
             columns,
-            data: electricityTableData,
+            data: filteredData,
             initialState: { pageIndex: 0, pageSize: 7 },
         },
         usePagination
@@ -299,6 +331,13 @@ const ViewMeterRecharge = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    <input
+                                        type="text"
+                                        className="form-control w-auto ms-3"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
 
                                 <div className="table-responsive mb-3">
