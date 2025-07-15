@@ -97,7 +97,7 @@ const ViewMeterRecharge = () => {
                 const { statusCode, statusMessage } = data.statusDescription;
 
                 if (statusCode === 200) {
-                    SetEelectricityTableData(data.electricityBillLogs || []);
+                    SetEelectricityTableData(data?.electricityBillLogs || []);
                 } else {
                     toast.error(statusMessage || 'Logout failed');
                 }
@@ -146,11 +146,19 @@ const ViewMeterRecharge = () => {
         {
             Header: 'Remarks',
             accessor: 'remarks',
-            Cell: ({ value }) => (
-                <span title={value}>
-                    {value.length > 20 ? `${value.slice(0, 20)}...` : value}
-                </span>
-            )
+            // Cell: ({ value }) => (
+            //     <span title={value}>
+            //         {value.length > 20 ? `${value.slice(0, 20)}...` : value}
+            //     </span>
+            // )
+            Cell: ({ value }) => {
+                const safeValue = value || '';
+                return (
+                    <span title={safeValue}>
+                        {safeValue.length > 20 ? `${safeValue.slice(0, 20)}...` : safeValue}
+                    </span>
+                );
+            }
         },
         {
             Header: 'Action',
@@ -284,7 +292,7 @@ const ViewMeterRecharge = () => {
 
             const result = await response.json();
 
-            if (response.ok && result.statusDescription?.statusCode === 200) {
+            if (response.ok && result?.statusDescription?.statusCode === 200) {
                 toast.success(result?.statusDescription?.description || 'Update successful!');
 
                 SetEelectricityTableData(prev =>
@@ -294,7 +302,7 @@ const ViewMeterRecharge = () => {
                 handleCloseModal();
                 handleGetMonthlyData();
             } else {
-                toast.error(result.statusDescription?.description || 'Failed to update');
+                toast.error(result?.statusDescription?.description || 'Failed to update');
             }
         } catch (error) {
             toast.error('API error: ' + error.message);
