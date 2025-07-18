@@ -23,6 +23,7 @@ import MySoho from './Components/Rent_Management/MySoho';
 import BankTransaction from './Components/Bank_Transaction/BankTransaction';
 import BankEntry from './Components/BankEntry/BankEntry';
 import DocMgnt from './Components/DocumentsManagements/DocMgnt';
+import Reports from './Components/Reports/Reports';
 
 const App = () => {
   return (
@@ -105,6 +106,10 @@ const App = () => {
           <Route
             path="/docMgnt"
             element={<PrivateRoute element={<MainLayout><DocMgnt /></MainLayout>} />}
+          />
+          <Route
+            path="/dataReport"
+            element={<PrivateRoute element={<MainLayout><Reports /></MainLayout>} />}
           />
         </Routes>
       </AuthProvider>
